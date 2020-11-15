@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-14 23:31:26
- * @LastEditTime: 2020-11-15 22:52:15
+ * @LastEditTime: 2020-11-16 00:13:21
  * @LastEditors: Please set LastEditors
  * @Description: 登录页
  * @FilePath: \hr-manage\src\views\login\login.vue
@@ -71,7 +71,6 @@ export default {
       console.log("账户", this.form.user, "密码", this.form.password);
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // alert("submit!");
           this.$router.push("/main");
         } else {
           console.log("error submit!!");
