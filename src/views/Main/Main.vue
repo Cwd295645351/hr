@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 17:23:40
- * @LastEditTime: 2020-11-15 22:51:06
+ * @LastEditTime: 2020-11-16 23:17:24
  * @LastEditors: Please set LastEditors
  * @Description: 系统整体框架
  * @FilePath: \hr-manage\src\views\main\main.vue
@@ -92,16 +92,15 @@ export default {
     align-items: center;
     border-bottom: 1px solid #f4f4f4;
     box-shadow: 0 8px 10px #f4f4f4;
+    background: #00a1ff;
     .logo {
       font-size: 30px;
-      color: #409EFF;
+      color: #fff;
       font-weight: bold;
-      border-right: 1px solid #dedede;
       height: 100%;
       width: 210px;
       line-height: 60px;
       padding: 0 20px;
-      box-shadow: 0px 0px 5px #dedede;
       cursor: pointer;
     }
     .module {
@@ -109,10 +108,10 @@ export default {
       padding: 20px;
       font-weight: bold;
       font-size: 20px;
-      color: #999;
+      color: #fff;
     }
     .active {
-      color: #409EFF;
+      color: #0000ff;
     }
   }
   .content {
