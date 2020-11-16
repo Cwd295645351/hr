@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 21:01:01
- * @LastEditTime: 2020-11-16 00:10:16
+ * @LastEditTime: 2020-11-16 23:59:02
  * @LastEditors: Please set LastEditors
  * @Description: 面试情况
  * @FilePath: \hr-manage\src\views\Interview\Situation\Situation.vue
@@ -16,6 +16,7 @@
             type="date"
             placeholder="选择开始日期"
             :picker-options="beginDateOptions"
+            clearable
           >
           </el-date-picker>
           ~
@@ -24,11 +25,16 @@
             type="date"
             placeholder="选择结束日期"
             :picker-options="endDateOptions"
+            clearable
           >
           </el-date-picker>
         </el-form-item>
         <el-form-item size="small" label="专业:">
-          <el-select v-model="searchCondition.major" placeholder="请选择专业">
+          <el-select
+            v-model="searchCondition.major"
+            placeholder="请选择专业"
+            clearable
+          >
             <el-option
               v-for="(item, index) in majorOptions"
               :key="item + '_' + index"
@@ -38,7 +44,11 @@
           </el-select>
         </el-form-item>
         <el-form-item size="small" label="渠道:">
-          <el-select v-model="searchCondition.region" placeholder="请选择渠道">
+          <el-select
+            v-model="searchCondition.region"
+            placeholder="请选择渠道"
+            clearable
+          >
             <el-option
               v-for="(item, index) in regionOptions"
               :key="item + '_' + index"
@@ -51,85 +61,67 @@
           <el-input
             v-model="searchCondition.name"
             placeholder="请输入姓名"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item size="small" label="手机号:">
           <el-input
             v-model="searchCondition.phone"
             placeholder="请输入手机号"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item size="small" label="邮箱:">
           <el-input
             v-model="searchCondition.email"
             placeholder="请输入邮箱"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item>
           <el-popover
             placement="bottom"
-            title="更多信息"
-            width="400"
+            popper-class="popBox"
+            v-model="popTag"
+            width="250"
             trigger="click"
+            @hide="hideHandle"
           >
             <div class="more-info">
+              <div class="topbar">
+                <div class="tip">更多信息</div>
+                <div class="operation">
+                  <div @click="cancelMoreInfo">取消</div>
+                  <div @click="clearMoreInfo">重置</div>
+                  <div @click="confirmMoreInfo">确认</div>
+                </div>
+              </div>
               <el-form
                 ref="moreInfo"
-                :model="searchCondition.moreInfo"
+                :model="currentMoreInfo"
                 label-width="80px"
               >
-                <el-form-item label="通过初筛">
+                <el-form-item size="small" label="通过初筛">
+                  <el-switch v-model="currentMoreInfo.isPass"></el-switch>
+                </el-form-item>
+                <el-form-item size="small" label="参加面试">
+                  <el-switch v-model="currentMoreInfo.isInterview"></el-switch>
+                </el-form-item>
+                <el-form-item size="small" label="是否到面">
                   <el-switch
-                    v-model="searchCondition.moreInfo.isPass"
+                    v-model="currentMoreInfo.isFaceInterview"
                   ></el-switch>
                 </el-form-item>
-              </el-form>
-              <el-form
-                ref="moreInfo"
-                :model="searchCondition.moreInfo"
-                label-width="80px"
-              >
-                <el-form-item label="参加面试">
-                  <el-switch
-                    v-model="searchCondition.moreInfo.isInterview"
-                  ></el-switch>
+                <el-form-item size="small" label="是否录用">
+                  <el-switch v-model="currentMoreInfo.isEmployment"></el-switch>
                 </el-form-item>
-              </el-form>
-              <el-form
-                ref="moreInfo"
-                :model="searchCondition.moreInfo"
-                label-width="80px"
-              >
-                <el-form-item label="是否到面">
-                  <el-switch
-                    v-model="searchCondition.moreInfo.isFaceInterview"
-                  ></el-switch>
-                </el-form-item>
-              </el-form>
-              <el-form
-                ref="moreInfo"
-                :model="searchCondition.moreInfo"
-                label-width="80px"
-              >
-                <el-form-item label="是否录用">
-                  <el-switch
-                    v-model="searchCondition.moreInfo.isEmployment"
-                  ></el-switch>
-                </el-form-item>
-              </el-form>
-              <el-form
-                ref="moreInfo"
-                :model="searchCondition.moreInfo"
-                label-width="80px"
-              >
-                <el-form-item label="是否入职">
-                  <el-switch
-                    v-model="searchCondition.moreInfo.isEntry"
-                  ></el-switch>
+                <el-form-item size="small" label="是否入职">
+                  <el-switch v-model="currentMoreInfo.isEntry"></el-switch>
                 </el-form-item>
               </el-form>
             </div>
-            <el-link slot="reference" type="info">更多</el-link>
+            <div class="more-button" slot="reference">更多</div>
+            <!-- <el-link slot="reference" type="info">更多</el-link> -->
           </el-popover>
         </el-form-item>
         <el-form-item size="small">
@@ -201,6 +193,8 @@ export default {
           value: "5",
         },
       ],
+      // 更多信息框tag
+      popTag: false,
       // 搜索条件
       searchCondition: {
         beginDate: "", // 开始日期
@@ -211,18 +205,56 @@ export default {
         phone: "", // 手机号
         email: "", // 邮箱
         moreInfo: {
-          isPass: false,
-          isInterview: false,
-          isFaceInterview: false,
-          isEmployment: false,
-          isEntry: false,
+          isPass: false, // 是否通过部门筛选
+          isInterview: false, // 是否参加面试
+          isFaceInterview: false, // 是否到面
+          isEmployment: false, // 是否录用
+          isEntry: false, // 是否入职
         },
+      },
+      currentMoreInfo: {
+        isPass: false, // 是否通过部门筛选
+        isInterview: false, // 是否参加面试
+        isFaceInterview: false, // 是否到面
+        isEmployment: false, // 是否录用
+        isEntry: false, // 是否入职
       },
     };
   },
   methods: {
     // 搜索
-    search() {},
+    search() {
+      console.log("搜索条件为：", this.searchCondition);
+    },
+    // 取消更多条件框
+    cancelMoreInfo() {
+      this.popTag = false;
+    },
+    // 清空更多条件
+    clearMoreInfo() {
+      this.currentMoreInfo = {
+        isPass: false,
+        isInterview: false,
+        isFaceInterview: false,
+        isEmployment: false,
+        isEntry: false,
+      };
+    },
+    // 更多条件框隐藏时的回调方法
+    hideHandle() {
+      if (event.target.innerText != "确认") {
+        this.currentMoreInfo = JSON.parse(
+          JSON.stringify(this.searchCondition.moreInfo)
+        );
+      }
+    },
+    // 确认更多信息
+    confirmMoreInfo() {
+      this.searchCondition.moreInfo = JSON.parse(
+        JSON.stringify(this.currentMoreInfo)
+      );
+      this.popTag = false;
+    },
   },
 };
 </script>
@@ -239,16 +271,45 @@ export default {
         /deep/ .el-form-item__label {
           padding-right: 5px;
         }
+        .more-button {
+          cursor: pointer;
+        }
+        .more-button:hover {
+          color: #999;
+          text-decoration: underline;
+        }
       }
     }
   }
 }
-.el-popover {
+</style>
+<style lang="less">
+.popBox {
+  padding: 0;
   .more-info {
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 10px;
+      background: #eee;
+      .operation {
+        display: flex;
+        div {
+          margin-right: 5px;
+          cursor: pointer;
+        }
+      }
+    }
+
     .el-form-item {
       margin: 0;
     }
   }
+}
+.el-popper .popper__arrow::after {
+  border-bottom-color: #eee !important;
 }
 </style>
 
