@@ -49,3 +49,29 @@ p {
 .el-input--small .el-input__inner, .el-date-editor.el-input, .el-date-editor.el-input__inner{
   width: 150px;
 }
+
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  background: #dceaf9;
+}
+
+.el-table th{
+  height: 60px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #dceaf9;
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover>td{
+  background-color: #cae4ff;
+}
+
+/*  滚动条的宽度 */
+.el-table__body-wrapper::-webkit-scrollbar {
+  width: 6px; /* 横向滚动条 */
+  height: 7px; /* 纵向滚动条 必写 */
+}
+/* 滚动条的滑块 */
+.el-table__body-wrapper::-webkit-scrollbar-thumb {
+  background: #dceaf9;
+  border-radius: 3.5px;
+}
