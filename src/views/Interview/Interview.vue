@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 20:36:38
- * @LastEditTime: 2020-11-16 23:28:25
+ * @LastEditTime: 2020-11-24 22:26:29
  * @LastEditors: Please set LastEditors
  * @Description: 面试系统
  * @FilePath: \hr-manage\src\views\Interview\Interview.vue
@@ -9,7 +9,7 @@
 <template>
   <div class="interview">
     <div class="aside">
-      <el-menu @select="chooseMenu" :collapse="true" :default-active="activeMenu">
+      <el-menu @select="chooseMenu" :collapse="true" background-color="#545c64" :default-active="activeMenu">
         <el-menu-item
           v-for="(item, index) in menus"
           :key="index"
