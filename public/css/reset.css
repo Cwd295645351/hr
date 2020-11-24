@@ -50,9 +50,9 @@ p {
   width: 150px;
 }
 
-.el-table--striped .el-table__body tr.el-table__row--striped td {
+/* .el-table--striped .el-table__body tr.el-table__row--striped td {
   background: #dceaf9;
-}
+} */
 
 .el-table th{
   height: 60px;
