@@ -1,7 +1,7 @@
 <!--
- * @Author: 陈伟栋
+ * @Author: Chen
  * @Date: 2020-11-15 21:01:01
- * @LastEditTime: 2020-11-24 23:16:04
+ * @LastEditTime: 2020-11-26 00:08:29
  * @LastEditors: Please set LastEditors
  * @Description: 面试情况
  * @FilePath: \hr-manage\src\views\Interview\Situation\Situation.vue
@@ -168,7 +168,7 @@
           <template slot-scope="scope">
             <div v-if="scope.row.addLineTag">
               <el-select
-                v-model="newLine.major"
+                v-model="newLine.majorId"
                 placeholder="请选择专业"
                 size="small"
                 clearable
@@ -182,7 +182,7 @@
               </el-select>
             </div>
             <div v-else>
-              {{ scope.row.major }}
+              {{ scope.row.majorName }}
             </div>
           </template>
         </el-table-column>
@@ -235,7 +235,7 @@
           <template slot-scope="scope">
             <div v-if="scope.row.addLineTag">
               <el-select
-                v-model="newLine.channel"
+                v-model="newLine.channelId"
                 size="small"
                 placeholder="请选择渠道"
                 clearable
@@ -249,7 +249,7 @@
               </el-select>
             </div>
             <div v-else>
-              {{ scope.row.channel }}
+              {{ scope.row.channelName }}
             </div>
           </template>
         </el-table-column>
@@ -259,7 +259,7 @@
               <el-switch v-model="newLine.isPassScreening"></el-switch>
             </div>
             <div v-else>
-              {{ scope.row.isPassScreening }}
+              {{ scope.row.isPassScreening ? "是" : "否" }}
             </div>
           </template>
         </el-table-column>
@@ -269,7 +269,7 @@
               <el-switch v-model="newLine.isAttendInterview"></el-switch>
             </div>
             <div v-else>
-              {{ scope.row.isAttendInterview }}
+              {{ scope.row.isAttendInterview ? "是" : "否" }}
             </div>
           </template>
         </el-table-column>
@@ -296,16 +296,31 @@
           <el-table-column width="160" align="center" label="时间">
             <template slot-scope="scope">
               <div v-if="scope.row.addLineTag">
-                <el-time-picker
+                <el-time-select
                   v-if="newLine.isAttendInterview"
                   v-model="newLine.interviewInfo.time"
-                  type="date"
                   size="small"
-                  value-format="hh:mm:ss"
                   placeholder="选择时间"
+                  :picker-options="{
+                    start: '08:00',
+                    step: '00:15',
+                    end: '20:00'
+                  }"
                   clearable
                 >
-                </el-time-picker>
+                </el-time-select>
+                <!-- <el-time-select
+                  v-if="newLine.isAttendInterview"
+                  v-model="newLine.interviewInfo.time"
+                  size="small"
+                  placeholder="选择时间"
+                  clearable
+                  :picker-options="{
+                    start: '00:00',
+                    step: '00:15',
+                    end: '18:30'
+                  }">
+                </el-time-select> -->
               </div>
               <div v-else>
                 {{ scope.row.interviewInfo.time }}
@@ -379,7 +394,7 @@
           <template slot-scope="scope">
             <div v-if="scope.row.addLineTag"></div>
             <div v-else>
-              {{ scope.row.isFace }}
+              {{ scope.row.isFace ? "是" : "否" }}
             </div>
           </template>
         </el-table-column>
@@ -387,7 +402,7 @@
           <template slot-scope="scope">
             <div v-if="scope.row.addLineTag"></div>
             <div v-else>
-              {{ scope.row.isEmploy }}
+              {{ scope.row.isEmploy ? "是" : "否" }}
             </div>
           </template>
         </el-table-column>
@@ -395,23 +410,39 @@
           <template slot-scope="scope">
             <div v-if="scope.row.addLineTag"></div>
             <div v-else>
-              {{ scope.row.isJoin }}
+              {{ scope.row.isJoin ? "是" : "否" }}
             </div>
           </template>
         </el-table-column>
         <el-table-column align="center" label="电话面试情况" width="200">
           <template slot-scope="scope">
-            <div v-if="scope.row.addLineTag"></div>
+            <div v-if="scope.row.addLineTag">
+              <el-input
+                type="textarea"
+                autosize
+                placeholder="请输入电话面试情况"
+                v-model="newLine.phoneInterviewSituation"
+              >
+              </el-input>
+            </div>
             <div v-else>
-              {{ scope.row.phoneInterviewSituation }}
+              <pre>{{ scope.row.phoneInterviewSituation }}</pre>
             </div>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="remark" label="备注" width="200">
           <template slot-scope="scope">
-            <div v-if="scope.row.addLineTag"></div>
+            <div v-if="scope.row.addLineTag">
+              <el-input
+                type="textarea"
+                autosize
+                placeholder="请输入备注"
+                v-model="newLine.remark"
+              >
+              </el-input>
+            </div>
             <div v-else>
-              {{ scope.row.remark }}
+              <pre>{{ scope.row.remark }}</pre>
             </div>
           </template>
         </el-table-column>
@@ -426,7 +457,7 @@
         <el-table-column align="center" label="操作" width="100">
           <template slot-scope="scope">
             <div v-if="!scope.row.addLineTag">
-              <el-link @click="operate(scope.row)" type="info" class="modify"
+              <el-link @click="editInfo(scope.row)" type="info" class="modify"
                 >修改</el-link
               >
               <el-link @click="operate(scope.row)" type="info">删除</el-link>
@@ -436,24 +467,20 @@
       </el-table>
     </div>
     <el-drawer
-      title="操作"
+      title="修改面试情况"
       :before-close="handleClose"
       :visible.sync="operateDialogTag"
       direction="rtl"
       ref="drawer"
     >
       <div>
-        <!-- <el-form :model="form">
-          <el-form-item label="活动名称" :label-width="formLabelWidth">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="活动区域" :label-width="formLabelWidth">
-            <el-select v-model="form.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form> -->
+        <my-form
+          :editLine="editLine"
+          :majorOptions="majorOptions"
+          :regionOptions="regionOptions"
+          :propertyOptions="propertyOptions"
+          :formOptions="formOptions"
+        ></my-form>
         <div class="demo-drawer__footer">
           <el-button @click="cancelForm">取 消</el-button>
           <el-button
@@ -469,7 +496,11 @@
 </template>
 
 <script>
+import myForm from "./form";
 export default {
+  components: {
+    "my-form": myForm,
+  },
   data() {
     let that = this;
     return {
@@ -560,6 +591,10 @@ export default {
           label: "现场",
           value: "现场",
         },
+        {
+          label: "其它",
+          value: "其它",
+        },
       ],
       // 更多信息框tag
       popTag: false,
@@ -592,11 +627,61 @@ export default {
       tableData: [
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
+          isPassScreening: true,
+          isAttendInterview: true,
+          interviewInfo: {
+            date: "2020-11-20",
+            time: "16:30",
+            property: "校招",
+            form: "现场",
+            interviewer: "张工",
+          },
+          isFace: true,
+          isEmploy: true,
+          isJoin: false,
+          phoneInterviewSituation: "谈吐还行，条理清晰",
+          remark: "逻辑清楚，不罗嗦，干净利落",
+        },
+        {
+          date: "2016-05-02",
+          majorId: "5",
+          majorName: "暖通",
+          name: "王小虎",
+          phoneNum: "12345678910",
+          email: "223456789@163.com",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
+          isPassScreening: true,
+          isAttendInterview: true,
+          interviewInfo: {
+            date: "2020-11-20",
+            time: "16:30",
+            property: "校招",
+            form: "现场",
+            interviewer: "张工",
+          },
+          isFace: true,
+          isEmploy: true,
+          isJoin: true,
+          phoneInterviewSituation: "谈吐还行，条理清晰",
+          remark: "逻辑清楚，不罗嗦，干净利落",
+        },
+        {
+          date: "2016-05-02",
+          majorId: "5",
+          majorName: "暖通",
+          name: "王小虎",
+          phoneNum: "12345678910",
+          email: "223456789@163.com",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -614,11 +699,13 @@ export default {
         },
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -636,11 +723,13 @@ export default {
         },
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -658,11 +747,13 @@ export default {
         },
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -680,11 +771,13 @@ export default {
         },
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -702,11 +795,13 @@ export default {
         },
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -724,11 +819,13 @@ export default {
         },
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -746,11 +843,13 @@ export default {
         },
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -768,33 +867,13 @@ export default {
         },
         {
           date: "2016-05-02",
-          major: "暖通",
+          majorId: "5",
+          majorName: "暖通",
           name: "王小虎",
           phoneNum: "12345678910",
           email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          major: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channel: "建筑英才网（搜索）",
+          channelId: "3",
+          channelName: "建筑英才网（搜索）",
           isPassScreening: false,
           isAttendInterview: false,
           interviewInfo: {
@@ -835,6 +914,30 @@ export default {
           interviewer: "", // 面试官
         },
       },
+      // 修改行
+      editLine: {
+        addLineTag: "",
+        date: "", // 日期
+        major: "", // 专业
+        name: "", // 姓名
+        phoneNum: "", // 手机号
+        email: "", // 邮箱
+        channel: "", // 渠道
+        isPassScreening: false, // 是否通过部门筛选
+        isAttendInterview: false, // 是否参加面试
+        isFace: false, // 是否到面
+        isEmploy: false, // 是否录用
+        isJoin: false, // 是否入职
+        phoneInterviewSituation: "", // 电话面试情况
+        remark: "", // 备注
+        interviewInfo: {
+          date: "", // 面试日期
+          time: "", // 面试时间
+          property: "", // 性质
+          form: "", // 面试形式
+          interviewer: "", // 面试官
+        },
+      },
     };
   },
   mounted() {
@@ -846,14 +949,14 @@ export default {
     search() {
       this.loading = true;
       console.log("搜索条件为：", this.searchCondition);
-      this.tableData = this.tableData.map((item) => {
+      /* this.tableData = this.tableData.map((item) => {
         item.isPassScreening = item.isPassScreening ? "是" : "否";
         item.isAttendInterview = item.isAttendInterview ? "是" : "否";
         item.isFace = item.isFace ? "是" : "否";
         item.isEmploy = item.isEmploy ? "是" : "否";
         item.isJoin = item.isJoin ? "是" : "否";
         return item;
-      });
+      }); */
       setTimeout(() => {
         this.loading = false;
       }, 1000);
@@ -924,9 +1027,10 @@ export default {
         this.loading = false;
       }, 1000);
     },
-    // 操作面试流程
-    operate(row) {
+    // 修改面试流程
+    editInfo(row) {
       this.operateDialogTag = true;
+      this.editLine = JSON.parse(JSON.stringify(row));
     },
     handleClose(done) {
       if (this.loading) {
