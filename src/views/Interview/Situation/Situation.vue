@@ -1,7 +1,7 @@
 <!--
  * @Author: Chen
  * @Date: 2020-11-15 21:01:01
- * @LastEditTime: 2020-11-26 00:08:29
+ * @LastEditTime: 2020-11-26 23:34:18
  * @LastEditors: Please set LastEditors
  * @Description: 面试情况
  * @FilePath: \hr-manage\src\views\Interview\Situation\Situation.vue
@@ -304,7 +304,7 @@
                   :picker-options="{
                     start: '08:00',
                     step: '00:15',
-                    end: '20:00'
+                    end: '20:00',
                   }"
                   clearable
                 >
@@ -648,6 +648,18 @@ export default {
           isJoin: false,
           phoneInterviewSituation: "谈吐还行，条理清晰",
           remark: "逻辑清楚，不罗嗦，干净利落",
+          fileList: [
+            {
+              name: "food.jpeg",
+              url:
+                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+            },
+            {
+              name: "food2.jpeg",
+              url:
+                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+            },
+          ],
         },
         {
           date: "2016-05-02",
@@ -669,9 +681,10 @@ export default {
           },
           isFace: true,
           isEmploy: true,
-          isJoin: true,
+          isJoin: false,
           phoneInterviewSituation: "谈吐还行，条理清晰",
           remark: "逻辑清楚，不罗嗦，干净利落",
+          fileList: [],
         },
         {
           date: "2016-05-02",
@@ -682,8 +695,8 @@ export default {
           email: "223456789@163.com",
           channelId: "3",
           channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
+          isPassScreening: true,
+          isAttendInterview: true,
           interviewInfo: {
             date: "2020-11-20",
             time: "16:30",
@@ -691,229 +704,16 @@ export default {
             form: "现场",
             interviewer: "张工",
           },
-          isFace: false,
-          isEmploy: false,
+          isFace: true,
+          isEmploy: true,
           isJoin: false,
           phoneInterviewSituation: "谈吐还行，条理清晰",
           remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          majorId: "5",
-          majorName: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channelId: "3",
-          channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          majorId: "5",
-          majorName: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channelId: "3",
-          channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          majorId: "5",
-          majorName: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channelId: "3",
-          channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          majorId: "5",
-          majorName: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channelId: "3",
-          channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          majorId: "5",
-          majorName: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channelId: "3",
-          channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          majorId: "5",
-          majorName: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channelId: "3",
-          channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          majorId: "5",
-          majorName: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channelId: "3",
-          channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
-        },
-        {
-          date: "2016-05-02",
-          majorId: "5",
-          majorName: "暖通",
-          name: "王小虎",
-          phoneNum: "12345678910",
-          email: "223456789@163.com",
-          channelId: "3",
-          channelName: "建筑英才网（搜索）",
-          isPassScreening: false,
-          isAttendInterview: false,
-          interviewInfo: {
-            date: "2020-11-20",
-            time: "16:30",
-            property: "校招",
-            form: "现场",
-            interviewer: "张工",
-          },
-          isFace: false,
-          isEmploy: false,
-          isJoin: false,
-          phoneInterviewSituation: "谈吐还行，条理清晰",
-          remark: "逻辑清楚，不罗嗦，干净利落",
+          fileList: [],
         },
       ],
       // 默认新增行
-      newLine: {
-        addLineTag: "",
-        date: "", // 日期
-        major: "", // 专业
-        name: "", // 姓名
-        phoneNum: "", // 手机号
-        email: "", // 邮箱
-        channel: "", // 渠道
-        isPassScreening: false, // 是否通过部门筛选
-        isAttendInterview: false, // 是否参加面试
-        isFace: false, // 是否到面
-        isEmploy: false, // 是否录用
-        isJoin: false, // 是否入职
-        phoneInterviewSituation: "", // 电话面试情况
-        remark: "", // 备注
-        interviewInfo: {
-          date: "", // 面试日期
-          time: "", // 面试时间
-          property: "", // 性质
-          form: "", // 面试形式
-          interviewer: "", // 面试官
-        },
-      },
+      newLine: {},
       // 修改行
       editLine: {
         addLineTag: "",
@@ -1015,6 +815,7 @@ export default {
           form: "",
           interviewer: "",
         },
+        fileList:[]
       };
       this.tableData.unshift(this.newLine);
     },
@@ -1036,7 +837,7 @@ export default {
       if (this.loading) {
         return;
       }
-      this.$confirm("确定要提交表单吗？")
+      this.$confirm("是否保存修改？")
         .then((_) => {
           this.loading = true;
           this.timer = setTimeout(() => {
