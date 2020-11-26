@@ -1,7 +1,7 @@
 <!--
  * @Author: Chen
  * @Date: 2020-11-25 22:27:58
- * @LastEditTime: 2020-11-26 00:07:53
+ * @LastEditTime: 2020-11-26 23:35:59
  * @LastEditors: Please set LastEditors
  * @Description: 编辑面试情况表单数据
  * @FilePath: \hr-manage\src\views\Interview\Situation\form.vue
@@ -99,7 +99,7 @@
           :picker-options="{
             start: '08:00',
             step: '00:15',
-            end: '20:00'
+            end: '20:00',
           }"
           clearable
         >
@@ -170,6 +170,27 @@
         >
         </el-input>
       </el-form-item>
+      <el-form-item label="相关材料">
+        <el-upload
+          ref="upload"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :auto-upload="false"
+        >
+          <el-button slot="trigger" size="small" type="primary"
+            >选取文件</el-button
+          >
+          <el-button
+            style="margin-left: 10px"
+            size="small"
+            type="success"
+            @click="submitUpload"
+            >上传到服务器</el-button
+          >
+        </el-upload>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -177,7 +198,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      fileList: this.editLine.fileList,
+    };
   },
   props: [
     "editLine",
@@ -188,7 +211,17 @@ export default {
   ],
   created() {},
   mounted() {},
-  methods: {},
+  methods: {
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
+    handleRemove(file, fileList) {
+      console.log("去除文件",file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+  },
 };
 </script>
 
