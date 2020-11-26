@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-14 23:31:26
- * @LastEditTime: 2020-11-16 00:13:21
+ * @LastEditTime: 2020-11-26 23:22:36
  * @LastEditors: Please set LastEditors
  * @Description: 登录页
  * @FilePath: \hr-manage\src\views\login\login.vue
@@ -16,12 +16,14 @@
             <el-input
               prefix-icon="el-icon-user-solid"
               v-model="form.user"
+              @keyup.enter.native="login('form')"
               placeholder="请输入用户名"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
               prefix-icon="el-icon-lock"
+              @keyup.enter.native="login('form')"
               type="password"
               v-model="form.password"
               placeholder="请输入密码"
