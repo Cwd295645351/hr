@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-14 00:10:00
- * @LastEditTime: 2020-11-14 23:40:19
+ * @LastEditTime: 2020-11-25 22:19:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \hr-manage\src\main.js
@@ -13,7 +13,7 @@ import store from './store'
 import ElementUI from 'element-ui';
 
 import 'element-ui/lib/theme-chalk/index.css';
-import './../public/css/reset.css';
+import './../public/css/reset.less';
 
 Vue.use(ElementUI);
 
