@@ -1,7 +1,7 @@
 <!--
  * @Author: Chen
  * @Date: 2020-11-15 21:01:01
- * @LastEditTime: 2020-11-30 20:18:01
+ * @LastEditTime: 2020-11-30 22:27:23
  * @LastEditors: Chen Weidong
  * @Description: 面试情况
  * @FilePath: \hr-manage\src\views\Interview\Situation\Situation.vue
@@ -15,7 +15,6 @@
                         v-model="searchCondition.beginDate"
                         type="date"
                         placeholder="选择开始日期"
-                        value-format="yyyy-MM-dd"
                         :picker-options="beginDateOptions"
                         clearable
                     >
@@ -25,7 +24,6 @@
                         v-model="searchCondition.endDate"
                         type="date"
                         placeholder="选择结束日期"
-                        value-format="yyyy-MM-dd"
                         :picker-options="endDateOptions"
                         clearable
                     >
@@ -817,6 +815,18 @@ export default {
         // 搜索
         search() {
             this.loading = true;
+            let beginDate = "",
+                endDate = "";
+            if (this.searchCondition.beginDate) {
+                beginDate = this.$moment(this.searchCondition.beginDate).format(
+                    "YYYY-MM-DD"
+                );
+            }
+            if (this.searchCondition.endDate) {
+                endDate = this.$moment(this.searchCondition.endDate).format(
+                    "YYYY-MM-DD"
+                );
+            }
             console.log("搜索条件为：", this.searchCondition);
             /* this.tableData = this.tableData.map((item) => {
         item.isPassScreening = item.isPassScreening ? "是" : "否";
