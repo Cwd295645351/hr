@@ -1,9 +1,9 @@
 /*
- * @Author: your name
+ * @Author: Chenweidong
  * @Date: 2020-11-14 00:10:00
- * @LastEditTime: 2020-11-25 22:19:21
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
+ * @LastEditTime: 2020-11-29 14:35:02
+ * @LastEditors: Chen Weidong
+ * @Description: 基础配置
  * @FilePath: \hr-manage\src\main.js
  */
 import Vue from 'vue'
@@ -11,12 +11,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui';
+import echarts from 'echarts';
 
 import 'element-ui/lib/theme-chalk/index.css';
 import './../public/css/reset.less';
 
 Vue.use(ElementUI);
-
+Vue.prototype.$echarts = echarts
 
 
 Vue.config.productionTip = false
