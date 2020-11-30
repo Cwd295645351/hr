@@ -1,27 +1,77 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 21:01:07
- * @LastEditTime: 2020-11-29 23:52:19
+ * @LastEditTime: 2020-11-30 22:52:22
  * @LastEditors: Chen Weidong
  * @Description: 面试统计
  * @FilePath: \hr-manage\src\views\Interview\Statistics\Statistics.vue
 -->
 <template>
     <div class="statistics">
-        <div class="searchBox">
-            <el-button size="small">查询</el-button>
+        <div class="search-box">
+            <el-form :inline="true" :model="searchCondition">
+                <el-form-item size="small" label="起止日期:">
+                    <el-date-picker
+                        v-model="searchCondition.beginDate"
+                        type="date"
+                        placeholder="选择开始日期"
+                        :picker-options="beginDateOptions"
+                        clearable
+                    >
+                    </el-date-picker>
+                    ~
+                    <el-date-picker
+                        v-model="searchCondition.endDate"
+                        type="date"
+                        placeholder="选择结束日期"
+                        :picker-options="endDateOptions"
+                        clearable
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item size="small" label="专业:">
+                    <el-select
+                        v-model="searchCondition.major"
+                        placeholder="请选择专业"
+                        clearable
+                    >
+                        <el-option
+                            v-for="(item, index) in majorOptions"
+                            :key="item + '_' + index"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button @click="searchData" size="small">查询</el-button>
+                </el-form-item>
+            </el-form>
         </div>
-        <div class="content">
+        <div class="content" v-loading="loading">
             <div id="statistics" class="charts"></div>
             <div class="proportion">
-                <div class="title">入职比例</div>
-                <div
-                    v-for="(item, index) in proportionData"
-                    :key="index"
-                    class="line-box"
-                >
-                    <div class="major">{{ item.major }}</div>
-                    <div>{{ item.proportion }}</div>
+                <div class="major-proportion">
+                    <div class="title">不同专业入职比例</div>
+                    <div
+                        v-for="(item, index) in proportionData"
+                        :key="index"
+                        class="line-box"
+                    >
+                        <div class="major">{{ item.major }}</div>
+                        <div>{{ item.proportion }}</div>
+                    </div>
+                </div>
+                <div class="region-proportion">
+                    <div class="title">不同渠道入职比例</div>
+                    <div
+                        v-for="(item, index) in regionData"
+                        :key="index + '_region'"
+                        class="line-box"
+                    >
+                        <div class="major">{{ item.region }}</div>
+                        <div>{{ item.proportion }}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -31,7 +81,9 @@
 <script>
 export default {
     data() {
+        let _this = this;
         return {
+            // 不同专业入职比例
             proportionData: [
                 {
                     major: "建筑",
@@ -74,6 +126,21 @@ export default {
                     proportion: "32%"
                 }
             ],
+            regionData: [
+                {
+                    region: "BOSS",
+                    proportion: "50%"
+                },
+                {
+                    region: "建筑英才网(投递)",
+                    proportion: "50%"
+                },
+                {
+                    region: "建筑英才网(搜索)",
+                    proportion: "50%"
+                }
+            ],
+            // echarts配置
             options: {
                 title: {
                     text: "面试统计信息",
@@ -226,17 +293,97 @@ export default {
                     "#30e0e0"
                 ]
             },
+            loading: false,
+            searchCondition: {
+                beginDate: "", // 开始日期
+                endDate: "", // 结束日期
+                major: "" // 专业
+            },
+            // 专业数组
+            majorOptions: [
+                {
+                    label: "建筑",
+                    value: "1"
+                },
+                {
+                    label: "结构",
+                    value: "2"
+                },
+                {
+                    label: "给排水",
+                    value: "3"
+                },
+                {
+                    label: "弱电",
+                    value: "4"
+                },
+                {
+                    label: "暖通",
+                    value: "5"
+                },
+                {
+                    label: "项目助理",
+                    value: "6"
+                },
+                {
+                    label: "市场",
+                    value: "7"
+                },
+                {
+                    label: "财务",
+                    value: "8"
+                }
+            ],
+            // 开始时间限制条件
+            beginDateOptions: {
+                disabledDate(time) {
+                    if (_this.searchCondition.endDate != "") {
+                        return time.getTime() > _this.searchCondition.endDate;
+                    } else {
+                        return false;
+                    }
+                }
+            },
+            // 结束时间限制条件
+            endDateOptions: {
+                disabledDate(time) {
+                    if (_this.searchCondition.beginDate != "") {
+                        return time.getTime() < _this.searchCondition.beginDate;
+                    } else {
+                        return false;
+                    }
+                }
+            },
             chart: null
         };
     },
     created() {},
     mounted() {
         this.chart = this.$echarts.init(document.getElementById("statistics"));
-        this.initEcharts();
+        this.searchData();
     },
     methods: {
         initEcharts() {
             this.chart.setOption(this.options, true);
+        },
+        searchData() {
+            this.loading = true;
+            let beginDate = "",
+                endDate = "";
+            if (this.searchCondition.beginDate) {
+                beginDate = this.$moment(this.searchCondition.beginDate).format(
+                    "YYYY-MM-DD"
+                );
+            }
+            if (this.searchCondition.endDate) {
+                endDate = this.$moment(this.searchCondition.endDate).format(
+                    "YYYY-MM-DD"
+                );
+            }
+            this.initEcharts();
+            setTimeout(() => {
+                this.loading = false;
+            }, 1000);
         }
     }
 };
@@ -244,35 +391,48 @@ export default {
 
 <style lang='less' scoped>
 .statistics {
-    width: 95vw;
+    // width: 95vw;
     margin: 20px;
+    .search-box {
+        text-align: left;
+    }
     .content {
         display: flex;
-        width: 100%;
+        // width: 100%;
         .charts {
-            width: 80%;
+            width: 75vw;
             height: 600px;
         }
         .proportion {
-            width: 15%;
-            height: 350px;
-            margin-left: 10px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            color: #666;
-            box-shadow: 2px 2px #eee;
-            .title {
-                font-size: 20px;
-                font-weight: bold;
-                margin-bottom: 10px;
-            }
-            .line-box {
-                display: flex;
-                justify-content: space-between;
-                font-size: 16px;
-                margin-top: 5px;
-                .major {
+            .major-proportion,
+            .region-proportion {
+                width: 15vw;
+                margin-left: 10px;
+                padding: 10px 0;
+                border: 1px solid #ddd;
+                color: #666;
+                box-shadow: 2px 2px #eee;
+                margin-bottom: 20px;
+                .title {
+                    font-size: 20px;
                     font-weight: bold;
+                    margin-bottom: 10px;
+                }
+                .line-box {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 16px;
+                    padding: 5px 20px;
+                    &:nth-child(2n) {
+                        background: #00a1ff80;
+                    }
+                    /* &:nth-child(2n + 1) {
+                        background: rgba(129, 214, 122, 0.3);
+                    } */
+                    .major {
+                        font-weight: bold;
+                    }
                 }
             }
         }
