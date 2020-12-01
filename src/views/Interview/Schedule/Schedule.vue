@@ -1,35 +1,59 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 21:00:54
- * @LastEditTime: 2020-11-30 23:42:39
+ * @LastEditTime: 2020-12-01 23:44:26
  * @LastEditors: Chen Weidong
  * @Description: 面试日程
  * @FilePath: \hr-manage\src\views\Interview\Schedule\Schedule.vue
 -->
 <template>
     <div class="schedule">
-        <el-calendar
-            v-model="date"
-            :first-day-of-week="7"
-            style="height: 100%"
-            v-loading="loading"
-        >
-            <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
-            <template slot="dateCell" slot-scope="{ date, data }">
-                <div style="height: 100%" @click="calendarOnClick(data)">
-                    <p :class="data.isSelected ? 'is-selected' : ''">
-                        {{ data.day.split("-").slice(1).join("-") }}
-                        <!-- {{ data.isSelected ? "✔️" : "" }} -->
-                    </p>
-                    <p
-                        v-show="data.type == 'current-month'"
-                        :class="data.isSelected ? 'is-selected' : ''"
-                    >
-                        {{ datas[data.day.split("-").slice(2)] }}
-                    </p>
+        <div class="operate">
+            <span>
+                <i class="el-icon-d-arrow-left" style="margin-right: 10px"></i>
+                <span>上一周</span>
+            </span>
+            <span>
+                <span>下一周</span>
+                <i class="el-icon-d-arrow-right" style="margin-left: 10px"></i>
+            </span>
+        </div>
+        <div class="content">
+            <div class="item week">
+                <div v-for="week in weeks" :key="'top_' + week">{{ week }}</div>
+            </div>
+            <div class="item">
+                <div v-for="i of 7" :key="'top_' + i">
+                    <div class="date">{{ datas[i - 1].date }}</div>
+                    <div class="scroll-box">
+                        <div
+                            class="data-item"
+                            v-for="(item,index) in datas[i-1].interview"
+                            :key="datas[i-1].date+'_'+index"
+                        >
+                            <div>{{item.time}}</div>
+                            <div>{{item.name}}</div>
+                            <div>(</div>
+                            <div>{{item.major}}</div>
+                            <div>{{item.property}}</div>
+                            <div>{{item.interview_form}}</div>
+                            <div>{{item.interviewer}}</div>
+                            <div>)</div>
+                        </div>
+                    </div>
                 </div>
-            </template>
-        </el-calendar>
+            </div>
+            <div class="item">
+                <div v-for="i of 7" :key="'middle_' + i">
+                    <div class="date">{{ datas[i - 1 + 7].date }}</div>
+                </div>
+            </div>
+            <div class="item">
+                <div v-for="i of 7" :key="'bottom_' + i">
+                    <div class="date">{{ datas[i - 1 + 14].date }}</div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -37,170 +61,431 @@
 export default {
     data() {
         return {
-            date: "",
             beginDate: "",
             endDate: "",
-            loading: false,
-            datas: {
-                "01": "1",
-                "02": "11",
-                "03": "13",
-                "04": "14",
-                "05": "15",
-                "06": "16",
-                "07": "17",
-                "08": "18",
-                "09": "19",
-                10: "100",
-                11: "121",
-                12: "122",
-                13: "123",
-                14: "124",
-                15: "125",
-                16: "126",
-                17: "127",
-                18: "128",
-                19: "129",
-                20: "130",
-                21: "131",
-                22: "132",
-                23: "133",
-                24: "145",
-                25: "1523",
-                26: "1532",
-                27: "1532",
-                28: "1532",
-                29: "1523",
-                30: "5235231"
-            }
+            topLine: [],
+            middleLine: [],
+            bottomLine: [],
+            weeks: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+            datas: [
+                {
+                    date: "2020-11-30",
+                    interview: [
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        },
+                        {
+                            time: "16:30",
+                            name: "王少发",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖高盛"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-01",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-02",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-03",
+                    interview: []
+                },
+                {
+                    date: "2020-12-04",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-05",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-06",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-07",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-08",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-09",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-10",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-11",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-12",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-13",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-14",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-15",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-16",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-17",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-18",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-19",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-12-20",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                }
+            ]
         };
     },
-    created() {
-        this.$nextTick(() => {
-            // 点击前一个月
-            let prevBtn = document.querySelector(
-                ".el-calendar__button-group .el-button-group>button:nth-child(1)"
-            );
-            prevBtn.addEventListener("click", (e) => {
-                console.log(
-                    "当前星期:",
-                    this.$moment(
-                        this.$moment(this.date).startOf("week")
-                    ).format("YYYY-MM-DD"),
-                    this.$moment(this.$moment(this.date).endOf("week")).format(
-                        "YYYY-MM-DD"
-                    )
-                );
-                console.log(this.date);
-                // this.$notify({
-                //     title: "上一月",
-                //     message: "上个月头天：" + this.value,
-                //     type: "success",
-                //     position: "top-left"
-                // });
-            });
-
-            //点击下一个月
-            let nextBtn = document.querySelector(
-                ".el-calendar__button-group .el-button-group>button:nth-child(3)"
-            );
-            nextBtn.addEventListener("click", () => {
-                console.log(this.date);
-                console.log(
-                    "当前星期:",
-                    this.$moment(
-                        this.$moment(this.date).startOf("week")
-                    ).format("YYYY-MM-DD"),
-                    this.$moment(this.$moment(this.date).endOf("week")).format(
-                        "YYYY-MM-DD"
-                    )
-                );
-                /* this.$notify({
-                    title: "下一月",
-                    message: "下个月头天：" + this.value,
-                    type: "warning",
-                    position: "top-left"
-                }); */
-            });
-
-            //点击今天
-            let todayBtn = document.querySelector(
-                ".el-calendar__button-group .el-button-group>button:nth-child(2)"
-            );
-            todayBtn.addEventListener("click", () => {
-                console.log(this.date);
-                console.log(
-                    "当前星期:",
-                    this.$moment(
-                        this.$moment(this.date).startOf("week")
-                    ).format("YYYY-MM-DD"),
-                    this.$moment(this.$moment(this.date).endOf("week")).format(
-                        "YYYY-MM-DD"
-                    )
-                );
-                /* this.$notify.info({
-                    title: "今天",
-                    message: "今天：" + this.value,
-                    position: "top-left"
-                }); */
-            });
-        });
-    },
-    mounted() {
-        this.searchData();
-        this.findDate(new Date());
-    },
-    methods: {
-        searchData() {
-            this.loading = true;
-            setTimeout(() => {
-                this.loading = false;
-            }, 1000);
-        },
-        findDate(date) {
-            let lastDateOfMonth = this.$moment(
-                this.$moment(date).endOf("month")
-            ).format("YYYY-MM-DD");
-            let firstDateOfMonth = this.$moment(
-                this.$moment(date).startOf("month")
-            ).format("YYYY-MM-DD");
-            let firstOfWeek = this.$moment(
-                this.$moment(firstDateOfMonth).startOf("week")
-            ).format("YYYY-MM-DD");
-            let lastOfWeek = this.$moment(
-                this.$moment(lastDateOfMonth).endOf("week")
-            ).format("YYYY-MM-DD");
-            console.log(
-                "lastDateOfMonth:",
-                lastDateOfMonth,
-                "firstDateOfMonth:",
-                firstDateOfMonth,
-                "firstOfWeek:",
-                firstOfWeek,
-                "lastOfWeek:",
-                lastOfWeek
-            );
-        },
-        //点击日期块
-        calendarOnClick(e) {
-            console.log(e.day);
-            // this.isArrange.push("2020-06-19");
-            // this.$notify.error({
-            //     title: "日历块点击",
-            //     message: e,
-            //     position: "top-left"
-            // });
-        }
-    }
+    created() {},
+    mounted() {},
+    methods: {}
 };
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .schedule {
-    height: 100%;
-}
-.is-selected {
-    color: #1989fa;
+    height: 98%;
+    width: 95vw;
+    text-align: center;
+    .operate {
+        width: 95%;
+        margin: 10px auto;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        color: #999;
+    }
+    .content {
+        height: 90%;
+        width: 95%;
+        margin: 0 auto;
+        border-left: 1px solid #999;
+        border-top: 1px solid #999;
+        .item {
+            display: flex;
+            height: 32%;
+            width: 100%;
+            > div {
+                flex: 1;
+                height: 100%;
+                border-right: 1px solid #999;
+                border-bottom: 1px solid #999;
+                .date {
+                    height: 20px;
+                    font-size: 16px;
+                    line-height: 20px;
+                    background: #eee;
+                }
+                .scroll-box {
+                    height: calc(100% - 20px);
+                    overflow: auto;
+                    .data-item {
+                        display: flex;
+                        align-items: center;
+                        margin: 10px;
+                        div {
+                            margin-right: 4px;
+                        }
+                    }
+                    &::-webkit-scrollbar {
+                        /*滚动条整体样式*/
+                        width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
+                        height: 1px;
+                    }
+                    &::-webkit-scrollbar-thumb {
+                        /*滚动条里面小方块*/
+                        border-radius: 2px;
+                        background-color: #eee;
+                    }
+                    &::-webkit-scrollbar-track {
+                        /*滚动条里面轨道*/
+                        box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+                        background: transparent;
+                        border-radius: 10px;
+                    }
+                }
+            }
+        }
+        .week {
+            height: 4%;
+            background: #00a1ff80;
+            font-size: 20px;
+            color: #fff;
+            font-weight: bold;
+        }
+    }
 }
 </style>
-
