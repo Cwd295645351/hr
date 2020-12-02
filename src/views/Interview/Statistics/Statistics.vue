@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 21:01:07
- * @LastEditTime: 2020-11-30 22:52:22
+ * @LastEditTime: 2020-12-02 22:41:38
  * @LastEditors: Chen Weidong
  * @Description: 面试统计
  * @FilePath: \hr-manage\src\views\Interview\Statistics\Statistics.vue
@@ -17,24 +17,17 @@
                         placeholder="选择开始日期"
                         :picker-options="beginDateOptions"
                         clearable
-                    >
-                    </el-date-picker>
-                    ~
+                    ></el-date-picker>~
                     <el-date-picker
                         v-model="searchCondition.endDate"
                         type="date"
                         placeholder="选择结束日期"
                         :picker-options="endDateOptions"
                         clearable
-                    >
-                    </el-date-picker>
+                    ></el-date-picker>
                 </el-form-item>
                 <el-form-item size="small" label="专业:">
-                    <el-select
-                        v-model="searchCondition.major"
-                        placeholder="请选择专业"
-                        clearable
-                    >
+                    <el-select v-model="searchCondition.major" placeholder="请选择专业" clearable>
                         <el-option
                             v-for="(item, index) in majorOptions"
                             :key="item + '_' + index"
@@ -53,11 +46,7 @@
             <div class="proportion">
                 <div class="major-proportion">
                     <div class="title">不同专业入职比例</div>
-                    <div
-                        v-for="(item, index) in proportionData"
-                        :key="index"
-                        class="line-box"
-                    >
+                    <div v-for="(item, index) in proportionData" :key="index" class="line-box">
                         <div class="major">{{ item.major }}</div>
                         <div>{{ item.proportion }}</div>
                     </div>
@@ -153,6 +142,19 @@ export default {
                     },
                     textStyle: {
                         align: "left"
+                    },
+                    formatter: function (params) {
+                        console.log(params);
+                        let str = params[0].axisValueLabel;
+                        params.forEach((item, index) => {
+                            str += `<br/>${item.seriesName}：${item.value}`;
+                            if (index != 4) {
+                                str += "份";
+                            } else {
+                                str += "%";
+                            }
+                        });
+                        return str;
                     }
                 },
                 legend: {
@@ -398,10 +400,11 @@ export default {
     }
     .content {
         display: flex;
+        height: 80vh;
         // width: 100%;
         .charts {
             width: 75vw;
-            height: 600px;
+            height: 100%;
         }
         .proportion {
             .major-proportion,
