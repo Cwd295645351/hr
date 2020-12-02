@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 21:00:54
- * @LastEditTime: 2020-12-01 23:44:26
+ * @LastEditTime: 2020-12-02 21:24:49
  * @LastEditors: Chen Weidong
  * @Description: 面试日程
  * @FilePath: \hr-manage\src\views\Interview\Schedule\Schedule.vue
@@ -9,11 +9,11 @@
 <template>
     <div class="schedule">
         <div class="operate">
-            <span>
+            <span @click="lastWeek">
                 <i class="el-icon-d-arrow-left" style="margin-right: 10px"></i>
                 <span>上一周</span>
             </span>
-            <span>
+            <span @click="nextWeek">
                 <span>下一周</span>
                 <i class="el-icon-d-arrow-right" style="margin-left: 10px"></i>
             </span>
@@ -28,16 +28,16 @@
                     <div class="scroll-box">
                         <div
                             class="data-item"
-                            v-for="(item,index) in datas[i-1].interview"
-                            :key="datas[i-1].date+'_'+index"
+                            v-for="(item, index) in datas[i - 1].interview"
+                            :key="datas[i - 1].date + '_' + index"
                         >
-                            <div>{{item.time}}</div>
-                            <div>{{item.name}}</div>
+                            <div>{{ item.time }}</div>
+                            <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{item.major}}</div>
-                            <div>{{item.property}}</div>
-                            <div>{{item.interview_form}}</div>
-                            <div>{{item.interviewer}}</div>
+                            <div>{{ item.major }}</div>
+                            <div>{{ item.property }}</div>
+                            <div>{{ item.interview_form }}</div>
+                            <div>{{ item.interviewer }}</div>
                             <div>)</div>
                         </div>
                     </div>
@@ -46,11 +46,43 @@
             <div class="item">
                 <div v-for="i of 7" :key="'middle_' + i">
                     <div class="date">{{ datas[i - 1 + 7].date }}</div>
+                    <div class="scroll-box">
+                        <div
+                            class="data-item"
+                            v-for="(item, index) in datas[i - 1 + 7].interview"
+                            :key="datas[i - 1 + 7].date + '_' + index"
+                        >
+                            <div>{{ item.time }}</div>
+                            <div>{{ item.name }}</div>
+                            <div>(</div>
+                            <div>{{ item.major }}</div>
+                            <div>{{ item.property }}</div>
+                            <div>{{ item.interview_form }}</div>
+                            <div>{{ item.interviewer }}</div>
+                            <div>)</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="item">
                 <div v-for="i of 7" :key="'bottom_' + i">
                     <div class="date">{{ datas[i - 1 + 14].date }}</div>
+                    <div class="scroll-box">
+                        <div
+                            class="data-item"
+                            v-for="(item, index) in datas[i - 1 + 14].interview"
+                            :key="datas[i - 1 + 14].date + '_' + index"
+                        >
+                            <div>{{ item.time }}</div>
+                            <div>{{ item.name }}</div>
+                            <div>(</div>
+                            <div>{{ item.major }}</div>
+                            <div>{{ item.property }}</div>
+                            <div>{{ item.interview_form }}</div>
+                            <div>{{ item.interviewer }}</div>
+                            <div>)</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,11 +95,99 @@ export default {
         return {
             beginDate: "",
             endDate: "",
-            topLine: [],
-            middleLine: [],
-            bottomLine: [],
             weeks: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
             datas: [
+                {
+                    date: "2020-11-23",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-24",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-25",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-26",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-27",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-28",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-29",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
                 {
                     date: "2020-11-30",
                     interview: [
@@ -312,13 +432,38 @@ export default {
                             interviewer: "廖"
                         }
                     ]
-                },
+                }
+            ]
+        };
+    },
+    created() {
+        this.$moment().weekday(1);
+        let today = new Date();
+        let mondayDate = this.$moment(today)
+            .startOf("week")
+            .format("YYYY-MM-DD");
+        let sundayDate = this.$moment(today).endOf("week").format("YYYY-MM-DD");
+
+        this.beginDate = this.$moment(
+            this.$moment(mondayDate).subtract(6, "days")
+        ).format("YYYY-MM-DD");
+        this.endDate = this.$moment(
+            this.$moment(sundayDate).add(8, "days")
+        ).format("YYYY-MM-DD");
+
+        console.log(this.beginDate, this.endDate);
+    },
+    mounted() {},
+    methods: {
+        // 下一周
+        nextWeek() {
+            let data = [
                 {
                     date: "2020-12-14",
                     interview: [
                         {
                             time: "2:30",
-                            name: "小王",
+                            name: "小王22",
                             major: "建筑",
                             property: "校招",
                             interview_form: "现场",
@@ -331,7 +476,7 @@ export default {
                     interview: [
                         {
                             time: "2:30",
-                            name: "小王",
+                            name: "小王22",
                             major: "建筑",
                             property: "校招",
                             interview_form: "现场",
@@ -344,7 +489,7 @@ export default {
                     interview: [
                         {
                             time: "2:30",
-                            name: "小王",
+                            name: "小王22",
                             major: "建筑",
                             property: "校招",
                             interview_form: "现场",
@@ -357,7 +502,7 @@ export default {
                     interview: [
                         {
                             time: "2:30",
-                            name: "小王",
+                            name: "小王22",
                             major: "建筑",
                             property: "校招",
                             interview_form: "现场",
@@ -370,7 +515,7 @@ export default {
                     interview: [
                         {
                             time: "2:30",
-                            name: "小王",
+                            name: "小王22",
                             major: "建筑",
                             property: "校招",
                             interview_form: "现场",
@@ -383,7 +528,7 @@ export default {
                     interview: [
                         {
                             time: "2:30",
-                            name: "小王",
+                            name: "小王22",
                             major: "建筑",
                             property: "校招",
                             interview_form: "现场",
@@ -396,7 +541,7 @@ export default {
                     interview: [
                         {
                             time: "2:30",
-                            name: "小王",
+                            name: "小王22",
                             major: "建筑",
                             property: "校招",
                             interview_form: "现场",
@@ -404,12 +549,107 @@ export default {
                         }
                     ]
                 }
-            ]
-        };
-    },
-    created() {},
-    mounted() {},
-    methods: {}
+            ];
+            this.datas = this.datas.slice(7).concat(data);
+        },
+        // 上一周
+        lastWeek() {
+            let data = [
+                {
+                    date: "2020-11-14",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王11",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-15",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王11",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-16",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王11",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-17",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王11",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-18",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王11",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-19",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王11",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                },
+                {
+                    date: "2020-11-20",
+                    interview: [
+                        {
+                            time: "2:30",
+                            name: "小王11",
+                            major: "建筑",
+                            property: "校招",
+                            interview_form: "现场",
+                            interviewer: "廖"
+                        }
+                    ]
+                }
+            ];
+            this.datas = data.concat(this.datas.slice(0, 14));
+        }
+    }
 };
 </script>
 
@@ -417,16 +657,19 @@ export default {
 .schedule {
     height: 98%;
     width: 95vw;
+    margin: 0 auto;
     text-align: center;
     .operate {
         width: 95%;
         margin: 10px auto;
-        cursor: pointer;
         font-size: 20px;
         font-weight: bold;
         display: flex;
         justify-content: space-between;
         color: #999;
+        span {
+            cursor: pointer;
+        }
     }
     .content {
         height: 90%;
