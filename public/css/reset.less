@@ -65,22 +65,46 @@ p {
   background-color: #cae4ff;
 }
 
-/*  滚动条的宽度 */
-.el-table__body-wrapper::-webkit-scrollbar {
-  width: 6px; /* 横向滚动条 */
-  height: 7px; /* 纵向滚动条 必写 */
+/*  表格纵向滚动条 */
+.el-table__body-wrapper{
+  &::-webkit-scrollbar {
+    width: 6px;/* 横向滚动条 */
+    height: 7px;/* 纵向滚动条 必写 */
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: #fff; // 滚动条背景颜色
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #dceaf9;
+    border-radius: 3.5px;
+  }
 }
-/* 滚动条的滑块 */
-.el-table__body-wrapper::-webkit-scrollbar-thumb {
-  background: #dceaf9;
-  border-radius: 3.5px;
+// 表格横向滚动条
+.el-table--scrollable-x .el-table__body-wrapper{
+  &::-webkit-scrollbar {
+    width: 6px;
+    /* 横向滚动条 */
+    height: 7px;
+    /* 纵向滚动条 必写 */
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: #fff; // 滚动条背景颜色
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #eee;
+    border-radius: 3.5px;
+  }
 }
 
 .el-drawer__header{
   font-size: 16px;
   font-weight: bold;
   text-align: left;
+  .el-drawer:focus {
+    outline: none;
+  }
 }
+
 
 .demo-drawer__footer{
   margin: 0 20px;
@@ -88,4 +112,7 @@ p {
   .el-button{
     flex:1;
   }
+}
+.el-drawer:focus{
+  outline:none;
 }
