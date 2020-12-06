@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 21:01:07
- * @LastEditTime: 2020-12-02 22:41:38
+ * @LastEditTime: 2020-12-06 21:23:12
  * @LastEditors: Chen Weidong
  * @Description: 面试统计
  * @FilePath: \hr-manage\src\views\Interview\Statistics\Statistics.vue
@@ -144,7 +144,6 @@ export default {
                         align: "left"
                     },
                     formatter: function (params) {
-                        console.log(params);
                         let str = params[0].axisValueLabel;
                         params.forEach((item, index) => {
                             str += `<br/>${item.seriesName}：${item.value}`;
