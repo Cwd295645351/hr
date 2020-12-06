@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 21:00:54
- * @LastEditTime: 2020-12-02 21:24:49
+ * @LastEditTime: 2020-12-06 21:22:33
  * @LastEditors: Chen Weidong
  * @Description: 面试日程
  * @FilePath: \hr-manage\src\views\Interview\Schedule\Schedule.vue
@@ -446,17 +446,23 @@ export default {
 
         this.beginDate = this.$moment(
             this.$moment(mondayDate).subtract(6, "days")
-        ).format("YYYY-MM-DD");
-        this.endDate = this.$moment(
-            this.$moment(sundayDate).add(8, "days")
-        ).format("YYYY-MM-DD");
-
-        console.log(this.beginDate, this.endDate);
+        );
+        this.endDate = this.$moment(this.$moment(sundayDate).add(8, "days"));
+        console.log(
+            this.$moment(this.beginDate).format("YYYY-MM-DD"),
+            this.$moment(this.endDate).format("YYYY-MM-DD")
+        );
     },
     mounted() {},
     methods: {
         // 下一周
         nextWeek() {
+            this.endDate = this.$moment(this.endDate).add(7, "days");
+            this.beginDate = this.$moment(this.beginDate).add(7, "days");
+            console.log(
+                this.$moment(this.beginDate).format("YYYY-MM-DD"),
+                this.$moment(this.endDate).format("YYYY-MM-DD")
+            );
             let data = [
                 {
                     date: "2020-12-14",
@@ -554,6 +560,12 @@ export default {
         },
         // 上一周
         lastWeek() {
+            this.endDate = this.$moment(this.endDate).subtract(7, "days");
+            this.beginDate = this.$moment(this.beginDate).subtract(7, "days");
+            console.log(
+                this.$moment(this.beginDate).format("YYYY-MM-DD"),
+                this.$moment(this.endDate).format("YYYY-MM-DD")
+            );
             let data = [
                 {
                     date: "2020-11-14",
