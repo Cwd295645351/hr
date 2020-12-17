@@ -1,7 +1,7 @@
 <!--
  * @Author: 陈伟栋
  * @Date: 2020-11-15 21:00:54
- * @LastEditTime: 2020-12-06 21:22:33
+ * @LastEditTime: 2020-12-13 23:06:16
  * @LastEditors: Chen Weidong
  * @Description: 面试日程
  * @FilePath: \hr-manage\src\views\Interview\Schedule\Schedule.vue
@@ -34,9 +34,9 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.major }}</div>
+                            <div>{{ item.majorName }}</div>
                             <div>{{ item.property }}</div>
-                            <div>{{ item.interview_form }}</div>
+                            <div>{{ item.form }}</div>
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
                         </div>
@@ -55,9 +55,9 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.major }}</div>
+                            <div>{{ item.majorName }}</div>
                             <div>{{ item.property }}</div>
-                            <div>{{ item.interview_form }}</div>
+                            <div>{{ item.form }}</div>
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
                         </div>
@@ -76,9 +76,9 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.major }}</div>
+                            <div>{{ item.majorName }}</div>
                             <div>{{ item.property }}</div>
-                            <div>{{ item.interview_form }}</div>
+                            <div>{{ item.form }}</div>
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
                         </div>
@@ -103,9 +103,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -116,9 +116,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -129,9 +129,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -142,9 +142,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -155,9 +155,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -168,9 +168,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -181,9 +181,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -194,81 +194,81 @@ export default {
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         },
                         {
                             time: "16:30",
                             name: "王少发",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖高盛"
                         }
                     ]
@@ -279,9 +279,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -292,9 +292,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -309,9 +309,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -322,9 +322,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -335,9 +335,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -348,9 +348,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -361,9 +361,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -374,9 +374,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -387,9 +387,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -400,9 +400,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -413,9 +413,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -426,9 +426,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -470,9 +470,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王22",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -483,9 +483,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王22",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -496,9 +496,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王22",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -509,9 +509,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王22",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -522,9 +522,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王22",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -535,9 +535,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王22",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -548,9 +548,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王22",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -573,9 +573,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王11",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -586,9 +586,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王11",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -599,9 +599,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王11",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -612,9 +612,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王11",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -625,9 +625,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王11",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -638,9 +638,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王11",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
@@ -651,9 +651,9 @@ export default {
                         {
                             time: "2:30",
                             name: "小王11",
-                            major: "建筑",
+                            majorName: "建筑",
                             property: "校招",
-                            interview_form: "现场",
+                            form: "现场",
                             interviewer: "廖"
                         }
                     ]
