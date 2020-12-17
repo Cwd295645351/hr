@@ -1,10 +1,10 @@
 /*
- * @Author: Chenweidong
- * @Date: 2020-11-14 00:10:00
- * @LastEditTime: 2020-11-30 22:11:22
- * @LastEditors: Chen
  * @Description: 基础配置
- * @FilePath: \hr-manage\src\main.js
+ * @Version: 0.0.1
+ * @Author: Chen
+ * @Date: 2020-12-17 22:42:22
+ * @LastEditors: Chen
+ * @LastEditTime: 2020-12-17 23:02:31
  */
 import Vue from 'vue'
 import App from './App.vue'

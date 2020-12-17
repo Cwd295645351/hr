@@ -1,10 +1,10 @@
 <!--
- * @Author: 陈伟栋
- * @Date: 2020-11-15 21:20:13
- * @LastEditTime: 2020-11-15 21:22:36
- * @LastEditors: Please set LastEditors
  * @Description: 人员管理
- * @FilePath: \hr-manage\src\views\User\User.vue
+ * @Version: 0.0.1
+ * @Author:Chen
+ * @Date: 2020-12-17 22:42:22
+ * @LastEditors: Chen
+ * @LastEditTime: 2020-12-17 23:02:16
 -->
 <template>
   <div class=''>

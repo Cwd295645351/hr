@@ -1,10 +1,10 @@
 <!--
- * @Author: Chen
- * @Date: 2020-11-15 20:36:38
- * @LastEditTime: 2020-11-30 22:09:39
- * @LastEditors: Chen
  * @Description: 面试系统
- * @FilePath: \hr-manage\src\views\Interview\Interview.vue
+ * @Version: 0.0.1
+ * @Author: Chen
+ * @Date: 2020-12-17 22:42:22
+ * @LastEditors: Chen
+ * @LastEditTime: 2020-12-17 23:00:18
 -->
 <template>
     <div class="interview">

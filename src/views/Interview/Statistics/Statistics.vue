@@ -1,10 +1,10 @@
 <!--
- * @Author: Chen
- * @Date: 2020-11-15 21:01:07
- * @LastEditTime: 2020-12-06 21:23:12
- * @LastEditors: Chen
  * @Description: 面试统计
- * @FilePath: \hr-manage\src\views\Interview\Statistics\Statistics.vue
+ * @Version: 0.0.1
+ * @Author:Chen
+ * @Date: 2020-12-17 22:42:22
+ * @LastEditors: Chen
+ * @LastEditTime: 2020-12-17 23:00:33
 -->
 <template>
     <div class="statistics">
@@ -17,7 +17,8 @@
                         placeholder="选择开始日期"
                         :picker-options="beginDateOptions"
                         clearable
-                    ></el-date-picker>~
+                    ></el-date-picker
+                    >~
                     <el-date-picker
                         v-model="searchCondition.endDate"
                         type="date"
@@ -27,7 +28,11 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item size="small" label="专业:">
-                    <el-select v-model="searchCondition.major" placeholder="请选择专业" clearable>
+                    <el-select
+                        v-model="searchCondition.major"
+                        placeholder="请选择专业"
+                        clearable
+                    >
                         <el-option
                             v-for="(item, index) in majorOptions"
                             :key="item + '_' + index"
@@ -46,7 +51,11 @@
             <div class="proportion">
                 <div class="major-proportion">
                     <div class="title">不同专业入职比例</div>
-                    <div v-for="(item, index) in proportionData" :key="index" class="line-box">
+                    <div
+                        v-for="(item, index) in proportionData"
+                        :key="index"
+                        class="line-box"
+                    >
                         <div class="major">{{ item.major }}</div>
                         <div>{{ item.proportion }}</div>
                     </div>
