@@ -1,19 +1,5 @@
 # hr-manage
 
-## Project setup
-```
-npm install
-```
+## Master分支为主分支，正式发版的话发到此分支
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### dev分支为开发分支，开发者从dev分支中拉多个新的分支进行开发，每次开发完毕变合并到dev分支中
