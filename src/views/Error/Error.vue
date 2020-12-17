@@ -1,8 +1,8 @@
 <!--
- * @Author: your name
+ * @Author: Chen
  * @Date: 2020-11-15 00:29:20
  * @LastEditTime: 2020-11-15 00:42:19
- * @LastEditors: Please set LastEditors
+ * @LastEditors: Chen
  * @Description: In User Settings Edit
  * @FilePath: \hr-manage\src\views\Error\Error.vue
 -->

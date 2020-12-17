@@ -1,8 +1,8 @@
 <!--
- * @Author: 陈伟栋
+ * @Author: Chen
  * @Date: 2020-11-14 23:31:26
  * @LastEditTime: 2020-11-26 23:22:36
- * @LastEditors: Please set LastEditors
+ * @LastEditors: Chen
  * @Description: 登录页
  * @FilePath: \hr-manage\src\views\login\login.vue
 -->
