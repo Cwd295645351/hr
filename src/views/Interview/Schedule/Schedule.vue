@@ -1,8 +1,8 @@
 <!--
- * @Author: 陈伟栋
+ * @Author: Chen
  * @Date: 2020-11-15 21:00:54
  * @LastEditTime: 2020-12-13 23:06:16
- * @LastEditors: Chen Weidong
+ * @LastEditors: Chen
  * @Description: 面试日程
  * @FilePath: \hr-manage\src\views\Interview\Schedule\Schedule.vue
 -->

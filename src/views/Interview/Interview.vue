@@ -1,8 +1,8 @@
 <!--
- * @Author: 陈伟栋
+ * @Author: Chen
  * @Date: 2020-11-15 20:36:38
  * @LastEditTime: 2020-11-30 22:09:39
- * @LastEditors: Chen Weidong
+ * @LastEditors: Chen
  * @Description: 面试系统
  * @FilePath: \hr-manage\src\views\Interview\Interview.vue
 -->

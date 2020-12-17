@@ -2,7 +2,7 @@
  * @Author: Chen
  * @Date: 2020-11-15 21:01:01
  * @LastEditTime: 2020-12-02 23:08:29
- * @LastEditors: Chen Weidong
+ * @LastEditors: Chen
  * @Description: 面试情况
  * @FilePath: \hr-manage\src\views\Interview\Situation\Situation.vue
 -->

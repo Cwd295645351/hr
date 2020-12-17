@@ -1,8 +1,8 @@
 <!--
- * @Author: 陈伟栋
+ * @Author: Chen
  * @Date: 2020-11-15 21:01:07
  * @LastEditTime: 2020-12-06 21:23:12
- * @LastEditors: Chen Weidong
+ * @LastEditors: Chen
  * @Description: 面试统计
  * @FilePath: \hr-manage\src\views\Interview\Statistics\Statistics.vue
 -->
