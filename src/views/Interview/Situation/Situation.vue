@@ -1,10 +1,10 @@
 <!--
- * @Author: Chen
- * @Date: 2020-11-15 21:01:01
- * @LastEditTime: 2020-12-02 23:08:29
- * @LastEditors: Chen
  * @Description: 面试情况
- * @FilePath: \hr-manage\src\views\Interview\Situation\Situation.vue
+ * @Version: 0.0.1
+ * @Author: Chen
+ * @Date: 2020-12-17 22:42:22
+ * @LastEditors: Chen
+ * @LastEditTime: 2020-12-17 23:00:46
 -->
 <template>
     <div class="situation">

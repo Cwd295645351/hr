@@ -1,12 +1,11 @@
 /*
- * @Author: Chen
- * @Date: 2020-11-13 23:46:28
- * @LastEditTime: 2020-11-13 23:59:45
- * @LastEditors: Please set LastEditors
  * @Description: vue配置页面
- * @FilePath: \人力资源管理系统\hr\vue.config.js
+ * @Version: 0.0.1
+ * @Author: Chen
+ * @Date: 2020-12-17 22:42:22
+ * @LastEditors: Chen
+ * @LastEditTime: 2020-12-17 23:02:46
  */
-
 module.exports = {
     //基本路径
     //baseUrl: './',//vue-cli3.3以下版本使用

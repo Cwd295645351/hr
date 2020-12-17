@@ -1,10 +1,10 @@
 <!--
- * @Author: Chen
- * @Date: 2020-11-25 22:27:58
- * @LastEditTime: 2020-12-06 21:14:11
- * @LastEditors: Chen
  * @Description: 编辑面试情况表单数据
- * @FilePath: \hr-manage\src\views\Interview\Situation\form.vue
+ * @Version: 0.0.1
+ * @Author: Chen
+ * @Date: 2020-12-17 22:42:22
+ * @LastEditors: Chen
+ * @LastEditTime: 2020-12-17 23:01:00
 -->
 <template>
     <div class="form-box">

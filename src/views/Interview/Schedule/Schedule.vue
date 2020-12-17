@@ -1,10 +1,10 @@
 <!--
- * @Author: Chen
- * @Date: 2020-11-15 21:00:54
- * @LastEditTime: 2020-12-13 23:06:16
- * @LastEditors: Chen
  * @Description: 面试日程
- * @FilePath: \hr-manage\src\views\Interview\Schedule\Schedule.vue
+ * @Version: 0.0.1
+ * @Author: Chen
+ * @Date: 2020-12-17 22:42:22
+ * @LastEditors: Chen
+ * @LastEditTime: 2020-12-17 23:01:13
 -->
 <template>
     <div class="schedule">
