@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-17 23:00:46
+ * @LastEditTime: 2020-12-21 23:56:33
 -->
 <template>
     <div class="situation">
@@ -17,7 +17,8 @@
                         placeholder="选择开始日期"
                         :picker-options="beginDateOptions"
                         clearable
-                    ></el-date-picker>~
+                    ></el-date-picker
+                    >~
                     <el-date-picker
                         v-model="searchCondition.endDate"
                         type="date"
@@ -27,7 +28,11 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item size="small" label="专业:">
-                    <el-select v-model="searchCondition.major" placeholder="请选择专业" clearable>
+                    <el-select
+                        v-model="searchCondition.major"
+                        placeholder="请选择专业"
+                        clearable
+                    >
                         <el-option
                             v-for="(item, index) in majorOptions"
                             :key="item + '_' + index"
@@ -37,9 +42,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item size="small" label="渠道:">
-                    <el-select v-model="searchCondition.channel" placeholder="请选择渠道" clearable>
+                    <el-select
+                        v-model="searchCondition.channel"
+                        placeholder="请选择渠道"
+                        clearable
+                    >
                         <el-option
-                            v-for="(item, index) in regionOptions"
+                            v-for="(item, index) in channelOptions"
                             :key="item + '_' + index"
                             :label="item.label"
                             :value="item.value"
@@ -47,13 +56,25 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item size="small" label="姓名:">
-                    <el-input v-model="searchCondition.name" placeholder="请输入姓名" clearable></el-input>
+                    <el-input
+                        v-model="searchCondition.name"
+                        placeholder="请输入姓名"
+                        clearable
+                    ></el-input>
                 </el-form-item>
                 <el-form-item size="small" label="手机号:">
-                    <el-input v-model="searchCondition.phoneNum" placeholder="请输入手机号" clearable></el-input>
+                    <el-input
+                        v-model="searchCondition.phoneNum"
+                        placeholder="请输入手机号"
+                        clearable
+                    ></el-input>
                 </el-form-item>
                 <el-form-item size="small" label="邮箱:">
-                    <el-input v-model="searchCondition.email" placeholder="请输入邮箱" clearable></el-input>
+                    <el-input
+                        v-model="searchCondition.email"
+                        placeholder="请输入邮箱"
+                        clearable
+                    ></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-popover
@@ -73,7 +94,11 @@
                                     <div @click="confirmMoreInfo">确认</div>
                                 </div>
                             </div>
-                            <el-form ref="moreInfo" :model="currentMoreInfo" label-width="80px">
+                            <el-form
+                                ref="moreInfo"
+                                :model="currentMoreInfo"
+                                label-width="80px"
+                            >
                                 <el-form-item size="small" label="通过初筛">
                                     <el-switch
                                         v-model="
@@ -89,13 +114,19 @@
                                     ></el-switch>
                                 </el-form-item>
                                 <el-form-item size="small" label="是否到面">
-                                    <el-switch v-model="currentMoreInfo.isFace"></el-switch>
+                                    <el-switch
+                                        v-model="currentMoreInfo.isFace"
+                                    ></el-switch>
                                 </el-form-item>
                                 <el-form-item size="small" label="是否录用">
-                                    <el-switch v-model="currentMoreInfo.isEmploy"></el-switch>
+                                    <el-switch
+                                        v-model="currentMoreInfo.isEmploy"
+                                    ></el-switch>
                                 </el-form-item>
                                 <el-form-item size="small" label="是否入职">
-                                    <el-switch v-model="currentMoreInfo.isJoin"></el-switch>
+                                    <el-switch
+                                        v-model="currentMoreInfo.isJoin"
+                                    ></el-switch>
                                 </el-form-item>
                             </el-form>
                         </div>
@@ -105,14 +136,28 @@
                 </el-form-item>
                 <el-form-item size="small">
                     <el-button type="primary" @click="search">查询</el-button>
-                    <el-button v-show="addLineTag == false" @click="addLine">新增</el-button>
-                    <el-button v-show="addLineTag == true" @click="saveLine">保存</el-button>
+                    <el-button v-show="addLineTag == false" @click="addLine"
+                        >新增</el-button
+                    >
+                    <el-button v-show="addLineTag == true" @click="saveLine"
+                        >保存</el-button
+                    >
                 </el-form-item>
             </el-form>
         </div>
         <div class="main">
-            <el-table :data="tableData" style="width: 100%" max-height="730" v-loading="loading">
-                <el-table-column fixed="left" align="center" label="日期" width="160">
+            <el-table
+                :data="tableData"
+                style="width: 100%"
+                max-height="730"
+                v-loading="loading"
+            >
+                <el-table-column
+                    fixed="left"
+                    align="center"
+                    label="日期"
+                    width="160"
+                >
                     <template slot-scope="scope">
                         <div v-if="scope.row.addLineTag">
                             <el-date-picker
@@ -127,7 +172,12 @@
                         <div v-else>{{ scope.row.date }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="left" align="center" label="专业" width="160">
+                <el-table-column
+                    fixed="left"
+                    align="center"
+                    label="专业"
+                    width="160"
+                >
                     <template slot-scope="scope">
                         <div v-if="scope.row.addLineTag">
                             <el-select
@@ -147,7 +197,12 @@
                         <div v-else>{{ scope.row.majorName }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="left" align="center" label="姓名" width="160">
+                <el-table-column
+                    fixed="left"
+                    align="center"
+                    label="姓名"
+                    width="160"
+                >
                     <template slot-scope="scope">
                         <div v-if="scope.row.addLineTag">
                             <el-input
@@ -196,8 +251,8 @@
                                 clearable
                             >
                                 <el-option
-                                    v-for="(item, index) in regionOptions"
-                                    :key="item + '_regionOptions_' + index"
+                                    v-for="(item, index) in channelOptions"
+                                    :key="item + '_channelOptions_' + index"
                                     :label="item.label"
                                     :value="item.value"
                                 ></el-option>
@@ -206,20 +261,28 @@
                         <div v-else>{{ scope.row.channelName }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column align="center" label="是否通过部门筛选" width="150">
+                <el-table-column
+                    align="center"
+                    label="当前简历状态"
+                    width="150"
+                >
                     <template slot-scope="scope">
                         <div v-if="scope.row.addLineTag">
-                            <el-switch v-model="newLine.isPassScreening"></el-switch>
+                            <el-select
+                                v-model="newLine.status"
+                                size="small"
+                                placeholder="请选择简历状态"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item, index) in statusOptions"
+                                    :key="item + '_statusOptions_' + index"
+                                    :label="item.label"
+                                    :value="item.value"
+                                ></el-option>
+                            </el-select>
                         </div>
-                        <div v-else>{{ scope.row.isPassScreening ? "是" : "否" }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="是否参加面试" width="130">
-                    <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
-                            <el-switch v-model="newLine.isAttendInterview"></el-switch>
-                        </div>
-                        <div v-else>{{ scope.row.isAttendInterview ? "是" : "否" }}</div>
+                        <div v-else>{{ scope.row.status }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column align="center" label="面试信息">
@@ -278,10 +341,16 @@
                                     ></el-option>
                                 </el-select>
                             </div>
-                            <div v-else>{{ scope.row.interviewInfo.property }}</div>
+                            <div v-else>
+                                {{ scope.row.interviewInfo.property }}
+                            </div>
                         </template>
                     </el-table-column>
-                    <el-table-column width="160" align="center" label="面试形式">
+                    <el-table-column
+                        width="160"
+                        align="center"
+                        label="面试形式"
+                    >
                         <template slot-scope="scope">
                             <div v-if="scope.row.addLineTag">
                                 <el-select
@@ -313,29 +382,17 @@
                                     clearable
                                 ></el-input>
                             </div>
-                            <div v-else>{{ scope.row.interviewInfo.interviewer }}</div>
+                            <div v-else>
+                                {{ scope.row.interviewInfo.interviewer }}
+                            </div>
                         </template>
                     </el-table-column>
                 </el-table-column>
-                <el-table-column align="center" label="是否到面" width="90">
-                    <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag"></div>
-                        <div v-else>{{ scope.row.isFace ? "是" : "否" }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="是否录用" width="90">
-                    <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag"></div>
-                        <div v-else>{{ scope.row.isEmploy ? "是" : "否" }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="是否入职" width="90">
-                    <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag"></div>
-                        <div v-else>{{ scope.row.isJoin ? "是" : "否" }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="电话面试情况" width="200">
+                <el-table-column
+                    align="center"
+                    label="电话面试情况"
+                    width="200"
+                >
                     <template slot-scope="scope">
                         <div v-if="scope.row.addLineTag">
                             <el-input
@@ -350,7 +407,12 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column align="center" prop="remark" label="备注" width="200">
+                <el-table-column
+                    align="center"
+                    prop="remark"
+                    label="备注"
+                    width="200"
+                >
                     <template slot-scope="scope">
                         <div v-if="scope.row.addLineTag">
                             <el-input
@@ -377,8 +439,15 @@
                 <el-table-column align="center" label="操作" width="100">
                     <template slot-scope="scope">
                         <div v-if="!scope.row.addLineTag">
-                            <el-link @click="editInfo(scope.row)" type="info" class="modify">修改</el-link>
-                            <el-link @click="deleteData(scope.row)" type="info">删除</el-link>
+                            <el-link
+                                @click="editInfo(scope.row)"
+                                type="info"
+                                class="modify"
+                                >修改</el-link
+                            >
+                            <el-link @click="deleteData(scope.row)" type="info"
+                                >删除</el-link
+                            >
                         </div>
                     </template>
                 </el-table-column>
@@ -395,7 +464,8 @@
                 <my-form
                     :editLine="editLine"
                     :majorOptions="majorOptions"
-                    :regionOptions="regionOptions"
+                    :channelOptions="channelOptions"
+                    :statusOptions="statusOptions"
                     :propertyOptions="propertyOptions"
                     :formOptions="formOptions"
                 ></my-form>
@@ -405,7 +475,8 @@
                         type="primary"
                         @click="$refs.drawer.closeDrawer()"
                         :loading="loading"
-                    >{{ loading ? "提交中 ..." : "确 定" }}</el-button>
+                        >{{ loading ? "提交中 ..." : "确 定" }}</el-button
+                    >
                 </div>
             </div>
         </el-drawer>
@@ -447,7 +518,7 @@ export default {
                 }
             },
             // 渠道数组
-            regionOptions: [
+            channelOptions: [
                 {
                     label: "BOSS",
                     value: "1"
@@ -461,6 +532,29 @@ export default {
                     value: "3"
                 }
             ],
+            // 当前简历状态数组
+            statusOptions:[
+                {
+                    label:"通过初筛",
+                    value: "pass"
+                },
+                {
+                    label:"参加面试",
+                    value: "attendInterview"
+                },
+                {
+                    label:"已到面",
+                    value: "faced"
+                },
+                {
+                    label:"已录用",
+                    value: "employ"
+                },
+                {
+                    label:"已入职",
+                    value: "join"
+                },
+                ],
             // 专业数组
             majorOptions: [
                 {
@@ -563,8 +657,7 @@ export default {
                     email: "223456789@163.com",
                     channelId: "3",
                     channelName: "建筑英才网（搜索）",
-                    isPassScreening: true,
-                    isAttendInterview: true,
+                    status: "pass",
                     interviewInfo: {
                         date: "2020-11-20",
                         time: "16:30",
@@ -572,9 +665,6 @@ export default {
                         form: "现场",
                         interviewer: "张工"
                     },
-                    isFace: true,
-                    isEmploy: true,
-                    isJoin: false,
                     phoneInterviewSituation: "谈吐还行，条理清晰",
                     remark: "逻辑清楚，不罗嗦，干净利落",
                     fileList: [
@@ -599,8 +689,7 @@ export default {
                     email: "223456789@163.com",
                     channelId: "3",
                     channelName: "建筑英才网（搜索）",
-                    isPassScreening: true,
-                    isAttendInterview: true,
+                    status: "faced",
                     interviewInfo: {
                         date: "2020-11-20",
                         time: "16:30",
@@ -608,12 +697,20 @@ export default {
                         form: "现场",
                         interviewer: "张工"
                     },
-                    isFace: true,
-                    isEmploy: true,
-                    isJoin: false,
                     phoneInterviewSituation: "谈吐还行，条理清晰",
                     remark: "逻辑清楚，不罗嗦，干净利落",
-                    fileList: []
+                    fileList: [
+                        {
+                            name: "food.jpeg",
+                            url:
+                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+                        },
+                        {
+                            name: "food2.jpeg",
+                            url:
+                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+                        }
+                    ]
                 },
                 {
                     date: "2016-05-02",
@@ -624,8 +721,7 @@ export default {
                     email: "223456789@163.com",
                     channelId: "3",
                     channelName: "建筑英才网（搜索）",
-                    isPassScreening: true,
-                    isAttendInterview: true,
+                    status: "attendInterview",
                     interviewInfo: {
                         date: "2020-11-20",
                         time: "16:30",
@@ -633,12 +729,20 @@ export default {
                         form: "现场",
                         interviewer: "张工"
                     },
-                    isFace: true,
-                    isEmploy: true,
-                    isJoin: false,
                     phoneInterviewSituation: "谈吐还行，条理清晰",
                     remark: "逻辑清楚，不罗嗦，干净利落",
-                    fileList: []
+                    fileList: [
+                        {
+                            name: "food.jpeg",
+                            url:
+                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+                        },
+                        {
+                            name: "food2.jpeg",
+                            url:
+                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+                        }
+                    ]
                 }
             ],
             // 默认新增行
@@ -741,12 +845,8 @@ export default {
                 name: "",
                 phoneNum: "",
                 email: "",
-                channel: "",
-                isPassScreening: false,
-                isAttendInterview: false,
-                isFace: false,
-                isEmploy: false,
-                isJoin: false,
+                channelId: "",
+                status: "",
                 phoneInterviewSituation: "",
                 remark: "",
                 interviewInfo: {
@@ -763,6 +863,7 @@ export default {
         // 保存新增
         saveLine() {
             this.loading = true;
+            console.log(this.newLine)
             this.addLineTag = false;
             this.tableData[0].addLineTag = false;
             setTimeout(() => {

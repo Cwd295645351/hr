@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-17 23:01:00
+ * @LastEditTime: 2020-12-21 23:57:11
 -->
 <template>
     <div class="form-box">
@@ -20,7 +20,12 @@
                 ></el-date-picker>
             </el-form-item>
             <el-form-item label="专业">
-                <el-select v-model="editLine.majorId" placeholder="请选择专业" size="small" clearable>
+                <el-select
+                    v-model="editLine.majorId"
+                    placeholder="请选择专业"
+                    size="small"
+                    clearable
+                >
                     <el-option
                         v-for="(item, index) in majorOptions"
                         :key="item + '_editLine_' + index"
@@ -30,30 +35,60 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="姓名">
-                <el-input v-model="editLine.name" size="small" placeholder="请输入姓名" clearable></el-input>
+                <el-input
+                    v-model="editLine.name"
+                    size="small"
+                    placeholder="请输入姓名"
+                    clearable
+                ></el-input>
             </el-form-item>
             <el-form-item label="手机号">
-                <el-input v-model="editLine.phoneNum" size="small" placeholder="请输入手机号" clearable></el-input>
+                <el-input
+                    v-model="editLine.phoneNum"
+                    size="small"
+                    placeholder="请输入手机号"
+                    clearable
+                ></el-input>
             </el-form-item>
             <el-form-item label="邮箱">
-                <el-input v-model="editLine.email" size="small" placeholder="请输入邮箱" clearable></el-input>
+                <el-input
+                    v-model="editLine.email"
+                    size="small"
+                    placeholder="请输入邮箱"
+                    clearable
+                ></el-input>
             </el-form-item>
             <el-form-item label="渠道">
-                <el-select v-model="editLine.channelId" size="small" placeholder="请选择渠道" clearable>
+                <el-select
+                    v-model="editLine.channelId"
+                    size="small"
+                    placeholder="请选择渠道"
+                    clearable
+                >
                     <el-option
-                        v-for="(item, index) in regionOptions"
-                        :key="item + '_regionOptions_' + index"
+                        v-for="(item, index) in channelOptions"
+                        :key="item + '_channelOptions_' + index"
                         :label="item.label"
                         :value="item.value"
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="是否通过部门筛选">
-                <el-switch v-model="editLine.isPassScreening"></el-switch>
+            <el-form-item label="当前简历状态">
+                <el-select
+                    v-model="editLine.status"
+                    size="small"
+                    placeholder="请选择简历状态"
+                    clearable
+                >
+                    <el-option
+                        v-for="(item, index) in statusOptions"
+                        :key="item + '_statusOptions_' + index"
+                        :label="item.label"
+                        :value="item.value"
+                    ></el-option>
+                </el-select>
             </el-form-item>
-            <el-form-item label="是否参加面试">
-                <el-switch v-model="editLine.isAttendInterview"></el-switch>
-            </el-form-item>
+
             <el-form-item label="面试日期" v-show="editLine.isAttendInterview">
                 <el-date-picker
                     v-model="editLine.interviewInfo.date"
@@ -70,10 +105,10 @@
                     size="small"
                     placeholder="选择时间"
                     :picker-options="{
-            start: '08:00',
-            step: '00:15',
-            end: '20:00',
-          }"
+                        start: '08:00',
+                        step: '00:15',
+                        end: '20:00'
+                    }"
                     clearable
                 ></el-time-select>
             </el-form-item>
@@ -115,15 +150,6 @@
                     clearable
                 ></el-input>
             </el-form-item>
-            <el-form-item label="是否到面">
-                <el-switch v-model="editLine.isFace"></el-switch>
-            </el-form-item>
-            <el-form-item label="是否录用">
-                <el-switch v-model="editLine.isEmploy"></el-switch>
-            </el-form-item>
-            <el-form-item label="是否入职">
-                <el-switch v-model="editLine.isJoin"></el-switch>
-            </el-form-item>
             <el-form-item label="电话面试情况">
                 <el-input
                     type="textarea"
@@ -133,7 +159,12 @@
                 ></el-input>
             </el-form-item>
             <el-form-item label="备注">
-                <el-input type="textarea" autosize placeholder="请输入备注" v-model="editLine.remark"></el-input>
+                <el-input
+                    type="textarea"
+                    autosize
+                    placeholder="请输入备注"
+                    v-model="editLine.remark"
+                ></el-input>
             </el-form-item>
             <el-form-item label="相关材料">
                 <el-upload
@@ -144,13 +175,16 @@
                     :file-list="fileList"
                     :auto-upload="false"
                 >
-                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                    <el-button slot="trigger" size="small" type="primary"
+                        >选取文件</el-button
+                    >
                     <el-button
                         style="margin-left: 10px"
                         size="small"
                         type="success"
                         @click="submitUpload"
-                    >上传到服务器</el-button>
+                        >上传到服务器</el-button
+                    >
                 </el-upload>
             </el-form-item>
         </el-form>
@@ -167,7 +201,8 @@ export default {
     props: [
         "editLine",
         "majorOptions",
-        "regionOptions",
+        "channelOptions",
+        "statusOptions",
         "propertyOptions",
         "formOptions"
     ],
