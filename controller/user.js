@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-03 22:16:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-03 23:52:46
+ * @LastEditTime: 2021-01-04 23:57:33
  */
 
 // 预防xss攻击
@@ -23,10 +23,11 @@ const login = async (username, password) => {
 		password: password
 	});
 	if (res) {
-		const test = {
-			token: JWT()
+		const retData = {
+			username: username,
+			token: JWT.createJWT(username)
 		};
-		return test;
+		return retData;
 	} else {
 		return null;
 	}
