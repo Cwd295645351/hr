@@ -4,9 +4,9 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-03 15:08:50
+ * @LastEditTime: 2021-01-05 22:56:55
  */
-const mongoose = require("../db");
+import mongoose from "../db";
 
 const IntervieweesSchema = mongoose.Schema(
 	{

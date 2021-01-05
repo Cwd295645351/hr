@@ -4,10 +4,10 @@
  * @Author:
  * @Date: 2020-12-24 22:59:19
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-28 00:16:30
+ * @LastEditTime: 2021-01-05 22:57:11
  */
 
-const mongoose = require("../db");
+import mongoose from "../db";
 
 const ChannelSchema = mongoose.Schema(
 	{

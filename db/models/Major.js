@@ -7,7 +7,7 @@
  * @LastEditTime: 2020-12-28 00:16:42
  */
 
-const mongoose = require("../db");
+import mongoose from "../db";
 
 // 用 Schema 定义数据规范
 const MajorSchema = mongoose.Schema(
