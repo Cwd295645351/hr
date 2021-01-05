@@ -4,12 +4,12 @@
  * @Author:
  * @Date: 2021-01-03 21:55:50
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-03 23:07:54
+ * @LastEditTime: 2021-01-05 23:52:00
  */
 class BaseModel {
 	constructor(data, message) {
-		if (typeof data === "string") {
-			this.message = data;
+		if (typeof data === null) {
+			this.message = message;
 			data = null;
 			message = null;
 		}
