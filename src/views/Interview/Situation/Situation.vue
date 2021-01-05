@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-21 23:56:33
+ * @LastEditTime: 2021-01-05 22:22:33
 -->
 <template>
     <div class="situation">
@@ -290,7 +290,10 @@
                         <template slot-scope="scope">
                             <div v-if="scope.row.addLineTag">
                                 <el-date-picker
-                                    v-if="newLine.isAttendInterview"
+                                    v-if="
+                                        newLine.status &&
+                                        newLine.status != 'pass'
+                                    "
                                     v-model="newLine.interviewInfo.date"
                                     type="date"
                                     size="small"
@@ -306,7 +309,10 @@
                         <template slot-scope="scope">
                             <div v-if="scope.row.addLineTag">
                                 <el-time-select
-                                    v-if="newLine.isAttendInterview"
+                                    v-if="
+                                        newLine.status &&
+                                        newLine.status != 'pass'
+                                    "
                                     v-model="newLine.interviewInfo.time"
                                     size="small"
                                     placeholder="选择时间"
@@ -325,7 +331,10 @@
                         <template slot-scope="scope">
                             <div v-if="scope.row.addLineTag">
                                 <el-select
-                                    v-if="newLine.isAttendInterview"
+                                    v-if="
+                                        newLine.status &&
+                                        newLine.status != 'pass'
+                                    "
                                     v-model="newLine.interviewInfo.property"
                                     placeholder="选择性质"
                                     size="small"
@@ -354,7 +363,10 @@
                         <template slot-scope="scope">
                             <div v-if="scope.row.addLineTag">
                                 <el-select
-                                    v-if="newLine.isAttendInterview"
+                                    v-if="
+                                        newLine.status &&
+                                        newLine.status != 'pass'
+                                    "
                                     v-model="newLine.interviewInfo.form"
                                     placeholder="选择面试形式"
                                     size="small"
@@ -375,7 +387,10 @@
                         <template slot-scope="scope">
                             <div v-if="scope.row.addLineTag">
                                 <el-input
-                                    v-if="newLine.isAttendInterview"
+                                    v-if="
+                                        newLine.status &&
+                                        newLine.status != 'pass'
+                                    "
                                     v-model="newLine.interviewInfo.interviewer"
                                     size="small"
                                     placeholder="请输入面试官"
@@ -533,28 +548,28 @@ export default {
                 }
             ],
             // 当前简历状态数组
-            statusOptions:[
+            statusOptions: [
                 {
-                    label:"通过初筛",
+                    label: "通过初筛",
                     value: "pass"
                 },
                 {
-                    label:"参加面试",
+                    label: "参加面试",
                     value: "attendInterview"
                 },
                 {
-                    label:"已到面",
+                    label: "已到面",
                     value: "faced"
                 },
                 {
-                    label:"已录用",
+                    label: "已录用",
                     value: "employ"
                 },
                 {
-                    label:"已入职",
+                    label: "已入职",
                     value: "join"
-                },
-                ],
+                }
+            ],
             // 专业数组
             majorOptions: [
                 {
@@ -780,6 +795,11 @@ export default {
     methods: {
         // 搜索
         search() {
+            if (this.addLineTag) {
+                this.addLineTag = false;
+                this.newLine = {};
+                this.tableData.shift();
+            }
             this.loading = true;
             let beginDate = "",
                 endDate = "";
@@ -863,7 +883,6 @@ export default {
         // 保存新增
         saveLine() {
             this.loading = true;
-            console.log(this.newLine)
             this.addLineTag = false;
             this.tableData[0].addLineTag = false;
             setTimeout(() => {
