@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-26 15:59:44
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-28 23:51:56
+ * @LastEditTime: 2021-01-05 22:34:17
 -->
 
 # hr 管理系统后台
@@ -39,7 +39,7 @@ npm i cross-env --save-dev
 
 5. 使用`import`步骤：
 在package中的`script`中的`dev`和`start`后面添加`--exec babel-node`
-加载依赖`babel-preset-es2015`
+加载依赖`babel-preset-es2015`和`babel-cli`
 创建文件`babelrc`，文件内容如下：
   ```js
   {
@@ -60,7 +60,7 @@ npm i koa-generic-session koa-redis redis --save
 引用`session`
 
 ```js
-const session = require("koa-generice-session");
+const session = require("koa-generic-session");
 const redisStore = require("koa-redis");
 
 app.keys = ["dsafasfas$@!6"];
@@ -118,6 +118,7 @@ module.exports = {
 	genPassword,
 };
 ```
+- 使用JWT生成token令牌验证用户
 
 ## 记录日志
 
@@ -163,3 +164,27 @@ const list = await Blog.find(whereOpt).sort({ _id: -1 });
 
 ## 打包上线
 将vue打包后的文件放到`public`文件夹下即可
+
+## 跨域处理
+安装库 koa2-cors
+```js
+  npm i koa2-cors --save
+
+  const cors = require('koa2-cors');
+ 
+  app.use(
+    cors({
+        origin: function(ctx) { //设置允许来自指定域名请求
+            if (ctx.url === '/test') {
+                return '*'; // 允许来自所有域名请求
+            }
+            return 'http://localhost:8080'; //只允许http://localhost:8080这个域名的请求
+        },
+        maxAge: 5, //指定本次预检请求的有效期，单位为秒。
+        credentials: true, //是否允许发送Cookie
+        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], //设置所允许的HTTP请求方法'
+        allowHeaders: ['Content-Type', 'Authorization', 'Accept'], //设置服务器支持的所有头信息字段
+        exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] //设置获取其他自定义字段
+    })
+);
+```
