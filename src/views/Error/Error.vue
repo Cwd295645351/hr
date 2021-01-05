@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-17 23:01:28
+ * @LastEditTime: 2021-01-05 22:17:35
 -->
 <template>
     <div class="error">
@@ -29,16 +29,16 @@ export default {
     },
     mounted() {
         var that = this;
-        /* setInterval(function() {
-      that.time--;
-      if (that.time === 0) {
-        that.$router.push("/info");
-      }
-    }, 1000); */
+        setInterval(function () {
+            that.time--;
+            if (that.time === 0) {
+                that.$router.push("/main");
+            }
+        }, 1000);
     },
     methods: {
         backToInfo() {
-            this.$router.push("/info");
+            this.$router.push("/main");
         }
     }
 };
