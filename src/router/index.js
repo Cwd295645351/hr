@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-17 23:01:49
+ * @LastEditTime: 2021-01-05 22:16:48
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -14,12 +14,12 @@ Vue.use(VueRouter);
 const routes = [
 	{
 		path: "/",
-		redirect: "/login",
+		redirect: "/login"
 	},
 	{
 		path: "/login", // 登录页
 		name: "Login",
-		component: () => import("../views/Login/Login.vue"),
+		component: () => import("../views/Login/Login.vue")
 	},
 	{
 		path: "/main", // 主页面
@@ -28,33 +28,33 @@ const routes = [
 		children: [
 			{
 				path: "interview", // 面试系统
-				component: () => import("../views/Interview/Interview.vue"),
+				component: () => import("../views/Interview/Interview.vue")
 			},
 			{
 				path: "user",
 				name: "User",
-				component: () => import("../views/User/User.vue"),
+				component: () => import("../views/User/User.vue")
 			},
 			{
 				path: "salary",
 				name: "Salary",
-				component: () => import("../views/Salary/Salary.vue"),
-			},
-		],
+				component: () => import("../views/Salary/Salary.vue")
+			}
+		]
 	},
 	{
 		path: "/error",
 		name: "Error",
-		component: () => import("../views/Error/Error.vue"),
+		component: () => import("../views/Error/Error.vue")
 	},
 	{
 		path: "*",
-		redirect: "/error",
-	},
+		redirect: "/error"
+	}
 ];
 
 const router = new VueRouter({
-	routes,
+	routes
 });
 
 export default router;

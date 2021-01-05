@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-17 23:00:02
+ * @LastEditTime: 2021-01-05 22:01:18
 -->
 <template>
     <div class="login">
@@ -17,10 +17,10 @@
                     :rules="rules"
                     ref="form"
                 >
-                    <el-form-item prop="user">
+                    <el-form-item prop="username">
                         <el-input
                             prefix-icon="el-icon-user-solid"
-                            v-model="form.user"
+                            v-model="form.username"
                             @keyup.enter.native="login('form')"
                             placeholder="请输入用户名"
                         ></el-input>
@@ -46,15 +46,16 @@
 </template>
 
 <script>
+import { login } from "../../../apis/login/index";
 export default {
     data() {
         return {
             form: {
-                user: "",
+                username: "",
                 password: ""
             },
             rules: {
-                user: [
+                username: [
                     {
                         validator: (rule, value, callback) => {
                             if (!value) {
@@ -80,11 +81,17 @@ export default {
     },
     methods: {
         // 登录
-        login(formName) {
-            console.log("账户", this.form.user, "密码", this.form.password);
-            this.$refs[formName].validate((valid) => {
+        async login(formName) {
+            console.log("账户", this.form.username, "密码", this.form.password);
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    this.$router.push("/main");
+                    const {
+                        data: { data, retCode, message }
+                    } = await login(this.form);
+                    if (retCode === 0) {
+                        sessionStorage.setItem("token", data.token);
+                        this.$router.push("/main");
+                    }
                 } else {
                     console.log("error submit!!");
                     return false;
