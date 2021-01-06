@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-03 22:16:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 23:57:20
+ * @LastEditTime: 2021-01-06 22:12:08
  */
 
 // 预防xss攻击
@@ -12,27 +12,20 @@ import xss from "xss";
 
 import genPassword from "../utils/cryp";
 import User from "../db/models/User";
-import JWT from "../utils/jwt";
 
 const login = async (username, password) => {
 	username = xss(username);
 	password = xss(genPassword(password)); // 对密码进行加密
 	console.log(password);
-	// JWT();
 	const res = await User.findOne({
 		username: username,
 		password: password
 	});
 	if (res) {
-		const retData = {
-			username: username,
-			token: JWT.createJWT(username)
-		};
-		return retData;
+		return res;
 	} else {
 		return null;
 	}
-	// return res;
 };
 
 export default login;
