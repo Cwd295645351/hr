@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-26 15:59:44
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 22:34:17
+ * @LastEditTime: 2021-01-06 23:39:18
 -->
 
 # hr 管理系统后台
@@ -49,9 +49,10 @@ npm i cross-env --save-dev
 
 ##
 
-## 实现 session
+## 鉴权
+前后端鉴权有两种方式，一种是`session-cookie`鉴权，保存到redis中，另一种是token鉴权。
 
--   基于`koa-generic-session`和`koa-redis`实现登录
+#### 1. 基于`koa-generic-session`和`koa-redis`实现登录
 
 ```js
 npm i koa-generic-session koa-redis redis --save
@@ -85,6 +86,66 @@ app.use(
 ```js
 ctx.session.count;
 ```
+### 2. token鉴权
+
+`koa2`中实现鉴权方式是使用`jsonwebtoken`插件来产生token，用`koa-jwt`插件来验证token产生`token`方法：
+```js
+const jwt = require('jsonwebtoken');
+
+router.post('/login', async (ctx) => {
+    const data = ctx.request.body;
+    const result = await User.findOne({
+        username: data.username,
+        password: data.password
+    })
+    if(result !== null){
+        const token = jwt.sign({
+            username: result.username,
+            _id: result._id
+        }, 'admin', { expiresIn: '2h' });
+        return ctx.body = {
+            code: 200,
+            token: token,
+            msg: '登录成功'
+        }
+    }else{
+        return ctx.body = {
+            code: 400,
+            token: null,
+            msg: '用户名或密码错误'
+        }
+    }
+});
+```
+  验证`token`方法：
+```js
+const koajwt = require('koa-jwt');
+
+// 错误处理
+app.use((ctx, next) => {
+    return next().catch((err) => {
+        if(err.status === 401){
+            ctx.status = 401;
+      		ctx.body = 'Protected resource, use Authorization header to get access\n';
+        }else{
+            throw err;
+        }
+    })
+})
+
+app.use(koajwt({
+	secret: 'my_token'
+}).unless({
+	path: [/\/user\/login/]
+}));
+/*
+  通过 app.use 来调用该中间件，并传入密钥 {secret: 'my_token'}
+  unless 可以指定哪些 URL 不需要进行 token 验证。
+  token 验证失败的时候会抛出401错误，因此需要添加错误处理，而且要放在 app.use(koajwt()) 之前，否则不执行。
+  如果请求时没有token或者token过期，则会返回401。
+*/
+```
+本项目使用token方式进行鉴权
 
 ## 安全性防范
 
@@ -188,3 +249,6 @@ const list = await Blog.find(whereOpt).sort({ _id: -1 });
     })
 );
 ```
+
+## 下一个版本功能点
+下个版本引入权限管理，对不同用户分配不同的权限
