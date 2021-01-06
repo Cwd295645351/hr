@@ -4,11 +4,10 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 23:58:09
+ * @LastEditTime: 2021-01-06 23:33:20
  */
 import Router from "koa-router";
 import { getList, addInterviewee } from "../controller/situation";
-import loginCheck from "../middleware/loginCheck";
 import resModel from "../model/resModel";
 
 const SuccessModel = resModel.SuccessModel;
@@ -19,7 +18,7 @@ const router = Router({
 });
 
 // 获取面试者列表
-router.get("/getList", loginCheck, async (ctx, next) => {
+router.get("/getList", async (ctx, next) => {
 	console.log(ctx.session);
 	const res = await getList();
 	console.log(res.length);
@@ -31,7 +30,7 @@ router.get("/getList", loginCheck, async (ctx, next) => {
 });
 
 // 新增面试者
-router.post("/addInterviewee", loginCheck, async (ctx, next) => {
+router.post("/addInterviewee", async (ctx, next) => {
 	const interviewee = ctx.request.body;
 	const res = await addInterviewee(interviewee);
 	if (res) {

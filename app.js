@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-28 23:15:38
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 21:55:31
+ * @LastEditTime: 2021-01-06 23:31:34
  */
 // const Koa = require('koa')
 import Koa from "koa";
@@ -16,6 +16,7 @@ import koaStatic from "koa-static";
 import session from "koa-generic-session";
 import redisStore from "koa-redis";
 import cors from "koa2-cors";
+import koajwt from "koa-jwt";
 
 import CONF from "./conf/db";
 
@@ -23,6 +24,7 @@ import user from "./routes/user";
 import situation from "./routes/situation";
 
 const app = new Koa();
+const SECRET_KEY = "admin_jwt_token";
 
 // error handler
 onerror(app);
@@ -52,7 +54,7 @@ app.use(
 		cookie: {
 			path: "/",
 			httpOnly: true,
-			maxAge: 3 * 60 * 60 * 1000 // 过期时间3小时
+			maxAge: 2 * 60 * 60 * 1000 // 过期时间2小时
 		},
 		// 配置 redis
 		store: redisStore({
@@ -75,6 +77,29 @@ app.use(
 		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], //设置所允许的HTTP请求方法'
 		allowHeaders: ["Content-Type", "Authorization", "Accept"], //设置服务器支持的所有头信息字段
 		exposeHeaders: ["WWW-Authenticate", "Server-Authorization"] //设置获取其他自定义字段
+	})
+);
+
+// 错误处理
+app.use((ctx, next) => {
+	return next().catch((err) => {
+		if (err.status === 401) {
+			ctx.status = 401;
+			ctx.body = {
+				retCode: 401,
+				message: "接口鉴权失败，请重新登录"
+			};
+		} else {
+			throw err;
+		}
+	});
+});
+
+app.use(
+	koajwt({
+		secret: SECRET_KEY
+	}).unless({
+		path: [/\/api\/user\/login/]
 	})
 );
 
