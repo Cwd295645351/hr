@@ -4,27 +4,27 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 22:56:55
+ * @LastEditTime: 2021-01-07 23:47:08
  */
 import mongoose from "../db";
 
 const IntervieweesSchema = mongoose.Schema(
 	{
-		date: {
+		userId: {
 			type: String,
 			required: true
+		},
+		date: {
+			type: String
 		},
 		majorId: {
-			type: String,
-			required: true
+			type: String
 		},
 		majorName: {
-			type: String,
-			required: true
+			type: String
 		},
 		name: {
-			type: String,
-			required: true
+			type: String
 		},
 		phoneNum: {
 			type: Number
@@ -33,20 +33,16 @@ const IntervieweesSchema = mongoose.Schema(
 			type: String
 		},
 		channelId: {
-			type: String,
-			required: true
+			type: String
 		},
 		channelName: {
-			type: String,
-			required: true
+			type: String
 		},
 		status: {
-			type: String,
-			required: true
+			type: String
 		},
-		schedules:{
-			type:Object,
-			required:true
+		schedules: {
+			type: Object
 		},
 		phoneInterviewSituation: {
 			type: String
