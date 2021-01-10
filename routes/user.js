@@ -4,15 +4,13 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-06 23:29:46
+ * @LastEditTime: 2021-01-11 00:15:09
  */
 import Router from "koa-router";
 import login from "../controller/user";
-import resModel from "../model/resModel";
+import { SuccessModel, ErrorModel } from "../model/resModel";
 import jwt from "jsonwebtoken";
 
-const SuccessModel = resModel.SuccessModel;
-const ErrorModel = resModel.ErrorModel;
 
 const SECRET_KEY = "admin_jwt_token";
 const EXPIRES_TIME = 3600000;
