@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-28 23:15:38
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-06 23:31:34
+ * @LastEditTime: 2021-01-10 22:41:34
  */
 // const Koa = require('koa')
 import Koa from "koa";
@@ -22,6 +22,7 @@ import CONF from "./conf/db";
 
 import user from "./routes/user";
 import situation from "./routes/situation";
+import common from "./routes/common";
 
 const app = new Koa();
 const SECRET_KEY = "admin_jwt_token";
@@ -106,6 +107,7 @@ app.use(
 // routes
 app.use(user.routes(), user.allowedMethods());
 app.use(situation.routes(), situation.allowedMethods());
+app.use(common.routes(), common.allowedMethods());
 
 // error-handling
 app.on("error", (err, ctx) => {
