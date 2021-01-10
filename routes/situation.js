@@ -4,14 +4,15 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-06 23:33:20
+ * @LastEditTime: 2021-01-11 00:14:13
  */
 import Router from "koa-router";
-import { getList, addInterviewee } from "../controller/situation";
-import resModel from "../model/resModel";
-
-const SuccessModel = resModel.SuccessModel;
-const ErrorModel = resModel.ErrorModel;
+import {
+	getList,
+	addInterviewee,
+	editInterviewee
+} from "../controller/situation";
+import { SuccessModel, ErrorModel } from "../model/resModel";
 
 const router = Router({
 	prefix: "/api/situation"
@@ -21,7 +22,6 @@ const router = Router({
 router.get("/getList", async (ctx, next) => {
 	console.log(ctx.session);
 	const res = await getList();
-	console.log(res.length);
 	if (res.length > 0) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
@@ -32,6 +32,9 @@ router.get("/getList", async (ctx, next) => {
 // 新增面试者
 router.post("/addInterviewee", async (ctx, next) => {
 	const interviewee = ctx.request.body;
+	if (!interviewee.userId || interviewee.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+	}
 	const res = await addInterviewee(interviewee);
 	if (res) {
 		ctx.body = new SuccessModel("", "新增成功");
@@ -40,4 +43,23 @@ router.post("/addInterviewee", async (ctx, next) => {
 	}
 });
 
-module.exports = router;
+// 编辑面试者
+router.post("/editInterviewee", async (ctx, next) => {
+	const interviewee = ctx.request.body;
+	if (!interviewee.userId || interviewee.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
+	if (!interviewee.id || interviewee.id == "") {
+		ctx.body = new ErrorModel(null, "id不能为空");
+		return;
+	}
+	const res = await editInterviewee(interviewee);
+	if (res) {
+		ctx.body = new SuccessModel("", "修改成功");
+	} else {
+		ctx.body = new ErrorModel(null, "修改失败");
+	}
+});
+
+export default router;
