@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-07 23:47:08
+ * @LastEditTime: 2021-01-11 00:05:04
  */
 import mongoose from "../db";
 
@@ -57,4 +57,4 @@ const IntervieweesSchema = mongoose.Schema(
 // Interview 对应 collection
 const Interview = mongoose.model("interviewees", IntervieweesSchema);
 
-module.exports = Interview;
+export default Interview;

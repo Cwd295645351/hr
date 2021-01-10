@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-24 22:55:45
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-28 00:16:42
+ * @LastEditTime: 2021-01-10 23:43:26
  */
 
 import mongoose from "../db";
@@ -16,8 +16,8 @@ const MajorSchema = mongoose.Schema(
 		majorName: {
 			type: String,
 			required: true, // 必需
-			unique: true, // 唯一，不能重复
-		},
+			unique: true // 唯一，不能重复
+		}
 	},
 	{ timestamps: true }
 );
@@ -25,4 +25,4 @@ const MajorSchema = mongoose.Schema(
 // Model 对应 collection
 const Major = mongoose.model("major", MajorSchema);
 
-module.exports = Major;
+export default Major;
