@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-11 00:05:04
+ * @LastEditTime: 2021-01-11 22:45:20
  */
 import mongoose from "../db";
 
@@ -15,40 +15,52 @@ const IntervieweesSchema = mongoose.Schema(
 			required: true
 		},
 		date: {
-			type: String
+			type: String,
+			required: true
 		},
 		majorId: {
-			type: String
+			type: String,
+			required: true
 		},
 		majorName: {
-			type: String
+			type: String,
+			required: true
 		},
 		name: {
-			type: String
+			type: String,
+			required: true
 		},
 		phoneNum: {
-			type: Number
+			type: Number,
+			required: true
 		},
 		email: {
-			type: String
+			type: String,
+			required: true
 		},
 		channelId: {
-			type: String
+			type: String,
+			required: true
 		},
 		channelName: {
-			type: String
+			type: String,
+			required: true
 		},
 		status: {
-			type: String
+			type: String,
+			required: true
 		},
 		schedules: {
-			type: Object
+			type: Object,
+			required: true
 		},
 		phoneInterviewSituation: {
-			type: String
+			type: String,
+			required: true
 		},
 		remark: {
-			type: String
+			type: String,
+			required: true
 		}
 	},
 	{ timestamps: true }
