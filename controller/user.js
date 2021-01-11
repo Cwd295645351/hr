@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-03 22:16:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-06 22:12:08
+ * @LastEditTime: 2021-01-11 23:45:20
  */
 
 // 预防xss攻击
@@ -16,7 +16,6 @@ import User from "../db/models/User";
 const login = async (username, password) => {
 	username = xss(username);
 	password = xss(genPassword(password)); // 对密码进行加密
-	console.log(password);
 	const res = await User.findOne({
 		username: username,
 		password: password
