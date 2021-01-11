@@ -4,13 +4,12 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-11 00:15:09
+ * @LastEditTime: 2021-01-11 23:49:51
  */
 import Router from "koa-router";
 import login from "../controller/user";
 import { SuccessModel, ErrorModel } from "../model/resModel";
 import jwt from "jsonwebtoken";
-
 
 const SECRET_KEY = "admin_jwt_token";
 const EXPIRES_TIME = 3600000;
@@ -43,7 +42,8 @@ router.post("/login", async (ctx, next) => {
 		const retData = {
 			accessToken: accessToken,
 			refreshToken: refreshToken,
-			expiresIn: EXPIRES_TIME
+			expiresIn: EXPIRES_TIME,
+			userId: res._id
 		};
 
 		ctx.body = new SuccessModel(retData, "登录成功");
@@ -73,7 +73,8 @@ router.post("/refreshToken", async (ctx, next) => {
 		const retData = {
 			accessToken: accessToken,
 			refreshToken: refreshToken,
-			expiresIn: EXPIRES_TIME
+			expiresIn: EXPIRES_TIME,
+			userId: ctx.session.user_id
 		};
 
 		ctx.body = new SuccessModel(retData, "刷新成功");
