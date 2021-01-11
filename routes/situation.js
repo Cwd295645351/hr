@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-11 00:14:13
+ * @LastEditTime: 2021-01-11 23:59:42
  */
 import Router from "koa-router";
 import {
@@ -19,9 +19,9 @@ const router = Router({
 });
 
 // 获取面试者列表
-router.get("/getList", async (ctx, next) => {
-	console.log(ctx.session);
-	const res = await getList();
+router.post("/getList", async (ctx, next) => {
+	const params = ctx.request.body;
+	const res = await getList(params);
 	if (res.length > 0) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
