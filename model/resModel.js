@@ -1,10 +1,10 @@
 /*
- * @Description:
- * @Version:
- * @Author:
+ * @Description: 返回结果模板
+ * @Version: 0.0.1
+ * @Author: Chen
  * @Date: 2021-01-03 21:55:50
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-11 00:15:53
+ * @LastEditTime: 2021-01-12 00:00:52
  */
 class BaseModel {
 	constructor(data, message) {
