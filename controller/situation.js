@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-11 23:56:59
+ * @LastEditTime: 2021-01-14 00:08:32
  */
 
 import xss from "xss";
@@ -30,17 +30,40 @@ export const getList = async (params) => {
 	let mp = {};
 	const pageIndex = params.pageIndex < 0 ? 0 : params.pageIndex;
 	const pageSize = params.pageSize;
-	for (let i in params) {
-		if (params[i] && i != "pageIndex" && i != "pageSize") {
-			mp[i] = new RegExp(params[i], "ig");
-		}
+
+	if (params.beginDate && params.endDate) {
+		mp.date = {
+			$gte: new Date(params.beginDate),
+			$lte: new Date(params.endDate)
+		};
+	} else if (params.beginDate && !params.endDate) {
+		mp.date = {
+			$gte: new Date(params.beginDate)
+		};
+	} else if (!params.beginDate && params.endDate) {
+		mp.date = {
+			$lte: new Date(params.endDate)
+		};
+	}
+	mp.majorId = new RegExp(params.majorId, "ig");
+	mp.channelId = new RegExp(params.channelId, "ig");
+	mp.name = new RegExp(params.name, "ig");
+	mp.phoneNum = new RegExp(params.phoneNum, "ig");
+	mp.email = new RegExp(params.email, "ig");
+	if (params.status.length > 0) {
+		mp.status = {
+			$in: params.status
+		};
 	}
 
-	console.log("查询条件:", mp);
 	const res = await Interview.find(mp)
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
-	return res;
+
+	return {
+		datas: res,
+		total: res.length
+	};
 };
 
 // 添加面试者
@@ -82,6 +105,5 @@ export const editInterviewee = async (data) => {
 		},
 		{ new: true }
 	);
-	console.log("结果：",res);
 	return res;
 };

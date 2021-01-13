@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-11 23:59:42
+ * @LastEditTime: 2021-01-14 00:02:19
  */
 import Router from "koa-router";
 import {
@@ -21,12 +21,23 @@ const router = Router({
 // 获取面试者列表
 router.post("/getList", async (ctx, next) => {
 	const params = ctx.request.body;
-	const res = await getList(params);
-	if (res.length > 0) {
-		ctx.body = new SuccessModel(res, "获取成功");
-	} else {
-		ctx.body = new ErrorModel(null, "获取失败");
+	if (params.beginDate != "") {
+		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
+		if (reg.test(params.beginDate)==false) {
+			ctx.body = new ErrorModel(null, "开始时间不规范");
+			return;
+		}
 	}
+	if (params.endDate != "") {
+		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
+		if (reg.test(params.endDate==false)) {
+			ctx.body = new ErrorModel(null, "结束时间不规范");
+			return;
+		}
+	}
+	const res = await getList(params);
+
+	ctx.body = new SuccessModel(res, "获取成功");
 });
 
 // 新增面试者
