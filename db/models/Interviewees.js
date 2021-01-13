@@ -4,9 +4,10 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-11 22:45:20
+ * @LastEditTime: 2021-01-14 00:08:19
  */
 import mongoose from "../db";
+import dayjs from "dayjs";
 
 const IntervieweesSchema = mongoose.Schema(
 	{
@@ -15,8 +16,11 @@ const IntervieweesSchema = mongoose.Schema(
 			required: true
 		},
 		date: {
-			type: String,
-			required: true
+			type: Date,
+			required: true,
+			get: (v) => {
+				return dayjs(v).format("YYYY-MM-DD");
+			}
 		},
 		majorId: {
 			type: String,
@@ -31,7 +35,7 @@ const IntervieweesSchema = mongoose.Schema(
 			required: true
 		},
 		phoneNum: {
-			type: Number,
+			type: String,
 			required: true
 		},
 		email: {
@@ -65,6 +69,9 @@ const IntervieweesSchema = mongoose.Schema(
 	},
 	{ timestamps: true }
 );
+
+// 使格式化时间能输出
+IntervieweesSchema.set("toJSON", { getters: true });
 
 // Interview 对应 collection
 const Interview = mongoose.model("interviewees", IntervieweesSchema);
