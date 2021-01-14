@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-28 23:15:38
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-10 22:41:34
+ * @LastEditTime: 2021-01-15 00:30:06
  */
 // const Koa = require('koa')
 import Koa from "koa";
@@ -22,6 +22,8 @@ import CONF from "./conf/db";
 
 import user from "./routes/user";
 import situation from "./routes/situation";
+import statistics from "./routes/statistics";
+import schedule from "./routes/schedule";
 import common from "./routes/common";
 
 const app = new Koa();
@@ -108,6 +110,8 @@ app.use(
 app.use(user.routes(), user.allowedMethods());
 app.use(situation.routes(), situation.allowedMethods());
 app.use(common.routes(), common.allowedMethods());
+app.use(statistics.routes(), statistics.allowedMethods());
+app.use(schedule.routes(), schedule.allowedMethods());
 
 // error-handling
 app.on("error", (err, ctx) => {
