@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-24 22:47:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-03 22:21:10
+ * @LastEditTime: 2021-01-16 23:52:04
  */
 
 import mongoose from "mongoose";
@@ -19,7 +19,8 @@ mongoose.set("useFindAndModify", false);
 mongoose.connect(`${url}/${dbName}`, {
 	// 配置
 	useNewUrlParser: true,
-	useUnifiedTopology: true
+	useUnifiedTopology: true,
+	useCreateIndex: true
 });
 
 //  获取连接对象
