@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-26 15:59:44
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-12 23:41:51
+ * @LastEditTime: 2021-01-17 00:24:10
 -->
 
 # hr 管理系统后台
@@ -254,3 +254,4 @@ const list = await Blog.find(whereOpt).sort({ _id: -1 });
 1. 下个版本引入权限管理，对不同用户分配不同的权限
 2. 文件管理
 3. 面试者录用后背景颜色变化
+4. 面试情况表添加入职时间
