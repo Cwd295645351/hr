@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-26 15:59:44
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-17 00:24:10
+ * @LastEditTime: 2021-01-18 00:10:24
 -->
 
 # hr 管理系统后台
@@ -248,6 +248,49 @@ const list = await Blog.find(whereOpt).sort({ _id: -1 });
         exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] //设置获取其他自定义字段
     })
 );
+```
+
+## PM2相关配置
+添加相关依赖`pm2`、`babel-polyfill`、`babel-register`
+pm2 兼容es6方法如下：
+1. package.json文件：
+```js
+"prd": "cross-env NODE_ENV=production pm2 start pm2.conf.json"
+```
+2. 在根目录创建文件`pm2.conf.json`，内容如下
+```js
+{
+  "apps" : [{
+    "name": "hr-manage",
+    "script": "server.js",
+    "instances": 2,
+    "autorestart": true,
+    "watch": true,
+    "max_memory_restart": "500M",
+    "interpreter": "node_modules/babel-cli/bin/babel-node.js",
+    "err_file": "logs/err.log",
+    "out_file": "logs/out.log",
+    "log_date_format": "YYYY-MM-DD HH:mm:ss",
+    "env": {
+      "NODE_ENV": "production"
+    },
+    "env_dev": {
+      "NODE_ENV": "development"
+    },
+    "env_pred": {
+      "NODE_ENV": "pred"
+    },
+    "env_prod": {
+      "NODE_ENV": "production"
+    }
+  }]
+}
+```
+3. 另外创建`server.js`文件，内容如下：
+```js
+require('babel-register');
+require('babel-polyfill');
+require('./bin/www')
 ```
 
 ## 下一个版本功能点
