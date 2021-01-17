@@ -4,6 +4,7 @@ bin-release/
 [Oo]bj/
 /node_modules/
 /public
+/logs
 
 # Other files and folders
 .settings/

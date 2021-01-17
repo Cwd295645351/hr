@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-28 23:15:38
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-15 00:30:06
+ * @LastEditTime: 2021-01-17 22:14:59
  */
 // const Koa = require('koa')
 import Koa from "koa";
@@ -17,6 +17,9 @@ import session from "koa-generic-session";
 import redisStore from "koa-redis";
 import cors from "koa2-cors";
 import koajwt from "koa-jwt";
+import path from "path";
+import fs from "fs";
+import morgan from "koa-morgan";
 
 import CONF from "./conf/db";
 
@@ -50,6 +53,30 @@ app.use(async (ctx, next) => {
 	console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
+// 配置日志
+const ENV = process.env.NODE_ENV;
+console.log("当前环境：",ENV);
+if (ENV != "production") {
+	// 开发环境 / 测试环境
+	app.use(
+		morgan("dev", {
+			stream: process.stdout
+		})
+	);
+} else {
+	// 线上环境
+	const logFileName = path.join(__dirname, "logs", "access.log");
+	const writeStream = fs.createWriteStream(logFileName, {
+		flags: "a"
+	});
+	app.use(
+		morgan("combined", {
+			stream: writeStream
+		})
+	);
+}
+
+// 配置session和cookie
 app.keys = ["dsafasfas$@!6"];
 app.use(
 	session({
@@ -66,6 +93,7 @@ app.use(
 	})
 );
 
+// 处理跨域请求
 app.use(
 	cors({
 		origin: function (ctx) {
@@ -98,6 +126,7 @@ app.use((ctx, next) => {
 	});
 });
 
+// jwt验证
 app.use(
 	koajwt({
 		secret: SECRET_KEY

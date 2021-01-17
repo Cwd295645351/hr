@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-03 23:23:56
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-04 23:58:38
+ * @LastEditTime: 2021-01-17 23:52:49
  */
 import crypto from "crypto";
 
@@ -33,7 +33,6 @@ let jwtToken = "";
 // 生成JWT
 function createJWT(username) {
 	let date = new Date();
-	console.log(date.getTime());
 	payload.iat = date.getTime();
 	payload.exp = payload.iat + 360000;
 	payload.name = username;
