@@ -12,14 +12,14 @@ import router from "./router";
 import store from "./store";
 import ElementUI from "element-ui";
 import echarts from "echarts";
-import moment from "moment";
+import dayjs from "dayjs";
 
 import "element-ui/lib/theme-chalk/index.css";
 import "./../public/css/reset.less";
 
 Vue.use(ElementUI);
 Vue.prototype.$echarts = echarts;
-Vue.prototype.$moment = moment;
+Vue.prototype.$dayjs = dayjs;
 
 import tools from "../utils/tools";
 Vue.prototype.$tools = tools;

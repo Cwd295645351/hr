@@ -381,12 +381,12 @@ export default {
             let beginDate = "",
                 endDate = "";
             if (this.searchCondition.beginDate) {
-                beginDate = this.$moment(this.searchCondition.beginDate).format(
+                beginDate = this.$dayjs(this.searchCondition.beginDate).format(
                     "YYYY-MM-DD"
                 );
             }
             if (this.searchCondition.endDate) {
-                endDate = this.$moment(this.searchCondition.endDate).format(
+                endDate = this.$dayjs(this.searchCondition.endDate).format(
                     "YYYY-MM-DD"
                 );
             }

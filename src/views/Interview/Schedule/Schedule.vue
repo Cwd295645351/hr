@@ -437,31 +437,31 @@ export default {
         };
     },
     created() {
-        this.$moment().weekday(1);
+        this.$dayjs().weekday(1);
         let today = new Date();
-        let mondayDate = this.$moment(today)
+        let mondayDate = this.$dayjs(today)
             .startOf("week")
             .format("YYYY-MM-DD");
-        let sundayDate = this.$moment(today).endOf("week").format("YYYY-MM-DD");
+        let sundayDate = this.$dayjs(today).endOf("week").format("YYYY-MM-DD");
 
-        this.beginDate = this.$moment(
-            this.$moment(mondayDate).subtract(6, "days")
+        this.beginDate = this.$dayjs(
+            this.$dayjs(mondayDate).subtract(6, "days")
         );
-        this.endDate = this.$moment(this.$moment(sundayDate).add(8, "days"));
+        this.endDate = this.$dayjs(this.$dayjs(sundayDate).add(8, "days"));
         console.log(
-            this.$moment(this.beginDate).format("YYYY-MM-DD"),
-            this.$moment(this.endDate).format("YYYY-MM-DD")
+            this.$dayjs(this.beginDate).format("YYYY-MM-DD"),
+            this.$dayjs(this.endDate).format("YYYY-MM-DD")
         );
     },
     mounted() {},
     methods: {
         // 下一周
         nextWeek() {
-            this.endDate = this.$moment(this.endDate).add(7, "days");
-            this.beginDate = this.$moment(this.beginDate).add(7, "days");
+            this.endDate = this.$dayjs(this.endDate).add(7, "days");
+            this.beginDate = this.$dayjs(this.beginDate).add(7, "days");
             console.log(
-                this.$moment(this.beginDate).format("YYYY-MM-DD"),
-                this.$moment(this.endDate).format("YYYY-MM-DD")
+                this.$dayjs(this.beginDate).format("YYYY-MM-DD"),
+                this.$dayjs(this.endDate).format("YYYY-MM-DD")
             );
             let data = [
                 {
@@ -560,11 +560,11 @@ export default {
         },
         // 上一周
         lastWeek() {
-            this.endDate = this.$moment(this.endDate).subtract(7, "days");
-            this.beginDate = this.$moment(this.beginDate).subtract(7, "days");
+            this.endDate = this.$dayjs(this.endDate).subtract(7, "days");
+            this.beginDate = this.$dayjs(this.beginDate).subtract(7, "days");
             console.log(
-                this.$moment(this.beginDate).format("YYYY-MM-DD"),
-                this.$moment(this.endDate).format("YYYY-MM-DD")
+                this.$dayjs(this.beginDate).format("YYYY-MM-DD"),
+                this.$dayjs(this.endDate).format("YYYY-MM-DD")
             );
             let data = [
                 {
