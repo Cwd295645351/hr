@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 22:01:18
+ * @LastEditTime: 2021-01-24 22:30:25
 -->
 <template>
     <div class="login">
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { login } from "../../../apis/login/index";
+import { login } from "../../../apis/interview/login";
 export default {
     data() {
         return {
@@ -89,8 +89,17 @@ export default {
                         data: { data, retCode, message }
                     } = await login(this.form);
                     if (retCode === 0) {
-                        sessionStorage.setItem("token", data.token);
-                        this.$router.push("/main");
+                        sessionStorage.setItem(
+                            "userInfo",
+                            JSON.stringify(data)
+                        );
+                        const nowDateStr = new Date().getTime();
+                        const expireAt = nowDateStr + data.expiresIn;
+                        // const expireAt = nowDateStr + 10000;
+                        sessionStorage.setItem("expireAt", expireAt);
+                        this.$router.push("/main/interview");
+                    } else {
+                        this.$message.error(message);
                     }
                 } else {
                     console.log("error submit!!");
