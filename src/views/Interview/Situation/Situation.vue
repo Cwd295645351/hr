@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 22:33:05
+ * @LastEditTime: 2021-01-24 23:50:36
 -->
 <template>
     <div class="situation">
@@ -142,6 +142,20 @@
                     <el-button v-show="addLineTag == true" @click="saveLine"
                         >保存</el-button
                     >
+                    <el-upload
+                        class="upload-demo"
+                        action
+                        :on-change="handleChange"
+                        :on-remove="handleRemove"
+                        :on-exceed="handleExceed"
+                        :show-file-list="false"
+                        :limit="1"
+                        :auto-upload="false"
+                    >
+                        <el-button size="small" type="primary"
+                            >批量上传</el-button
+                        >
+                    </el-upload>
                 </el-form-item>
             </el-form>
         </div>
@@ -795,6 +809,182 @@ export default {
     },
     created() {},
     methods: {
+        //导入文件时处理方法
+        handleChange(file, fileList) {
+            this.fileTemp = file.raw;
+            if (this.fileTemp) {
+                if (/\.(xls|xlsx)$/.test(file.name.toLowerCase())) {
+                    this.importfxx(this.fileTemp);
+                } else {
+                    this.$message({
+                        type: "warning",
+                        message: "附件格式错误，请重新上传！"
+                    });
+                }
+            } else {
+                this.$message({
+                    type: "warning",
+                    message: "请上传附件！"
+                });
+            }
+            fileList.pop();
+        },
+        importfxx(obj) {
+            let _this = this;
+            let inputDOM = this.$refs.inputer;
+            // 通过DOM取文件数据
+
+            this.file = event.currentTarget.files[0];
+
+            var rABS = false; //是否将文件读取为二进制字符串
+            var f = this.file;
+
+            var reader = new FileReader();
+            //if (!FileReader.prototype.readAsBinaryString) {
+            FileReader.prototype.readAsBinaryString = function (f) {
+                var binary = "";
+                var rABS = false; //是否将文件读取为二进制字符串
+                var pt = this;
+                var wb; //读取完成的数据
+                var outdata;
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var bytes = new Uint8Array(reader.result);
+                    var length = bytes.byteLength;
+                    for (var i = 0; i < length; i++) {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+                    //如果没有在main.js中引入，则此处需要引入，用于解析excel
+                    var XLSX = require("xlsx");
+                    if (rABS) {
+                        wb = XLSX.read(btoa(fixdata(binary)), {
+                            //手动转化
+                            type: "base64"
+                        });
+                    } else {
+                        wb = XLSX.read(binary, {
+                            type: "binary"
+                        });
+                    }
+                    /* var sheet = wb.Sheets[wb.SheetNames[0]];
+                    if (
+                        sheet.A1.v != "序号" ||
+                        sheet.B1.v != "渠道" ||
+                        sheet.C1.v != "姓名" ||
+                        sheet.D1.v != "联系方式" ||
+                        sheet.E1.v != "简历情况" ||
+                        sheet.F1.v != "电话沟通情况" ||
+                        sheet.G1.v != "面试时间" ||
+                        sheet.H1.v != "面试官" ||
+                        sheet.I1.v != "录用结果" ||
+                        sheet.J1.v != "备注" 
+                    ) {
+                        _this.$message({
+                            type: "warning",
+                            message: "模板格式错误，请重新上传！"
+                        });
+                        return;
+                    } */
+                    outdata = XLSX.utils.sheet_to_json(
+                        wb.Sheets[wb.SheetNames[0]]
+                    );
+                    // outdata就是读取的数据（不包含标题行即表头，表头会作为对象的下标）
+                    // 此处可对数据进行处理
+                    let arr = [];
+                    const userInfo = _this.$tools.getInfo();
+                    outdata.map((v) => {
+                        let obj = {};
+                        // 之后自己控制专业id
+                        obj.majorId = "";
+                        // obj.user_name = v["序号"];
+                        obj.userId = userInfo.userId;
+                        obj.date = v["日期"];
+                        obj.name = v["姓名"];
+                        // obj.user_class = v["简历情况"];
+                        obj.phoneInterviewSituation = v["电话沟通情况"];
+                        obj.remark = v["备注"];
+                        obj.phoneNum = v["联系方式"];
+
+                        const interviewer = v["面试官"];
+                        const interviewTime = v["面试时间"]
+                            .replaceAll("/", "-")
+                            .split(" ");
+                        obj.schedules = {
+                            date: interviewTime[0],
+                            time: interviewTime[1],
+                            interviewer: interviewer,
+                            form: ""
+                        };
+
+                        const channelName = v["渠道"];
+                        switch (channelName) {
+                            case "BOSS直聘":
+                                obj.channelId = "boss";
+                                break;
+                            case "建筑英才网(投递)":
+                                obj.channelId = "buildHRDeliver";
+                                break;
+                            case "建筑英才网(搜索)":
+                                obj.channelId = "buildHRSearch";
+                                break;
+                        }
+
+                        const status = v["录用结果"];
+                        if (status == "意向录用") {
+                        } else if (status == "不录用") {
+                        }
+
+                        
+                        arr.push(obj);
+                    });
+                    /* _this.datotal = arr;
+          _this.tableData = _this.datotal.slice(0, 10);
+          _this.totalPage = arr.length; */
+                    console.log(arr);
+                    /* _this.axios
+                        .post(_this.URL.addStudents, {
+                            token: _this.token,
+                            students: arr
+                        })
+                        .then((res) => {
+                            if (res.data.code == 200) {
+                                _this.$message({
+                                    message: res.data.message,
+                                    type: "success"
+                                });
+                                _this.search();
+                            } else {
+                                this.$message.error(res.data.message);
+                                if (
+                                    res.data.code == 1011 ||
+                                    res.data.code == 1013
+                                ) {
+                                    this.$router.push("/");
+                                }
+                            }
+                        }); */
+                    return arr;
+                };
+                reader.readAsArrayBuffer(f);
+            };
+            if (rABS) {
+                reader.readAsArrayBuffer(f);
+            } else {
+                reader.readAsBinaryString(f);
+            }
+        },
+        //超出最大上传文件数量时的处理方法
+        handleExceed() {
+            this.$message({
+                type: "warning",
+                message: "超出最大上传文件数量的限制！"
+            });
+            return;
+        },
+        //移除文件的操作方法
+        handleRemove(file, fileList) {
+            this.fileTemp = null;
+        },
         // 获取专业列表
         async getMajorList() {
             const { data, retCode, message } = await getMajorList();
@@ -811,24 +1001,24 @@ export default {
             let beginDate = "",
                 endDate = "";
             if (this.searchCondition.beginDate) {
-                beginDate = this.$moment(this.searchCondition.beginDate).format(
+                beginDate = this.$dayjs(this.searchCondition.beginDate).format(
                     "YYYY-MM-DD"
                 );
             }
             if (this.searchCondition.endDate) {
-                endDate = this.$moment(this.searchCondition.endDate).format(
+                endDate = this.$dayjs(this.searchCondition.endDate).format(
                     "YYYY-MM-DD"
                 );
             }
             console.log("搜索条件为：", this.searchCondition);
             /* this.tableData = this.tableData.map((item) => {
-        item.isPassScreening = item.isPassScreening ? "是" : "否";
-        item.isAttendInterview = item.isAttendInterview ? "是" : "否";
-        item.isFace = item.isFace ? "是" : "否";
-        item.isEmploy = item.isEmploy ? "是" : "否";
-        item.isJoin = item.isJoin ? "是" : "否";
-        return item;
-      }); */
+                item.isPassScreening = item.isPassScreening ? "是" : "否";
+                item.isAttendInterview = item.isAttendInterview ? "是" : "否";
+                item.isFace = item.isFace ? "是" : "否";
+                item.isEmploy = item.isEmploy ? "是" : "否";
+                item.isJoin = item.isJoin ? "是" : "否";
+                return item;
+            }); */
             setTimeout(() => {
                 this.loading = false;
             }, 1000);
@@ -981,6 +1171,11 @@ export default {
         border-right: 1px solid #c5c5c5;
         margin-right: 5px;
     }
+}
+/deep/ .upload-demo {
+    //文件上传组件
+    display: inline-block;
+    margin-left: 10px;
 }
 </style>
 <style lang="less">
