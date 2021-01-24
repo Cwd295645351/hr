@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 22:11:58
+ * @LastEditTime: 2021-01-24 22:22:53
  */
 import Vue from "vue";
 import App from "./App.vue";
@@ -21,22 +21,8 @@ Vue.use(ElementUI);
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$moment = moment;
 
-router.beforeEach((to, from, next) => {
-  console.log(to.path);
-  debugger
-	if (to.path == "/" || to.path == "/login" || to.path == "/error") {
-		next();
-	} else {
-		const token = sessionStorage.getItem("token");
-		if (token) {
-			next();
-		} else {
-			next({
-				path: "/login"
-			});
-		}
-	}
-});
+import tools from "../utils/tools";
+Vue.prototype.$tools = tools;
 
 Vue.config.productionTip = false;
 
