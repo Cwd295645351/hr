@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:17:20
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-17 00:21:00
+ * @LastEditTime: 2021-01-24 22:38:20
  */
 import Router from "koa-router";
 import getSchedule from "../controller/schedule";
@@ -15,14 +15,18 @@ const router = Router({
 	prefix: "/api/schedule"
 });
 
-router.post("/getSchedule", async (ctx, next) => {
-	const params = ctx.request.body;
+// 获取面试日程
+router.get("/getSchedule", async (ctx, next) => {
+	const params = ctx.query;
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.beginDate) == false) {
 			ctx.body = new ErrorModel(null, "开始时间不规范");
 			return;
 		}
+	} else {
+		ctx.body = new ErrorModel(null, "开始时间不能为空");
+		return;
 	}
 	if (params.endDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
@@ -30,6 +34,9 @@ router.post("/getSchedule", async (ctx, next) => {
 			ctx.body = new ErrorModel(null, "结束时间不规范");
 			return;
 		}
+	} else {
+		ctx.body = new ErrorModel(null, "结束时间不能为空");
+		return;
 	}
 	const res = await getSchedule(params);
 

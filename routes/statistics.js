@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-14 23:47:37
+ * @LastEditTime: 2021-01-24 16:29:01
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -16,8 +16,9 @@ const router = Router({
 });
 
 // 获取面试统计信息
-router.post("/getStatisticsData", async (ctx, next) => {
-	const params = ctx.request.body;
+router.get("/getStatisticsData", async (ctx, next) => {
+	const params = ctx.query;
+	console.log(111,params);
 	const retData = {
 		total: [0, 0, 0, 0, 0, 0]
 	};
@@ -86,8 +87,8 @@ router.post("/getStatisticsData", async (ctx, next) => {
 });
 
 // 获取不同专业入职比例
-router.post("/getEntryRate", async (ctx, next) => {
-	const params = ctx.request.body;
+router.get("/getEntryRate", async (ctx, next) => {
+	const params = ctx.query;
 	const retData = {};
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
