@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 22:16:48
+ * @LastEditTime: 2021-01-24 22:36:35
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -24,6 +24,7 @@ const routes = [
 	{
 		path: "/main", // 主页面
 		name: "Main",
+		redirect: "/main/interview",
 		component: () => import("../views/Main/Main.vue"),
 		children: [
 			{
@@ -55,6 +56,21 @@ const routes = [
 
 const router = new VueRouter({
 	routes
+});
+
+router.beforeEach((to, from, next) => {
+	if (to.path == "/" || to.path == "/login" || to.path == "/error") {
+		next();
+	} else {
+		const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+		if (userInfo) {
+			next();
+		} else {
+			next({
+				path: "/login"
+			});
+		}
+	}
 });
 
 export default router;
