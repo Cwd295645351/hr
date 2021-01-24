@@ -1,0 +1,30 @@
+/*
+ * @Description: 面试情况接口
+ * @Version: 0.0.1
+ * @Author: Chen
+ * @Date: 2021-01-23 13:41:03
+ * @LastEditors: Chen
+ * @LastEditTime: 2021-01-23 13:44:07
+ */
+
+import {
+	GET_INTERVIEW_LIST,
+	ADD_INTERVIEWEE,
+	EDIT_INTERVIEWEE
+} from "../InterviewUrlConfig";
+import axios from "../AxiosConfig";
+
+// 获取面试情况
+const getInterviewList = (data)=>{
+    return axios.post(GET_INTERVIEW_LIST,data);
+}
+
+// 新增面试者
+const addInterviewee = (data)=>{
+    return axios.post(ADD_INTERVIEWEE,data);
+}
+
+// 修改面试者
+const editInterviewee = (data)=>{
+    return axios.post(EDIT_INTERVIEWEE,data);
+}
