@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-05 22:22:33
+ * @LastEditTime: 2021-01-24 22:33:05
 -->
 <template>
     <div class="situation">
@@ -500,6 +500,7 @@
 
 <script>
 import myForm from "./form";
+import { getMajorList, getChannelList } from "../../../../apis/common";
 export default {
     components: {
         "my-form": myForm
@@ -789,10 +790,16 @@ export default {
         };
     },
     mounted() {
+        this.getMajorList();
         this.search();
     },
     created() {},
     methods: {
+        // 获取专业列表
+        async getMajorList() {
+            const { data, retCode, message } = await getMajorList();
+            console.log(data);
+        },
         // 搜索
         search() {
             if (this.addLineTag) {
