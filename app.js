@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-28 23:15:38
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-17 22:14:59
+ * @LastEditTime: 2021-01-24 22:37:19
  */
 // const Koa = require('koa')
 import Koa from "koa";
@@ -55,7 +55,7 @@ app.use(async (ctx, next) => {
 
 // 配置日志
 const ENV = process.env.NODE_ENV;
-console.log("当前环境：",ENV);
+console.log("当前环境：", ENV);
 if (ENV != "production") {
 	// 开发环境 / 测试环境
 	app.use(
@@ -97,11 +97,7 @@ app.use(
 app.use(
 	cors({
 		origin: function (ctx) {
-			//设置允许来自指定域名请求
-			if (ctx.url === "/test") {
-				return "*"; // 允许来自所有域名请求
-			}
-			return "http://localhost:8080"; //只允许http://localhost:8080这个域名的请求
+			return "*"; //只允许所有域名的请求
 		},
 		maxAge: 5, //指定本次预检请求的有效期，单位为秒。
 		credentials: true, //是否允许发送Cookie
@@ -115,6 +111,7 @@ app.use(
 app.use((ctx, next) => {
 	return next().catch((err) => {
 		if (err.status === 401) {
+			ctx.headers["Content-Type"] = "application/json";
 			ctx.status = 401;
 			ctx.body = {
 				retCode: 401,
