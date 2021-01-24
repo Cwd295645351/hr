@@ -4,12 +4,12 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-17 22:59:50
+ * @LastEditTime: 2021-01-24 22:29:02
 -->
 <template>
     <div class="main">
         <div class="top-bar">
-            <div class="logo" @click="resetModule">HR管理系统</div>
+            <div class="logo">HR管理系统</div>
             <div style="display: flex" v-if="current_module">
                 <div
                     v-for="(item, index) in modules"
@@ -25,7 +25,7 @@
             </div>
         </div>
         <router-view v-if="current_module"></router-view>
-        <div class="content" v-else>
+        <!-- <div class="content" v-else>
             <div
                 v-for="(item, index) in modules"
                 :key="item + index"
@@ -34,7 +34,7 @@
             >
                 {{ item.title }}
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -42,7 +42,8 @@
 export default {
     data() {
         return {
-            current_module: "",
+            heartBeatTimer: null,
+            current_module: "面试系统",
             modules: [
                 {
                     title: "面试系统",
@@ -65,12 +66,53 @@ export default {
             this.current_module = module;
         }
     },
+    mounted() {
+        sessionStorage.setItem("module", this.current_module);
+        this.heartBeat();
+    },
+    beforeDestroy() {
+        // sessionStorage.clear();
+    },
     methods: {
+        // 心跳监测
+        heartBeat() {
+            let expireAt = this.$tools.getExpire();
+            if (expireAt) {
+                this.heartBeatTimer = setInterval(() => {
+                    expireAt = this.$tools.getExpire();
+                    if (expireAt) {
+                        const nowDateStr = new Date().getTime();
+                        if (expireAt < nowDateStr) {
+                            sessionStorage.clear();
+                            clearInterval(this.heartBeatTimer);
+                            this.heartBeatTimer = null;
+                            this.$message.warning("登录已超时！");
+                            this.$router.push("/login");
+                        } else if (expireAt - nowDateStr < 20000) {
+                            // token即将过期，重新请求token
+                        }
+                    } else {
+                        sessionStorage.clear();
+                        clearInterval(this.heartBeatTimer);
+                        this.heartBeatTimer = null;
+                        this.$message.warning("登录已超时！");
+                        this.$router.push("/login");
+                    }
+                }, 3000);
+            } else {
+                // 退出网站
+                sessionStorage.clear();
+                this.$message.warning("登录已超时！");
+                this.$router.push("/login");
+            }
+        },
         // 选择子系统
         chooseModule(item) {
-            this.current_module = item.title;
-            sessionStorage.setItem("module", this.current_module);
-            this.$router.push(item.route);
+            if (item.title != this.current_module) {
+                this.current_module = item.title;
+                sessionStorage.setItem("module", this.current_module);
+                this.$router.push(item.route);
+            }
         },
         // 重新选择子系统
         resetModule() {
@@ -103,7 +145,7 @@ export default {
             width: 210px;
             line-height: 60px;
             padding: 0 20px;
-            cursor: pointer;
+            // cursor: pointer;
         }
         .module {
             cursor: pointer;
