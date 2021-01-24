@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:28:12
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 17:22:19
+ * @LastEditTime: 2021-01-24 22:33:17
  */
 
 import Axios from "axios";
@@ -32,7 +32,6 @@ Axios.interceptors.response.use(
 		return response;
 	},
 	(err) => {
-		debugger;
 		if (err && err.response && err.response.status) {
 			switch (err.response.status) {
 				case 500:

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-23 13:44:44
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 17:16:22
+ * @LastEditTime: 2021-01-24 22:31:03
  */
 
 import { GET_MAJOR_LIST, GET_CHANNEL_LIST } from "./InterviewUrlConfig";
@@ -12,7 +12,6 @@ import axios from "./AxiosConfig";
 
 // 获取专业列表
 export const getMajorList = () => {
-	console.log(GET_MAJOR_LIST)
 	return axios.get(GET_MAJOR_LIST);
 };
 
