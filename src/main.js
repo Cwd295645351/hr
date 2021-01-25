@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 22:22:53
+ * @LastEditTime: 2021-01-25 21:41:52
  */
 import Vue from "vue";
 import App from "./App.vue";
@@ -21,8 +21,10 @@ Vue.use(ElementUI);
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$dayjs = dayjs;
 
-import tools from "../utils/tools";
-Vue.prototype.$tools = tools;
+import * as tools from "../utils/tools";
+Vue.prototype.$tools = {
+	...tools
+};
 
 Vue.config.productionTip = false;
 
