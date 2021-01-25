@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-25 22:43:24
+ * @LastEditTime: 2021-01-25 23:47:49
 -->
 <template>
     <div class="login">
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { login } from "../../../apis/interview/login";
+import { login } from "../../../apis/login";
 export default {
     data() {
         return {
@@ -93,9 +93,11 @@ export default {
                             "userInfo",
                             JSON.stringify(data)
                         );
+                        const MS_ONE_SECOND = 1000;
                         const nowDateStr = new Date().getTime();
-                        const expiresAt = nowDateStr + data.expiresIn;
-                        // const expiresAt = nowDateStr + 10000;
+                        const expiresAt =
+                            nowDateStr + data.expiresIn * MS_ONE_SECOND;
+                        // const expiresAt = nowDateStr + 20000;
                         sessionStorage.setItem("expiresAt", expiresAt);
                         this.$router.push("/main/interview");
                     } else {
