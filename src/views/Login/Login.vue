@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 22:30:25
+ * @LastEditTime: 2021-01-25 22:43:24
 -->
 <template>
     <div class="login">
@@ -94,9 +94,9 @@ export default {
                             JSON.stringify(data)
                         );
                         const nowDateStr = new Date().getTime();
-                        const expireAt = nowDateStr + data.expiresIn;
-                        // const expireAt = nowDateStr + 10000;
-                        sessionStorage.setItem("expireAt", expireAt);
+                        const expiresAt = nowDateStr + data.expiresIn;
+                        // const expiresAt = nowDateStr + 10000;
+                        sessionStorage.setItem("expiresAt", expiresAt);
                         this.$router.push("/main/interview");
                     } else {
                         this.$message.error(message);
