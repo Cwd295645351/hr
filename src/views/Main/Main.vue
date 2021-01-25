@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 22:29:02
+ * @LastEditTime: 2021-01-25 23:54:47
 -->
 <template>
     <div class="main">
@@ -39,10 +39,10 @@
 </template>
 
 <script>
+import { refreshToken } from "../../../apis/login";
 export default {
     data() {
         return {
-            heartBeatTimer: null,
             current_module: "面试系统",
             modules: [
                 {
@@ -76,35 +76,45 @@ export default {
     methods: {
         // 心跳监测
         heartBeat() {
-            let expireAt = this.$tools.getExpire();
-            if (expireAt) {
-                this.heartBeatTimer = setInterval(() => {
-                    expireAt = this.$tools.getExpire();
-                    if (expireAt) {
-                        const nowDateStr = new Date().getTime();
-                        if (expireAt < nowDateStr) {
-                            sessionStorage.clear();
-                            clearInterval(this.heartBeatTimer);
-                            this.heartBeatTimer = null;
-                            this.$message.warning("登录已超时！");
-                            this.$router.push("/login");
-                        } else if (expireAt - nowDateStr < 20000) {
-                            // token即将过期，重新请求token
-                        }
-                    } else {
+            const _this = this;
+            const SECONDS_ONE_BEAT = 5; // 心跳频率 s
+            let expiresAt = Number(sessionStorage.getItem("expiresAt"));
+            if (!window.heartBeatTimer) {
+                window.heartBeatTimer = setTimeout(() => {
+                    const REFRESH_BEFORE_MS = 10; //提前 10s 进行请求
+                    const nowDateStr = new Date().getTime();
+                    const targetStamp = expiresAt - REFRESH_BEFORE_MS * 1000;
+                    clearTimeout(window.heartBeatTimer);
+                    window.heartBeatTimer = null;
+                    if (nowDateStr > expiresAt) {
+                        // 当前时间大于过期时间
                         sessionStorage.clear();
-                        clearInterval(this.heartBeatTimer);
-                        this.heartBeatTimer = null;
-                        this.$message.warning("登录已超时！");
+                        this.$message.warning("登录已过期，请重新登录");
                         this.$router.push("/login");
+                    } else if (nowDateStr > targetStamp) {
+                        // 当前需要刷新token时间大于当前时间
+                        console.log("请刷新token,当前时间为：", new Date());
+                        this.refreshToken();
+                    } else {
+                        _this.heartBeat();
                     }
-                }, 3000);
-            } else {
-                // 退出网站
-                sessionStorage.clear();
-                this.$message.warning("登录已超时！");
-                this.$router.push("/login");
+                }, SECONDS_ONE_BEAT * 1000);
             }
+        },
+        // 刷新token
+        async refreshToken() {
+            const userInfo = this.$tools.getUserInfo();
+            const refresh = userInfo.refreshToken;
+            const {
+                data: { data, message, retCode }
+            } = await refreshToken(refresh);
+            this.$tools.refreshExpireStamp(data.expiresIn);
+            this.$tools.refreshUserInfo(data);
+            console.log(
+                "下次过期时间为：",
+                new Date(Number(sessionStorage.getItem("expiresAt")))
+            );
+            this.heartBeat();
         },
         // 选择子系统
         chooseModule(item) {
