@@ -4,22 +4,19 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:28:12
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 22:33:17
+ * @LastEditTime: 2021-01-25 21:47:10
  */
 
 import Axios from "axios";
-import refreshToken from "../apis/interview/login";
-import tools from "../utils/tools";
+import { Message } from "element-ui";
+import * as tools from "../utils/tools";
 
 Axios.interceptors.request.use(
 	(config) => {
-		const userInfo = sessionStorage.getItem("userInfo")
-			? JSON.parse(sessionStorage.getItem("userInfo"))
-			: null;
-		if (userInfo) {
-			config.headers.Authorization = "Bearer " + userInfo.accessToken;
-		}
-		// console.log(config);
+		const userInfo = tools.getUserInfo();
+		config.headers.Authorization = userInfo
+			? `Bearer ${userInfo.accessToken}`
+			: "";
 		return config;
 	},
 	(error) => {
@@ -28,27 +25,20 @@ Axios.interceptors.request.use(
 );
 
 Axios.interceptors.response.use(
-	(response) => {
-		return response;
+	(res) => {
+		return res;
 	},
 	(err) => {
 		if (err && err.response && err.response.status) {
 			switch (err.response.status) {
-				case 500:
-					// do something...
-					break;
 				case 401:
-					const userInfo = tools.getInfo();
-					console.log("userInfo", userInfo);
-					// refreshToken();
-					// do something...
+					Message.warning("登录信息过期，请重新登录");
+					tools.logout();
 					break;
 				default:
-					// do something...
-					break;
+					return Promise.reject(err);
 			}
 		}
-		return Promise.reject(err);
 	}
 );
 
