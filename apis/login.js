@@ -4,11 +4,11 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:26:28
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-23 18:01:10
+ * @LastEditTime: 2021-01-25 22:54:17
  */
 
-import { LOGIN, REFRESH_TOKEN } from "../InterviewUrlConfig";
-import axios from "../AxiosConfig";
+import { LOGIN, REFRESH_TOKEN } from "./InterviewUrlConfig";
+import axios from "./AxiosConfig";
 
 // 登录
 export const login = (data) => {
