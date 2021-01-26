@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 23:50:36
+ * @LastEditTime: 2021-01-26 23:29:18
 -->
 <template>
     <div class="situation">
@@ -29,29 +29,29 @@
                 </el-form-item>
                 <el-form-item size="small" label="专业:">
                     <el-select
-                        v-model="searchCondition.major"
+                        v-model="searchCondition.majorId"
                         placeholder="请选择专业"
                         clearable
                     >
                         <el-option
                             v-for="(item, index) in majorOptions"
                             :key="item + '_' + index"
-                            :label="item.label"
-                            :value="item.value"
+                            :label="item.majorName"
+                            :value="item.majorId"
                         ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item size="small" label="渠道:">
                     <el-select
-                        v-model="searchCondition.channel"
+                        v-model="searchCondition.channelId"
                         placeholder="请选择渠道"
                         clearable
                     >
                         <el-option
                             v-for="(item, index) in channelOptions"
                             :key="item + '_' + index"
-                            :label="item.label"
-                            :value="item.value"
+                            :label="item.channelName"
+                            :value="item.channelId"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -95,37 +95,35 @@
                                 </div>
                             </div>
                             <el-form
-                                ref="moreInfo"
+                                ref="status"
                                 :model="currentMoreInfo"
                                 label-width="80px"
                             >
                                 <el-form-item size="small" label="通过初筛">
                                     <el-switch
-                                        v-model="
-                                            currentMoreInfo.isPassScreening
-                                        "
+                                        v-model="currentMoreInfo.pass"
                                     ></el-switch>
                                 </el-form-item>
                                 <el-form-item size="small" label="参加面试">
                                     <el-switch
                                         v-model="
-                                            currentMoreInfo.isAttendInterview
+                                            currentMoreInfo.attendInterview
                                         "
                                     ></el-switch>
                                 </el-form-item>
                                 <el-form-item size="small" label="是否到面">
                                     <el-switch
-                                        v-model="currentMoreInfo.isFace"
+                                        v-model="currentMoreInfo.faced"
                                     ></el-switch>
                                 </el-form-item>
                                 <el-form-item size="small" label="是否录用">
                                     <el-switch
-                                        v-model="currentMoreInfo.isEmploy"
+                                        v-model="currentMoreInfo.employ"
                                     ></el-switch>
                                 </el-form-item>
                                 <el-form-item size="small" label="是否入职">
                                     <el-switch
-                                        v-model="currentMoreInfo.isJoin"
+                                        v-model="currentMoreInfo.join"
                                     ></el-switch>
                                 </el-form-item>
                             </el-form>
@@ -139,7 +137,9 @@
                     <el-button v-show="addLineTag == false" @click="addLine"
                         >新增</el-button
                     >
-                    <el-button v-show="addLineTag == true" @click="saveLine"
+                    <el-button
+                        v-show="addLineTag == true"
+                        @click="addInterviewee"
                         >保存</el-button
                     >
                     <el-upload
@@ -173,7 +173,7 @@
                     width="160"
                 >
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-date-picker
                                 v-model="newLine.date"
                                 type="date"
@@ -193,7 +193,7 @@
                     width="160"
                 >
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-select
                                 v-model="newLine.majorId"
                                 placeholder="请选择专业"
@@ -203,8 +203,8 @@
                                 <el-option
                                     v-for="(item, index) in majorOptions"
                                     :key="item + '_newLine_' + index"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :label="item.majorName"
+                                    :value="item.majorId"
                                 ></el-option>
                             </el-select>
                         </div>
@@ -218,7 +218,7 @@
                     width="160"
                 >
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 v-model="newLine.name"
                                 size="small"
@@ -231,7 +231,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="手机号" width="160">
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 v-model="newLine.phoneNum"
                                 size="small"
@@ -244,7 +244,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="邮箱" width="180">
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 v-model="newLine.email"
                                 size="small"
@@ -257,7 +257,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="渠道" width="160">
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-select
                                 v-model="newLine.channelId"
                                 size="small"
@@ -267,12 +267,34 @@
                                 <el-option
                                     v-for="(item, index) in channelOptions"
                                     :key="item + '_channelOptions_' + index"
+                                    :label="item.channelName"
+                                    :value="item.channelId"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>{{ scope.row.channelName }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column width="160" align="center" label="性质">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.property"
+                                placeholder="选择性质"
+                                size="small"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item, index) in propertyOptions"
+                                    :key="item + '_propertyOptions_' + index"
                                     :label="item.label"
                                     :value="item.value"
                                 ></el-option>
                             </el-select>
                         </div>
-                        <div v-else>{{ scope.row.channelName }}</div>
+                        <div v-else>
+                            {{ scope.row.property }}
+                        </div>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -281,7 +303,7 @@
                     width="150"
                 >
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-select
                                 v-model="newLine.status"
                                 size="small"
@@ -296,19 +318,19 @@
                                 ></el-option>
                             </el-select>
                         </div>
-                        <div v-else>{{ scope.row.status }}</div>
+                        <div v-else>{{ scope.row.statusName }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column align="center" label="面试信息">
                     <el-table-column width="160" align="center" label="日期">
                         <template slot-scope="scope">
-                            <div v-if="scope.row.addLineTag">
+                            <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-date-picker
                                     v-if="
                                         newLine.status &&
                                         newLine.status != 'pass'
                                     "
-                                    v-model="newLine.interviewInfo.date"
+                                    v-model="newLine.schedules.date"
                                     type="date"
                                     size="small"
                                     value-format="yyyy-MM-dd"
@@ -316,18 +338,18 @@
                                     clearable
                                 ></el-date-picker>
                             </div>
-                            <div v-else>{{ scope.row.interviewInfo.date }}</div>
+                            <div v-else>{{ scope.row.schedules.date }}</div>
                         </template>
                     </el-table-column>
                     <el-table-column width="160" align="center" label="时间">
                         <template slot-scope="scope">
-                            <div v-if="scope.row.addLineTag">
+                            <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-time-select
                                     v-if="
                                         newLine.status &&
                                         newLine.status != 'pass'
                                     "
-                                    v-model="newLine.interviewInfo.time"
+                                    v-model="newLine.schedules.time"
                                     size="small"
                                     placeholder="选择时间"
                                     :picker-options="{
@@ -338,50 +360,23 @@
                                     clearable
                                 ></el-time-select>
                             </div>
-                            <div v-else>{{ scope.row.interviewInfo.time }}</div>
+                            <div v-else>{{ scope.row.schedules.time }}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column width="160" align="center" label="性质">
-                        <template slot-scope="scope">
-                            <div v-if="scope.row.addLineTag">
-                                <el-select
-                                    v-if="
-                                        newLine.status &&
-                                        newLine.status != 'pass'
-                                    "
-                                    v-model="newLine.interviewInfo.property"
-                                    placeholder="选择性质"
-                                    size="small"
-                                    clearable
-                                >
-                                    <el-option
-                                        v-for="(item, index) in propertyOptions"
-                                        :key="
-                                            item + '_propertyOptions_' + index
-                                        "
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select>
-                            </div>
-                            <div v-else>
-                                {{ scope.row.interviewInfo.property }}
-                            </div>
-                        </template>
-                    </el-table-column>
+
                     <el-table-column
                         width="160"
                         align="center"
                         label="面试形式"
                     >
                         <template slot-scope="scope">
-                            <div v-if="scope.row.addLineTag">
+                            <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-select
                                     v-if="
                                         newLine.status &&
                                         newLine.status != 'pass'
                                     "
-                                    v-model="newLine.interviewInfo.form"
+                                    v-model="newLine.schedules.form"
                                     placeholder="选择面试形式"
                                     size="small"
                                     clearable
@@ -394,25 +389,25 @@
                                     ></el-option>
                                 </el-select>
                             </div>
-                            <div v-else>{{ scope.row.interviewInfo.form }}</div>
+                            <div v-else>{{ scope.row.schedules.form }}</div>
                         </template>
                     </el-table-column>
                     <el-table-column width="160" align="center" label="面试官">
                         <template slot-scope="scope">
-                            <div v-if="scope.row.addLineTag">
+                            <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-input
                                     v-if="
                                         newLine.status &&
                                         newLine.status != 'pass'
                                     "
-                                    v-model="newLine.interviewInfo.interviewer"
+                                    v-model="newLine.schedules.interviewer"
                                     size="small"
                                     placeholder="请输入面试官"
                                     clearable
                                 ></el-input>
                             </div>
                             <div v-else>
-                                {{ scope.row.interviewInfo.interviewer }}
+                                {{ scope.row.schedules.interviewer }}
                             </div>
                         </template>
                     </el-table-column>
@@ -423,7 +418,7 @@
                     width="200"
                 >
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 type="textarea"
                                 autosize
@@ -443,7 +438,7 @@
                     width="200"
                 >
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 type="textarea"
                                 autosize
@@ -458,7 +453,9 @@
                 </el-table-column>
                 <el-table-column align="center" label="相关材料" width="100">
                     <template slot-scope="scope">
-                        <div v-if="scope.row.addLineTag"></div>
+                        <div
+                            v-if="scope.$index == 0 && addLineTag == true"
+                        ></div>
                         <!-- <div v-else>{{ scope.row.relatedMaterials }}</div> -->
                         <div v-else>
                             <a href="/files/test-pdf.pdf" target="_blank">11</a>
@@ -467,7 +464,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="操作" width="100">
                     <template slot-scope="scope">
-                        <div v-if="!scope.row.addLineTag">
+                        <div v-if="addLineTag == false || scope.$index > 0">
                             <el-link
                                 @click="editInfo(scope.row)"
                                 type="info"
@@ -515,6 +512,11 @@
 <script>
 import myForm from "./form";
 import { getMajorList, getChannelList } from "../../../../apis/common";
+import {
+    getInterviewList,
+    addInterviewee,
+    editInterviewee
+} from "../../../../apis/interview/interview";
 export default {
     components: {
         "my-form": myForm
@@ -527,6 +529,7 @@ export default {
             // 新增标志,true为正在新增，false为已保存
             addLineTag: false,
             loading: false,
+            userId: "",
             // 开始时间限制条件
             beginDateOptions: {
                 disabledDate(time) {
@@ -548,20 +551,7 @@ export default {
                 }
             },
             // 渠道数组
-            channelOptions: [
-                {
-                    label: "BOSS",
-                    value: "1"
-                },
-                {
-                    label: "建筑英才网(投递)",
-                    value: "2"
-                },
-                {
-                    label: "建筑英才网(搜索)",
-                    value: "3"
-                }
-            ],
+            channelOptions: [],
             // 当前简历状态数组
             statusOptions: [
                 {
@@ -586,40 +576,7 @@ export default {
                 }
             ],
             // 专业数组
-            majorOptions: [
-                {
-                    label: "建筑",
-                    value: "1"
-                },
-                {
-                    label: "结构",
-                    value: "2"
-                },
-                {
-                    label: "给排水",
-                    value: "3"
-                },
-                {
-                    label: "弱电",
-                    value: "4"
-                },
-                {
-                    label: "暖通",
-                    value: "5"
-                },
-                {
-                    label: "项目助理",
-                    value: "6"
-                },
-                {
-                    label: "市场",
-                    value: "7"
-                },
-                {
-                    label: "财务",
-                    value: "8"
-                }
-            ],
+            majorOptions: [],
             // 性质数组
             propertyOptions: [
                 {
@@ -656,155 +613,41 @@ export default {
                 beginDate: "", // 开始日期
                 endDate: "", // 结束日期
                 name: "", // 姓名
-                major: "", // 专业
-                channel: "", // 渠道,
+                majorId: "", // 专业
+                channelId: "", // 渠道,
                 phoneNum: "", // 手机号
                 email: "", // 邮箱
-                moreInfo: {
-                    isPassScreening: false, // 是否通过部门筛选
-                    isAttendInterview: false, // 是否参加面试
-                    isFace: false, // 是否到面
-                    isEmploy: false, // 是否录用
-                    isJoin: false // 是否入职
+                status: {
+                    pass: false, // 是否通过部门筛选
+                    attendInterview: false, // 是否参加面试
+                    faced: false, // 是否到面
+                    employ: false, // 是否录用
+                    join: false // 是否入职
                 }
             },
+            pageIndex: 0,
+            pageSize: 10,
             // 当前更多搜索条件
             currentMoreInfo: {
-                isPassScreening: false, // 是否通过部门筛选
-                isAttendInterview: false, // 是否参加面试
-                isFace: false, // 是否到面
-                isEmploy: false, // 是否录用
-                isJoin: false // 是否入职
+                pass: false, // 是否通过部门筛选
+                attendInterview: false, // 是否参加面试
+                faced: false, // 是否到面
+                employ: false, // 是否录用
+                join: false // 是否入职
             },
             // 表格数据
-            tableData: [
-                {
-                    date: "2016-05-02",
-                    majorId: "5",
-                    majorName: "暖通",
-                    name: "王小虎",
-                    phoneNum: "12345678910",
-                    email: "223456789@163.com",
-                    channelId: "3",
-                    channelName: "建筑英才网（搜索）",
-                    status: "pass",
-                    interviewInfo: {
-                        date: "2020-11-20",
-                        time: "16:30",
-                        property: "校招",
-                        form: "现场",
-                        interviewer: "张工"
-                    },
-                    phoneInterviewSituation: "谈吐还行，条理清晰",
-                    remark: "逻辑清楚，不罗嗦，干净利落",
-                    fileList: [
-                        {
-                            name: "food.jpeg",
-                            url:
-                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-                        },
-                        {
-                            name: "food2.jpeg",
-                            url:
-                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-                        }
-                    ]
-                },
-                {
-                    date: "2016-05-02",
-                    majorId: "5",
-                    majorName: "暖通",
-                    name: "王小虎",
-                    phoneNum: "12345678910",
-                    email: "223456789@163.com",
-                    channelId: "3",
-                    channelName: "建筑英才网（搜索）",
-                    status: "faced",
-                    interviewInfo: {
-                        date: "2020-11-20",
-                        time: "16:30",
-                        property: "校招",
-                        form: "现场",
-                        interviewer: "张工"
-                    },
-                    phoneInterviewSituation: "谈吐还行，条理清晰",
-                    remark: "逻辑清楚，不罗嗦，干净利落",
-                    fileList: [
-                        {
-                            name: "food.jpeg",
-                            url:
-                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-                        },
-                        {
-                            name: "food2.jpeg",
-                            url:
-                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-                        }
-                    ]
-                },
-                {
-                    date: "2016-05-02",
-                    majorId: "5",
-                    majorName: "暖通",
-                    name: "王小虎",
-                    phoneNum: "12345678910",
-                    email: "223456789@163.com",
-                    channelId: "3",
-                    channelName: "建筑英才网（搜索）",
-                    status: "attendInterview",
-                    interviewInfo: {
-                        date: "2020-11-20",
-                        time: "16:30",
-                        property: "校招",
-                        form: "现场",
-                        interviewer: "张工"
-                    },
-                    phoneInterviewSituation: "谈吐还行，条理清晰",
-                    remark: "逻辑清楚，不罗嗦，干净利落",
-                    fileList: [
-                        {
-                            name: "food.jpeg",
-                            url:
-                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-                        },
-                        {
-                            name: "food2.jpeg",
-                            url:
-                                "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-                        }
-                    ]
-                }
-            ],
+            tableData: [],
             // 默认新增行
             newLine: {},
             // 修改行
-            editLine: {
-                addLineTag: "",
-                date: "", // 日期
-                major: "", // 专业
-                name: "", // 姓名
-                phoneNum: "", // 手机号
-                email: "", // 邮箱
-                channel: "", // 渠道
-                isPassScreening: false, // 是否通过部门筛选
-                isAttendInterview: false, // 是否参加面试
-                isFace: false, // 是否到面
-                isEmploy: false, // 是否录用
-                isJoin: false, // 是否入职
-                phoneInterviewSituation: "", // 电话面试情况
-                remark: "", // 备注
-                interviewInfo: {
-                    date: "", // 面试日期
-                    time: "", // 面试时间
-                    property: "", // 性质
-                    form: "", // 面试形式
-                    interviewer: "" // 面试官
-                }
-            }
+            editLine: {}
         };
     },
     mounted() {
+        const userInfo = this.$tools.getUserInfo();
+        this.userId = userInfo.userId;
         this.getMajorList();
+        this.getChannelList();
         this.search();
     },
     created() {},
@@ -891,13 +734,12 @@ export default {
                     // outdata就是读取的数据（不包含标题行即表头，表头会作为对象的下标）
                     // 此处可对数据进行处理
                     let arr = [];
-                    const userInfo = _this.$tools.getInfo();
                     outdata.map((v) => {
                         let obj = {};
                         // 之后自己控制专业id
                         obj.majorId = "";
                         // obj.user_name = v["序号"];
-                        obj.userId = userInfo.userId;
+                        obj.userId = this.userId;
                         obj.date = v["日期"];
                         obj.name = v["姓名"];
                         // obj.user_class = v["简历情况"];
@@ -934,7 +776,6 @@ export default {
                         } else if (status == "不录用") {
                         }
 
-                        
                         arr.push(obj);
                     });
                     /* _this.datotal = arr;
@@ -987,11 +828,30 @@ export default {
         },
         // 获取专业列表
         async getMajorList() {
-            const { data, retCode, message } = await getMajorList();
+            const {
+                data: { data, retCode, message }
+            } = await getMajorList();
             console.log(data);
+            if (retCode === 0) {
+                this.majorOptions = data;
+            } else {
+                this.$message.error(message);
+            }
+        },
+        // 获取渠道列表
+        async getChannelList() {
+            const {
+                data: { data, retCode, message }
+            } = await getChannelList();
+            console.log(data);
+            if (retCode === 0) {
+                this.channelOptions = data;
+            } else {
+                this.$message.error(message);
+            }
         },
         // 搜索
-        search() {
+        async search() {
             if (this.addLineTag) {
                 this.addLineTag = false;
                 this.newLine = {};
@@ -1010,7 +870,6 @@ export default {
                     "YYYY-MM-DD"
                 );
             }
-            console.log("搜索条件为：", this.searchCondition);
             /* this.tableData = this.tableData.map((item) => {
                 item.isPassScreening = item.isPassScreening ? "是" : "否";
                 item.isAttendInterview = item.isAttendInterview ? "是" : "否";
@@ -1019,9 +878,42 @@ export default {
                 item.isJoin = item.isJoin ? "是" : "否";
                 return item;
             }); */
-            setTimeout(() => {
-                this.loading = false;
-            }, 1000);
+            const params = {
+                userId: this.userId,
+                beginDate: beginDate,
+                endDate: endDate,
+                name: this.searchCondition.name,
+                majorId: this.searchCondition.majorId,
+                channelId: this.searchCondition.channelId,
+                phoneNum: this.searchCondition.phoneNum,
+                email: this.searchCondition.email,
+                status: [],
+                pageIndex: this.pageIndex,
+                pageSize: this.pageSize
+            };
+            for (let key in this.searchCondition.status) {
+                if (this.searchCondition.status[key]) {
+                    params.status.push(key);
+                }
+            }
+            console.log("搜索条件为：", params);
+            const {
+                data: { data, retCode, message }
+            } = await getInterviewList(params);
+            this.loading = false;
+            if (retCode === 0) {
+                this.tableData = data.datas.map((item) => {
+                    this.statusOptions.forEach((status) => {
+                        if (item.status == status.value) {
+                            item.statusName = status.label;
+                        }
+                    });
+                    return item;
+                });
+                console.log("查询结果", data);
+            } else {
+                this.$message.error(message);
+            }
         },
         // 取消更多条件框
         cancelMoreInfo() {
@@ -1041,35 +933,34 @@ export default {
         hideHandle() {
             if (event.target.innerText != "确认") {
                 this.currentMoreInfo = JSON.parse(
-                    JSON.stringify(this.searchCondition.moreInfo)
+                    JSON.stringify(this.searchCondition.status)
                 );
             }
         },
         // 确认更多信息
         confirmMoreInfo() {
-            this.searchCondition.moreInfo = JSON.parse(
+            this.searchCondition.status = JSON.parse(
                 JSON.stringify(this.currentMoreInfo)
             );
             this.popTag = false;
         },
-        // 新增
+        // 新增一行
         addLine() {
             this.addLineTag = true;
             this.newLine = {
-                addLineTag: true,
                 date: "",
-                major: "",
+                majorId: "",
                 name: "",
                 phoneNum: "",
                 email: "",
                 channelId: "",
+                property: "",
                 status: "",
                 phoneInterviewSituation: "",
                 remark: "",
-                interviewInfo: {
+                schedules: {
                     date: "",
                     time: "",
-                    property: "",
                     form: "",
                     interviewer: ""
                 },
@@ -1078,13 +969,27 @@ export default {
             this.tableData.unshift(this.newLine);
         },
         // 保存新增
-        saveLine() {
+        async addInterviewee() {
             this.loading = true;
             this.addLineTag = false;
-            this.tableData[0].addLineTag = false;
-            setTimeout(() => {
+            const params = JSON.parse(JSON.stringify(this.newLine));
+            params.userId = this.userId;
+            try {
+                const {
+                    data: { data, retCode, message }
+                } = await addInterviewee(params);
                 this.loading = false;
-            }, 1000);
+                if (retCode === 0) {
+                    this.$message.success(message);
+                    this.search();
+                } else {
+                    this.$message.error(message);
+                }
+            } catch (err) {
+                console.error(err);
+                this.loading = false;
+            }
+            console.log("新增数据", this.newLine);
         },
         // 修改面试流程
         editInfo(row) {
@@ -1111,27 +1016,38 @@ export default {
                     });
                 });
         },
-        handleClose(done) {
+        // 关闭抽屉
+        async handleClose(done) {
             if (this.loading) {
                 return;
             }
             this.$confirm("是否保存修改？")
-                .then((_) => {
+                .then(async (_) => {
                     this.loading = true;
-                    this.timer = setTimeout(() => {
-                        done();
-                        // 动画关闭需要一定的时间
-                        setTimeout(() => {
-                            this.loading = false;
-                        }, 400);
-                    }, 2000);
+                    const params = JSON.parse(JSON.stringify(this.editLine));
+                    params.userId = this.userId;
+
+                    try {
+                        const {
+                            data: { data, retCode, message }
+                        } = await editInterviewee(params);
+                        if (retCode === 0) {
+                            done();
+                            this.$message.success(message);
+                            this.search();
+                        } else {
+                            this.$message.error(message);
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        this.loading = false;
+                    }
                 })
                 .catch((_) => {});
         },
         cancelForm() {
             this.loading = false;
             this.operateDialogTag = false;
-            clearTimeout(this.timer);
         }
     }
 };

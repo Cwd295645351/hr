@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-21 23:57:11
+ * @LastEditTime: 2021-01-26 23:16:39
 -->
 <template>
     <div class="form-box">
@@ -29,8 +29,8 @@
                     <el-option
                         v-for="(item, index) in majorOptions"
                         :key="item + '_editLine_' + index"
-                        :label="item.label"
-                        :value="item.value"
+                        :label="item.majorName"
+                        :value="item.majorId"
                     ></el-option>
                 </el-select>
             </el-form-item>
@@ -68,6 +68,21 @@
                     <el-option
                         v-for="(item, index) in channelOptions"
                         :key="item + '_channelOptions_' + index"
+                        :label="item.channelName"
+                        :value="item.channelId"
+                    ></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="招工性质">
+                <el-select
+                    v-model="editLine.property"
+                    placeholder="选择性质"
+                    size="small"
+                    clearable
+                >
+                    <el-option
+                        v-for="(item, index) in propertyOptions"
+                        :key="item + '_propertyOptions_' + index"
                         :label="item.label"
                         :value="item.value"
                     ></el-option>
@@ -89,9 +104,9 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="面试日期" v-show="editLine.isAttendInterview">
+            <el-form-item label="面试日期" v-show="editLine.status!='pass'">
                 <el-date-picker
-                    v-model="editLine.interviewInfo.date"
+                    v-model="editLine.schedules.date"
                     type="date"
                     size="small"
                     value-format="yyyy-MM-dd"
@@ -99,9 +114,9 @@
                     clearable
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="面试时间" v-show="editLine.isAttendInterview">
+            <el-form-item label="面试时间" v-show="editLine.status!='pass'">
                 <el-time-select
-                    v-model="editLine.interviewInfo.time"
+                    v-model="editLine.schedules.time"
                     size="small"
                     placeholder="选择时间"
                     :picker-options="{
@@ -112,24 +127,10 @@
                     clearable
                 ></el-time-select>
             </el-form-item>
-            <el-form-item label="面试性质" v-show="editLine.isAttendInterview">
+            
+            <el-form-item label="面试形式" v-show="editLine.status!='pass'">
                 <el-select
-                    v-model="editLine.interviewInfo.property"
-                    placeholder="选择性质"
-                    size="small"
-                    clearable
-                >
-                    <el-option
-                        v-for="(item, index) in propertyOptions"
-                        :key="item + '_propertyOptions_' + index"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="面试形式" v-show="editLine.isAttendInterview">
-                <el-select
-                    v-model="editLine.interviewInfo.form"
+                    v-model="editLine.schedules.form"
                     placeholder="选择面试形式"
                     size="small"
                     clearable
@@ -142,9 +143,9 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="面试官" v-show="editLine.isAttendInterview">
+            <el-form-item label="面试官" v-show="editLine.status!='pass'">
                 <el-input
-                    v-model="editLine.interviewInfo.interviewer"
+                    v-model="editLine.schedules.interviewer"
                     size="small"
                     placeholder="请输入面试官"
                     clearable
