@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-14 00:08:32
+ * @LastEditTime: 2021-01-26 21:45:10
  */
 
 import xss from "xss";
@@ -45,6 +45,7 @@ export const getList = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
+	mp.userId = params.userId;
 	mp.majorId = new RegExp(params.majorId, "ig");
 	mp.channelId = new RegExp(params.channelId, "ig");
 	mp.name = new RegExp(params.name, "ig");
