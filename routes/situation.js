@@ -4,13 +4,14 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-15 00:24:56
+ * @LastEditTime: 2021-01-27 22:00:10
  */
 import Router from "koa-router";
 import {
 	getList,
 	addInterviewee,
-	editInterviewee
+	editInterviewee,
+	deleteInterviewee
 } from "../controller/situation";
 import { SuccessModel, ErrorModel } from "../model/resModel";
 
@@ -73,6 +74,24 @@ router.post("/editInterviewee", async (ctx, next) => {
 		ctx.body = new SuccessModel("", "修改成功");
 	} else {
 		ctx.body = new ErrorModel(null, "修改失败");
+	}
+});
+
+router.post("/deleteInterviewee", async (ctx, next) => {
+	const data = ctx.request.body;
+	if (!data.userId || data.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
+	if (!data.id || data.id == "") {
+		ctx.body = new ErrorModel(null, "id不能为空");
+		return;
+	}
+	const res = await deleteInterviewee(data);
+	if (res) {
+		ctx.body = new SuccessModel("", "删除成功");
+	} else {
+		ctx.body = new ErrorModel(null, "删除失败");
 	}
 });
 
