@@ -4,10 +4,11 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-15 00:07:46
+ * @LastEditTime: 2021-01-27 23:41:13
  */
 
 import Interview from "../db/models/Interviewees";
+// 获取面试统计信息
 export const getStatisticsData = async (params) => {
 	let mp = {};
 	if (params.beginDate && params.endDate) {
@@ -26,13 +27,13 @@ export const getStatisticsData = async (params) => {
 	}
 	mp.majorId = new RegExp(params.majorId, "ig");
 	const res = await Interview.find(mp, {
-		channelId: 1,
 		channelName: 1,
 		status: 1
 	});
 	return res;
 };
 
+// 获取不同专业入职比例
 export const getEntryRate = async (params) => {
 	let mp = {};
 	if (params.beginDate && params.endDate) {
@@ -49,6 +50,6 @@ export const getEntryRate = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
-	const res = await Interview.find(mp, { majorId: 1, majorName: 1 });
+	const res = await Interview.find(mp, { majorName: 1 });
 	return res;
 };
