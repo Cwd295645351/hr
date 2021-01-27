@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:22:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 17:20:15
+ * @LastEditTime: 2021-01-27 22:01:46
  */
 
 const HOST = process.env == "production" ? window.location.origin : "http://127.0.0.1:8000";
@@ -18,6 +18,7 @@ export const GET_CHANNEL_LIST = `${HOST}/api/common/getChannelList`; // 获取�
 export const GET_INTERVIEW_LIST = `${HOST}/api/situation/getList`; // 获取面试情况
 export const ADD_INTERVIEWEE = `${HOST}/api/situation/addInterviewee`; // 新增面试者
 export const EDIT_INTERVIEWEE = `${HOST}/api/situation/editInterviewee`; // 修改面试者
+export const DELETE_INTERVIEWEE = `${HOST}/api/situation/deleteInterviewee`; // 删除面试者
 
 export const GET_INTERVIEW_STATISTICS = `${HOST}/api/statistics/getStatisticsData`; // 获取面试统计信息
 export const GET_ENTRY_RATE = `${HOST}/api/statistics/getEntryRate`; // 获取不同专业入职比例

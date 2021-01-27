@@ -4,13 +4,14 @@
  * @Author: Chen
  * @Date: 2021-01-23 13:41:03
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-26 21:32:34
+ * @LastEditTime: 2021-01-27 22:02:00
  */
 
 import {
 	GET_INTERVIEW_LIST,
 	ADD_INTERVIEWEE,
-	EDIT_INTERVIEWEE
+	EDIT_INTERVIEWEE,
+	DELETE_INTERVIEWEE
 } from "../InterviewUrlConfig";
 import axios from "../AxiosConfig";
 
@@ -27,4 +28,9 @@ export const addInterviewee = (data)=>{
 // 修改面试者
 export const editInterviewee = (data)=>{
     return axios.post(EDIT_INTERVIEWEE,data);
+}
+
+// 删除面试者
+export const deleteInterviewee = (data)=>{
+    return axios.post(DELETE_INTERVIEWEE,data);
 }

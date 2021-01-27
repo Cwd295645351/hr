@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-26 23:29:18
+ * @LastEditTime: 2021-01-27 22:04:32
 -->
 <template>
     <div class="situation">
@@ -515,7 +515,8 @@ import { getMajorList, getChannelList } from "../../../../apis/common";
 import {
     getInterviewList,
     addInterviewee,
-    editInterviewee
+    editInterviewee,
+    deleteInterviewee
 } from "../../../../apis/interview/interview";
 export default {
     components: {
@@ -997,17 +998,26 @@ export default {
             this.editLine = JSON.parse(JSON.stringify(row));
         },
         // 删除数据
-        deleteData(row) {
+        async deleteData(row) {
             this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             })
-                .then(() => {
-                    this.$message({
-                        type: "success",
-                        message: "删除成功!"
-                    });
+                .then(async () => {
+                    const params = {
+                        userId: this.userId,
+                        id: row.id
+                    };
+                    const {
+                        data: { data, retCode, message }
+                    } = await deleteInterviewee(params);
+                    if (retCode === 0) {
+                        this.search();
+                        this.$message.success(message);
+                    } else {
+                        this.$message.error(message);
+                    }
                 })
                 .catch(() => {
                     this.$message({

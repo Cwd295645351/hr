@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-26 23:16:39
+ * @LastEditTime: 2021-01-27 23:27:53
 -->
 <template>
     <div class="form-box">
@@ -230,6 +230,7 @@ export default {
     overflow-y: auto;
     /deep/ .el-form-item__content {
         text-align: left;
+        .el-input--small,
         .el-input--small .el-input__inner,
         .el-date-editor.el-input,
         .el-date-editor.el-input__inner,
