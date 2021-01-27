@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-26 21:45:10
+ * @LastEditTime: 2021-01-27 21:56:25
  */
 
 import xss from "xss";
@@ -58,6 +58,7 @@ export const getList = async (params) => {
 	}
 
 	const res = await Interview.find(mp)
+		.sort({ date: 1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
 
@@ -108,3 +109,13 @@ export const editInterviewee = async (data) => {
 	);
 	return res;
 };
+
+// 删除面试者
+export const deleteInterviewee = async(data)=>{
+	const mp = {
+		_id: mongoose.Types.ObjectId(data.id),
+		userId: data.userId
+	}
+	const res = await Interview.findOneAndDelete(mp);
+	return res;
+}
