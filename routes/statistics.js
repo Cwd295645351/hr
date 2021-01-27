@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 16:29:01
+ * @LastEditTime: 2021-01-28 00:05:02
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -18,9 +18,9 @@ const router = Router({
 // 获取面试统计信息
 router.get("/getStatisticsData", async (ctx, next) => {
 	const params = ctx.query;
-	console.log(111,params);
+	console.log(111, params);
 	const retData = {
-		total: [0, 0, 0, 0, 0, 0]
+		总数: [0, 0, 0, 0, 0, 0]
 	};
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
@@ -38,51 +38,53 @@ router.get("/getStatisticsData", async (ctx, next) => {
 	}
 	const channelArr = await getChannelList();
 	channelArr.forEach((item) => {
-		retData[item.channelId] = [0, 0, 0, 0, 0, 0];
+		retData[item.channelName] = [0, 0, 0, 0, 0, 0];
 	});
 	const res = await getStatisticsData(params);
 	res.forEach((item) => {
-		retData.total[0]++;
-		retData[item.channelId][0]++;
+		retData["总数"][0]++;
+		retData[item.channelName][0]++;
 		// 判断状态
 		switch (item.status) {
 			// 通过初筛
 			case "pass":
-				retData.total[1]++;
-				retData[item.channelId][1]++;
+				retData["总数"][1]++;
+				retData[item.channelName][1]++;
 				break;
 			// 参加面试
 			case "attendInterview":
-				retData.total[2]++;
-				retData[item.channelId][2]++;
+				retData["总数"][2]++;
+				retData[item.channelName][2]++;
 				break;
 			// 已到面
 			case "faced":
-				retData.total[3]++;
-				retData[item.channelId][3]++;
+				retData["总数"][3]++;
+				retData[item.channelName][3]++;
 				break;
 			// 已录用
 			case "employ":
-				retData.total[4]++;
-				retData[item.channelId][4]++;
+				retData["总数"][4]++;
+				retData[item.channelName][4]++;
 				break;
 			// 已入职
 			case "join":
-				retData.total[5]++;
-				retData[item.channelId][5]++;
+				retData["总数"][5]++;
+				retData[item.channelName][5]++;
 				break;
 		}
 	});
-	retData.percent = [];
-	const totalArr = retData.total;
+	retData["转化率"] = [];
+	const totalArr = retData["总数"];
 	let nowNum = totalArr[totalArr.length - 1];
 	// 获取转化率
 	for (let i = totalArr.length - 1; i > 0; i--) {
 		let lastNum = nowNum + totalArr[i - 1];
-		retData.percent.unshift(lastNum > 0 ? (nowNum * 100) / lastNum : 0);
+		retData["转化率"].unshift(
+			lastNum > 0 ? ((nowNum * 100) / lastNum).toFixed(2) : 0
+		);
 		nowNum += totalArr[i - 1];
 	}
-	retData.percent.unshift(100);
+	retData["转化率"].unshift(100);
 	ctx.body = new SuccessModel(retData, "获取成功");
 });
 
@@ -90,6 +92,7 @@ router.get("/getStatisticsData", async (ctx, next) => {
 router.get("/getEntryRate", async (ctx, next) => {
 	const params = ctx.query;
 	const retData = {};
+	const returnData = [];
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.beginDate) == false) {
@@ -106,19 +109,22 @@ router.get("/getEntryRate", async (ctx, next) => {
 	}
 	const majorArr = await getMajorList();
 	majorArr.forEach((item) => {
-		retData[item.majorId] = 0;
+		retData[item.majorName] = 0;
 	});
 	const res = await getEntryRate(params);
 	const total = res.length;
 	if (total > 0) {
 		res.forEach((item) => {
-			retData[item.majorId]++;
+			retData[item.majorName]++;
 		});
 		for (let key in retData) {
-			retData[key] = (retData[key] * 100) / total;
+			let obj = {};
+			obj.majorName = key;
+			obj.proportion = ((retData[key] * 100) / total).toFixed(2);
+			returnData.push(obj);
 		}
 	}
-	ctx.body = new SuccessModel(retData, "获取成功");
+	ctx.body = new SuccessModel(returnData, "获取成功");
 });
 
 export default router;
