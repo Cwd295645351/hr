@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 00:19:17
+ * @LastEditTime: 2021-01-28 21:17:05
 -->
 <template>
     <div class="statistics">
@@ -312,12 +312,16 @@ export default {
                     if (key !== "转化率") {
                         if (key != "总数") {
                             // 获取不同渠道入职比例
+                            const proportion =
+                                data["总数"][5] > 0
+                                    ? (
+                                          (data[key][5] * 100) /
+                                          data["总数"][5]
+                                      ).toFixed(2)
+                                    : 0;
                             let obj = {
                                 channelName: key,
-                                proportion:
-                                    (data[key][5] * 100 / data["总数"][5]).toFixed(
-                                        2
-                                    ) + "%"
+                                proportion: proportion + "%"
                             };
                             regionData.push(obj);
                         }
