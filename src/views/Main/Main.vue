@@ -4,12 +4,12 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-25 23:54:47
+ * @LastEditTime: 2021-01-28 22:12:01
 -->
 <template>
     <div class="main">
         <div class="top-bar">
-            <div class="logo">HR管理系统</div>
+            <div class="logo">信息统计</div>
             <div style="display: flex" v-if="current_module">
                 <div
                     v-for="(item, index) in modules"
@@ -43,18 +43,18 @@ import { refreshToken } from "../../../apis/login";
 export default {
     data() {
         return {
-            current_module: "面试系统",
+            current_module: "面试",
             modules: [
                 {
-                    title: "面试系统",
+                    title: "面试",
                     route: "/main/interview"
                 },
                 {
-                    title: "人员管理",
+                    title: "人员",
                     route: "/main/user"
                 },
                 {
-                    title: "薪酬系统",
+                    title: "薪酬",
                     route: "/main/salary"
                 }
             ]
@@ -152,7 +152,7 @@ export default {
             color: #fff;
             font-weight: bold;
             height: 100%;
-            width: 210px;
+            width: 170px;
             line-height: 60px;
             padding: 0 20px;
             // cursor: pointer;

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-25 22:42:21
+ * @LastEditTime: 2021-01-28 22:47:32
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -30,7 +30,7 @@ const routes = [
 		component: () => import("../views/Main/Main.vue"),
 		children: [
 			{
-				path: "interview", // 面试系统
+				path: "interview", // 面试
 				name: "Interview",
 				component: () => import("../views/Interview/Interview.vue")
 			},

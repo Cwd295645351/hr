@@ -1,5 +1,5 @@
 <!--
- * @Description: 人员管理
+ * @Description: 人员
  * @Version: 0.0.1
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
@@ -8,7 +8,7 @@
 -->
 <template>
   <div class=''>
-    人员管理
+    人员
   </div>
 </template>
 

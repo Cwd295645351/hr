@@ -9,7 +9,7 @@
 <template>
     <div class="login">
         <div class="login-box">
-            <div class="title">HR管理系统</div>
+            <div class="title">信息统计</div>
             <div class="form">
                 <el-form
                     label-position="left"
