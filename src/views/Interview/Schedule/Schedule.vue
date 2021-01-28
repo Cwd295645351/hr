@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-17 23:01:13
+ * @LastEditTime: 2021-01-28 21:42:50
 -->
 <template>
     <div class="schedule">
@@ -90,354 +90,22 @@
 </template>
 
 <script>
+import { getSchedule } from "../../../../apis/interview/schedule";
 export default {
     data() {
         return {
+            // 开始时间
             beginDate: "",
+            // 结束时间
             endDate: "",
+            // 表头
             weeks: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-            datas: [
-                {
-                    date: "2020-11-23",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-24",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-25",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-26",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-27",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-28",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-29",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-30",
-                    interview: [
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        },
-                        {
-                            time: "16:30",
-                            name: "王少发",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖高盛"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-01",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-02",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-03",
-                    interview: []
-                },
-                {
-                    date: "2020-12-04",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-05",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-06",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-07",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-08",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-09",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-10",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-11",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-12",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-13",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                }
-            ]
+            // 面试日程内容
+            datas: []
         };
     },
     created() {
-        this.$dayjs().weekday(1);
+        // this.$dayjs().weekday(1);
         let today = new Date();
         let mondayDate = this.$dayjs(today)
             .startOf("week")
@@ -446,220 +114,46 @@ export default {
 
         this.beginDate = this.$dayjs(
             this.$dayjs(mondayDate).subtract(6, "days")
-        );
-        this.endDate = this.$dayjs(this.$dayjs(sundayDate).add(8, "days"));
-        console.log(
-            this.$dayjs(this.beginDate).format("YYYY-MM-DD"),
-            this.$dayjs(this.endDate).format("YYYY-MM-DD")
-        );
+        ).format("YYYY-MM-DD");
+        this.endDate = this.$dayjs(
+            this.$dayjs(sundayDate).add(8, "days")
+        ).format("YYYY-MM-DD");
     },
-    mounted() {},
+    mounted() {
+        this.searchData();
+    },
     methods: {
+        // 搜索
+        async searchData() {
+            const params = {
+                beginDate: this.beginDate,
+                endDate: this.endDate
+            };
+            const {
+                data: { data, retCode, message }
+            } = await getSchedule(params);
+            if (retCode === 0) {
+                console.log(data);
+                this.datas = data;
+            } else {
+                this.$message.error(message);
+            }
+        },
         // 下一周
         nextWeek() {
-            this.endDate = this.$dayjs(this.endDate).add(7, "days");
-            this.beginDate = this.$dayjs(this.beginDate).add(7, "days");
-            console.log(
-                this.$dayjs(this.beginDate).format("YYYY-MM-DD"),
-                this.$dayjs(this.endDate).format("YYYY-MM-DD")
-            );
-            let data = [
-                {
-                    date: "2020-12-14",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王22",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-15",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王22",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-16",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王22",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-17",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王22",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-18",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王22",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-19",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王22",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-12-20",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王22",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                }
-            ];
-            this.datas = this.datas.slice(7).concat(data);
+            this.endDate = this.$dayjs(this.endDate)
+                .add(7, "days")
+                .format("YYYY-MM-DD");
+            this.beginDate = this.$dayjs(this.beginDate)
+                .add(7, "days")
+                .format("YYYY-MM-DD");
+            this.searchData();
         },
         // 上一周
         lastWeek() {
-            this.endDate = this.$dayjs(this.endDate).subtract(7, "days");
-            this.beginDate = this.$dayjs(this.beginDate).subtract(7, "days");
-            console.log(
-                this.$dayjs(this.beginDate).format("YYYY-MM-DD"),
-                this.$dayjs(this.endDate).format("YYYY-MM-DD")
-            );
-            let data = [
-                {
-                    date: "2020-11-14",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王11",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-15",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王11",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-16",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王11",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-17",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王11",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-18",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王11",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-19",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王11",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                },
-                {
-                    date: "2020-11-20",
-                    interview: [
-                        {
-                            time: "2:30",
-                            name: "小王11",
-                            majorName: "建筑",
-                            property: "校招",
-                            form: "现场",
-                            interviewer: "廖"
-                        }
-                    ]
-                }
-            ];
-            this.datas = data.concat(this.datas.slice(0, 14));
+            this.endDate = this.$dayjs(this.endDate).subtract(7, "days").format("YYYY-MM-DD");
+            this.beginDate = this.$dayjs(this.beginDate).subtract(7, "days").format("YYYY-MM-DD");
+            this.searchData();
         }
     }
 };
