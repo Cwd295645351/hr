@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-27 23:41:13
+ * @LastEditTime: 2021-01-28 23:02:32
  */
 
 import Interview from "../db/models/Interviewees";
@@ -50,6 +50,7 @@ export const getEntryRate = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
+	mp.status = "join";
 	const res = await Interview.find(mp, { majorName: 1 });
 	return res;
 };
