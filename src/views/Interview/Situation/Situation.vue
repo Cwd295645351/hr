@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-27 22:04:32
+ * @LastEditTime: 2021-01-28 22:58:22
 -->
 <template>
     <div class="situation">
@@ -499,7 +499,7 @@
                     <el-button @click="cancelForm">取 消</el-button>
                     <el-button
                         type="primary"
-                        @click="$refs.drawer.closeDrawer()"
+                        @click="submitEditInterviewee"
                         :loading="loading"
                         >{{ loading ? "提交中 ..." : "确 定" }}</el-button
                     >
@@ -1026,32 +1026,43 @@ export default {
                     });
                 });
         },
+        async submitEditInterviewee() {
+            this.loading = true;
+            const params = JSON.parse(JSON.stringify(this.editLine));
+            params.userId = this.userId;
+            if (params.status == "pass") {
+                params.schedules = {
+                    date: "",
+                    time: "",
+                    interviewer: "",
+                    form: ""
+                };
+            }
+            try {
+                const {
+                    data: { data, retCode, message }
+                } = await editInterviewee(params);
+                this.loading = false;
+                if (retCode === 0) {
+                    this.operateDialogTag = false;
+                    this.$message.success(message);
+                    this.search();
+                } else {
+                    this.$message.error(message);
+                }
+            } catch (err) {
+                console.error(err);
+                this.loading = false;
+            }
+        },
         // 关闭抽屉
-        async handleClose(done) {
+        handleClose(done) {
             if (this.loading) {
                 return;
             }
-            this.$confirm("是否保存修改？")
+            this.$confirm("是否未保存修改就退出？")
                 .then(async (_) => {
-                    this.loading = true;
-                    const params = JSON.parse(JSON.stringify(this.editLine));
-                    params.userId = this.userId;
-
-                    try {
-                        const {
-                            data: { data, retCode, message }
-                        } = await editInterviewee(params);
-                        if (retCode === 0) {
-                            done();
-                            this.$message.success(message);
-                            this.search();
-                        } else {
-                            this.$message.error(message);
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        this.loading = false;
-                    }
+                    done();
                 })
                 .catch((_) => {});
         },
