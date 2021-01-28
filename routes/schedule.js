@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:17:20
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 22:38:20
+ * @LastEditTime: 2021-01-28 21:45:55
  */
 import Router from "koa-router";
 import getSchedule from "../controller/schedule";
@@ -30,7 +30,7 @@ router.get("/getSchedule", async (ctx, next) => {
 	}
 	if (params.endDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
-		if (reg.test(params.endDate == false)) {
+		if (reg.test(params.endDate) == false) {
 			ctx.body = new ErrorModel(null, "结束时间不规范");
 			return;
 		}

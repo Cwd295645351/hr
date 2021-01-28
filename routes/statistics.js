@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 00:05:02
+ * @LastEditTime: 2021-01-28 21:13:53
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -31,7 +31,7 @@ router.get("/getStatisticsData", async (ctx, next) => {
 	}
 	if (params.endDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
-		if (reg.test(params.endDate == false)) {
+		if (reg.test(params.endDate) == false) {
 			ctx.body = new ErrorModel(null, "结束时间不规范");
 			return;
 		}
@@ -41,50 +41,54 @@ router.get("/getStatisticsData", async (ctx, next) => {
 		retData[item.channelName] = [0, 0, 0, 0, 0, 0];
 	});
 	const res = await getStatisticsData(params);
+	const TOTLE_KEY = "总数";
+	const CONVERSION_RATE = "转化率";
 	res.forEach((item) => {
-		retData["总数"][0]++;
+		retData[TOTLE_KEY][0]++;
 		retData[item.channelName][0]++;
 		// 判断状态
 		switch (item.status) {
 			// 通过初筛
 			case "pass":
-				retData["总数"][1]++;
+				retData[TOTLE_KEY][1]++;
 				retData[item.channelName][1]++;
 				break;
 			// 参加面试
 			case "attendInterview":
-				retData["总数"][2]++;
+				retData[TOTLE_KEY][2]++;
 				retData[item.channelName][2]++;
 				break;
 			// 已到面
 			case "faced":
-				retData["总数"][3]++;
+				retData[TOTLE_KEY][3]++;
 				retData[item.channelName][3]++;
 				break;
 			// 已录用
 			case "employ":
-				retData["总数"][4]++;
+				retData[TOTLE_KEY][4]++;
 				retData[item.channelName][4]++;
 				break;
 			// 已入职
 			case "join":
-				retData["总数"][5]++;
+				retData[TOTLE_KEY][5]++;
 				retData[item.channelName][5]++;
 				break;
 		}
 	});
-	retData["转化率"] = [];
-	const totalArr = retData["总数"];
+	retData[CONVERSION_RATE] = [];
+	console.log(retData);
+
+	const totalArr = retData[TOTLE_KEY];
 	let nowNum = totalArr[totalArr.length - 1];
 	// 获取转化率
 	for (let i = totalArr.length - 1; i > 0; i--) {
 		let lastNum = nowNum + totalArr[i - 1];
-		retData["转化率"].unshift(
+		retData[CONVERSION_RATE].unshift(
 			lastNum > 0 ? ((nowNum * 100) / lastNum).toFixed(2) : 0
 		);
 		nowNum += totalArr[i - 1];
 	}
-	retData["转化率"].unshift(100);
+	retData[CONVERSION_RATE].unshift(nowNum > 0 ? 100 : 0);
 	ctx.body = new SuccessModel(retData, "获取成功");
 });
 
@@ -102,7 +106,7 @@ router.get("/getEntryRate", async (ctx, next) => {
 	}
 	if (params.endDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
-		if (reg.test(params.endDate == false)) {
+		if (reg.test(params.endDate) == false) {
 			ctx.body = new ErrorModel(null, "结束时间不规范");
 			return;
 		}
