@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-30 11:32:07
+ * @LastEditTime: 2021-01-31 16:17:48
  */
 
 import xss from "xss";
@@ -28,7 +28,7 @@ const xssData = (data) => {
 // 获取面试情况列表
 export const getList = async (params) => {
 	let mp = {};
-	const pageIndex = params.pageIndex < 0 ? 0 : params.pageIndex;
+	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
 	const pageSize = params.pageSize;
 
 	if (params.beginDate && params.endDate) {
