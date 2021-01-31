@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-30 16:29:09
+ * @LastEditTime: 2021-01-31 17:04:42
 -->
 <template>
     <div class="schedule">
@@ -107,17 +107,27 @@ export default {
     created() {
         // this.$dayjs().weekday(1);
         let today = new Date();
+        let todayDate = this.$dayjs(today).format("YYYY-MM-DD");
         let mondayDate = this.$dayjs(today)
             .startOf("week")
             .format("YYYY-MM-DD");
         let sundayDate = this.$dayjs(today).endOf("week").format("YYYY-MM-DD");
 
-        this.beginDate = this.$dayjs(
-            this.$dayjs(mondayDate).subtract(6, "days")
-        ).format("YYYY-MM-DD");
-        this.endDate = this.$dayjs(
-            this.$dayjs(sundayDate).add(8, "days")
-        ).format("YYYY-MM-DD");
+        if (mondayDate == todayDate) {
+            this.beginDate = this.$dayjs(
+                this.$dayjs(mondayDate).subtract(13, "days")
+            ).format("YYYY-MM-DD");
+            this.endDate = this.$dayjs(
+                this.$dayjs(sundayDate).add(7, "days")
+            ).format("YYYY-MM-DD");
+        }else{
+            this.beginDate = this.$dayjs(
+                this.$dayjs(mondayDate).subtract(6, "days")
+            ).format("YYYY-MM-DD");
+            this.endDate = this.$dayjs(
+                this.$dayjs(sundayDate).add(8, "days")
+            ).format("YYYY-MM-DD");
+        }
     },
     mounted() {
         this.searchData();
@@ -133,7 +143,6 @@ export default {
                 data: { data, retCode, message }
             } = await getSchedule(params);
             if (retCode === 0) {
-                console.log(data);
                 this.datas = data;
             } else {
                 this.$message.error(message);
