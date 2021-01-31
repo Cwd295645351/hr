@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 21:13:53
+ * @LastEditTime: 2021-01-31 15:11:01
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -53,7 +53,7 @@ router.get("/getStatisticsData", async (ctx, next) => {
 				retData[TOTLE_KEY][1]++;
 				retData[item.channelName][1]++;
 				break;
-			// 参加面试
+			// 已约面
 			case "attendInterview":
 				retData[TOTLE_KEY][2]++;
 				retData[item.channelName][2]++;
@@ -128,6 +128,13 @@ router.get("/getEntryRate", async (ctx, next) => {
 			returnData.push(obj);
 		}
 	}
+	returnData.sort((first, second) => {
+		if (parseFloat(first.proportion) > parseFloat(second.proportion)) {
+			return -1;
+		} else {
+			return 1;
+		}
+	});
 	ctx.body = new SuccessModel(returnData, "获取成功");
 });
 
