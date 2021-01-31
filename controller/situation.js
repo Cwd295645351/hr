@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-27 21:56:25
+ * @LastEditTime: 2021-01-30 11:32:07
  */
 
 import xss from "xss";
@@ -61,10 +61,10 @@ export const getList = async (params) => {
 		.sort({ date: 1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
-
+	const length = await Interview.count();
 	return {
 		datas: res,
-		total: res.length
+		total: length
 	};
 };
 
@@ -76,6 +76,14 @@ export const addInterviewee = async (data) => {
 	const channelName = await getChannelNameById(data.channelId);
 	data.channelName = channelName;
 	const res = await Interview.create(data);
+	return res;
+};
+
+// 批量导入面试者
+export const importInterviewee = async (data) => {
+	xssData(data);
+	console.log(data);
+	const res = await Interview.insertMany(data);
 	return res;
 };
 
@@ -111,11 +119,11 @@ export const editInterviewee = async (data) => {
 };
 
 // 删除面试者
-export const deleteInterviewee = async(data)=>{
+export const deleteInterviewee = async (data) => {
 	const mp = {
 		_id: mongoose.Types.ObjectId(data.id),
 		userId: data.userId
-	}
+	};
 	const res = await Interview.findOneAndDelete(mp);
 	return res;
-}
+};

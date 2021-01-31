@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:17:20
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 21:45:55
+ * @LastEditTime: 2021-01-30 16:23:24
  */
 import Router from "koa-router";
 import getSchedule from "../controller/schedule";
@@ -63,7 +63,7 @@ router.get("/getSchedule", async (ctx, next) => {
 	});
 
 	let retData = new Array(21);
-	const ONE_DAY_STRING = 86400000;
+	const ONE_DAY_STRING = 24 * 60 * 60 * 1000;
 	[...map].forEach((item) => {
 		const index =
 			(new Date(item[0]) - new Date(params.beginDate)) / ONE_DAY_STRING;

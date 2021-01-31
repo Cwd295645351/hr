@@ -4,12 +4,13 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 21:39:06
+ * @LastEditTime: 2021-01-30 00:38:06
  */
 import Router from "koa-router";
 import {
 	getList,
 	addInterviewee,
+	importInterviewee,
 	editInterviewee,
 	deleteInterviewee
 } from "../controller/situation";
@@ -41,6 +42,17 @@ router.post("/getList", async (ctx, next) => {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
 		ctx.body = new ErrorModel(null, "获取失败");
+	}
+});
+
+// 批量导入面试者
+router.post("/importInterviewee", async (ctx, next) => {
+	const interviewee = ctx.request.body;
+	const res = await importInterviewee(interviewee);
+	if (res) {
+		ctx.body = new SuccessModel(res, "新增成功");
+	} else {
+		ctx.body = new ErrorModel(null, "新增失败");
 	}
 });
 
