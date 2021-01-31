@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 15:15:31
+ * @LastEditTime: 2021-01-31 19:06:35
 -->
 <template>
     <div class="statistics">
@@ -108,7 +108,7 @@ export default {
                         let str = params[0].axisValueLabel;
                         params.forEach((item, index) => {
                             str += `<br/>${item.seriesName}：${item.value}`;
-                            if (item.seriesName != "转化率") {
+                            if (!item.seriesName.includes("转化")) {
                                 str += "份";
                             } else {
                                 str += "%";
@@ -124,17 +124,14 @@ export default {
                     orient: "vertical"
                 },
                 grid: {
-                    width: "82%",
+                    width: "70%",
                     left: "5%"
                 },
-                /*  toolbox: {
+                 /* toolbox: {
                     feature: {
-                        dataView: {
-                            readOnly: true
-                        },
                         magicType: {
                             type: ["line", "bar"],
-                            show: false
+                            show: true
                         }
                     }
                 }, */
@@ -306,10 +303,11 @@ export default {
             if (retCode === 0) {
                 // console.log(data);
                 const regionData = [];
+                const proportionArr = [];
                 let index = 0;
                 for (let key in data) {
                     this.options.legend.data.push(key);
-                    if (key !== "转化率") {
+                    if (!key.includes("转化")) {
                         if (key != "总数") {
                             // 获取不同渠道入职比例
                             const proportion =
@@ -324,6 +322,9 @@ export default {
                                 proportion: proportion
                             };
                             regionData.push(obj);
+
+                            
+                            proportionArr.push()
                         }
 
                         this.options.series[index++] = {
@@ -332,6 +333,7 @@ export default {
                             data: data[key],
                             yAxisIndex: 0
                         };
+                        
                     } else {
                         this.options.series[index++] = {
                             name: key,
