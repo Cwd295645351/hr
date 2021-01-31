@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 15:03:22
+ * @LastEditTime: 2021-01-31 16:34:07
 -->
 <template>
     <div class="situation">
@@ -133,7 +133,7 @@
                     </el-popover>
                 </el-form-item>
                 <el-form-item size="small">
-                    <el-button type="primary" @click="search">查询</el-button>
+                    <el-button type="primary" @click="search(1)">查询</el-button>
                     <el-button v-show="addLineTag == false" @click="addLine"
                         >新增</el-button
                     >
@@ -168,10 +168,9 @@
                 v-loading="loading"
             >
                 <el-table-column
-                    fixed="left"
                     align="center"
                     label="日期"
-                    width="160"
+                    width="95"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -188,10 +187,9 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    fixed="left"
                     align="center"
                     label="专业"
-                    width="160"
+                    width="80"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -212,71 +210,7 @@
                         <div v-else>{{ scope.row.majorName }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column
-                    fixed="left"
-                    align="center"
-                    label="姓名"
-                    width="160"
-                >
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-input
-                                v-model="newLine.name"
-                                size="small"
-                                placeholder="请输入姓名"
-                                clearable
-                            ></el-input>
-                        </div>
-                        <div v-else>{{ scope.row.name }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="手机号" width="160">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-input
-                                v-model="newLine.phoneNum"
-                                size="small"
-                                placeholder="请输入手机号"
-                                clearable
-                            ></el-input>
-                        </div>
-                        <div v-else>{{ scope.row.phoneNum }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="邮箱" width="180">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-input
-                                v-model="newLine.email"
-                                size="small"
-                                placeholder="请输入邮箱"
-                                clearable
-                            ></el-input>
-                        </div>
-                        <div v-else>{{ scope.row.email }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="渠道" width="160">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-select
-                                v-model="newLine.channelId"
-                                size="small"
-                                placeholder="请选择渠道"
-                                clearable
-                            >
-                                <el-option
-                                    v-for="(item, index) in channelOptions"
-                                    :key="item + '_channelOptions_' + index"
-                                    :label="item.channelName"
-                                    :value="item.channelId"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div v-else>{{ scope.row.channelName }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column width="160" align="center" label="性质">
+                <el-table-column width="60" align="center" label="性质">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-select
@@ -298,10 +232,73 @@
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column align="center" label="渠道" width="130">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.channelId"
+                                size="small"
+                                placeholder="请选择渠道"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item, index) in channelOptions"
+                                    :key="item + '_channelOptions_' + index"
+                                    :label="item.channelName"
+                                    :value="item.channelId"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>{{ scope.row.channelName }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="姓名"
+                    width="80"
+                >
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-input
+                                v-model="newLine.name"
+                                size="small"
+                                placeholder="请输入姓名"
+                                clearable
+                            ></el-input>
+                        </div>
+                        <div v-else>{{ scope.row.name }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="手机号" width="110">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-input
+                                v-model="newLine.phoneNum"
+                                size="small"
+                                placeholder="请输入手机号"
+                                clearable
+                            ></el-input>
+                        </div>
+                        <div v-else>{{ scope.row.phoneNum }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="邮箱" width="160">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-input
+                                v-model="newLine.email"
+                                size="small"
+                                placeholder="请输入邮箱"
+                                clearable
+                            ></el-input>
+                        </div>
+                        <div v-else>{{ scope.row.email }}</div>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     align="center"
                     label="当前简历状态"
-                    width="150"
+                    width="100"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -322,8 +319,29 @@
                         <div v-else>{{ scope.row.statusName }}</div>
                     </template>
                 </el-table-column>
+                <el-table-column
+                    align="center"
+                    prop="remark"
+                    show-overflow-tooltip
+                    label="备注"
+                    width="220"
+                >
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-input
+                                type="textarea"
+                                autosize
+                                placeholder="请输入备注"
+                                v-model="newLine.remark"
+                            ></el-input>
+                        </div>
+                        <div v-else>
+                            <pre>{{ scope.row.remark }}</pre>
+                        </div>
+                    </template>
+                </el-table-column>
                 <el-table-column align="center" label="面试信息">
-                    <el-table-column width="160" align="center" label="日期">
+                    <el-table-column width="95" align="center" label="日期">
                         <template slot-scope="scope">
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-date-picker
@@ -342,7 +360,7 @@
                             <div v-else>{{ scope.row.schedules.date }}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column width="160" align="center" label="时间">
+                    <el-table-column width="60" align="center" label="时间">
                         <template slot-scope="scope">
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-time-select
@@ -366,7 +384,7 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="160"
+                        width="60"
                         align="center"
                         label="面试形式"
                     >
@@ -393,7 +411,7 @@
                             <div v-else>{{ scope.row.schedules.form }}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column width="160" align="center" label="面试官">
+                    <el-table-column width="150" align="center" label="面试官">
                         <template slot-scope="scope">
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-input
@@ -417,7 +435,7 @@
                     align="center"
                     label="电话面试情况"
                     show-overflow-tooltip
-                    width="200"
+                    width="220"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -433,27 +451,7 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column
-                    align="center"
-                    prop="remark"
-                    show-overflow-tooltip
-                    label="备注"
-                    width="200"
-                >
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-input
-                                type="textarea"
-                                autosize
-                                placeholder="请输入备注"
-                                v-model="newLine.remark"
-                            ></el-input>
-                        </div>
-                        <div v-else>
-                            <pre>{{ scope.row.remark }}</pre>
-                        </div>
-                    </template>
-                </el-table-column>
+                
                 <el-table-column align="center" label="相关材料" width="100">
                     <template slot-scope="scope">
                         <div
@@ -667,7 +665,7 @@ export default {
         this.userId = userInfo.userId;
         this.getMajorList();
         this.getChannelList();
-        this.search();
+        this.search(1);
     },
     created() {},
     methods: {
@@ -949,15 +947,15 @@ export default {
         changePageSize(size) {
             this.pageSize = size;
             this.pageIndex = 0;
-            this.search();
+            this.search(1);
         },
         // 翻页
         changePageIndex(index) {
-            this.pageIndex = index - 1;
-            this.search();
+            this.pageIndex = index;
+            this.search(index);
         },
         // 搜索
-        async search() {
+        async search(index) {
             if (this.addLineTag) {
                 this.addLineTag = false;
                 this.newLine = {};
@@ -994,7 +992,7 @@ export default {
                 phoneNum: this.searchCondition.phoneNum,
                 email: this.searchCondition.email,
                 status: [],
-                pageIndex: this.pageIndex,
+                pageIndex: index,
                 pageSize: this.pageSize
             };
             for (let key in this.searchCondition.status) {
@@ -1088,7 +1086,7 @@ export default {
                 this.loading = false;
                 if (retCode === 0) {
                     this.$message.success(message);
-                    this.search();
+                    this.search(1);
                 } else {
                     this.$message.error(message);
                 }
@@ -1119,7 +1117,7 @@ export default {
                         data: { data, retCode, message }
                     } = await deleteInterviewee(params);
                     if (retCode === 0) {
-                        this.search();
+                        this.search(1);
                         this.$message.success(message);
                     } else {
                         this.$message.error(message);
@@ -1132,6 +1130,7 @@ export default {
                     });
                 });
         },
+        // 提交编辑面试者
         async submitEditInterviewee() {
             this.loading = true;
             const params = JSON.parse(JSON.stringify(this.editLine));
@@ -1152,7 +1151,7 @@ export default {
                 if (retCode === 0) {
                     this.operateDialogTag = false;
                     this.$message.success(message);
-                    this.search();
+                    this.search(1);
                 } else {
                     this.$message.error(message);
                 }
