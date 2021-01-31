@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 21:42:50
+ * @LastEditTime: 2021-01-30 16:29:09
 -->
 <template>
     <div class="schedule">
@@ -18,7 +18,7 @@
                 <i class="el-icon-d-arrow-right" style="margin-left: 10px"></i>
             </span>
         </div>
-        <div class="content">
+        <div class="content" v-if="datas.length > 0">
             <div class="item week">
                 <div v-for="week in weeks" :key="'top_' + week">{{ week }}</div>
             </div>
@@ -151,8 +151,12 @@ export default {
         },
         // 上一周
         lastWeek() {
-            this.endDate = this.$dayjs(this.endDate).subtract(7, "days").format("YYYY-MM-DD");
-            this.beginDate = this.$dayjs(this.beginDate).subtract(7, "days").format("YYYY-MM-DD");
+            this.endDate = this.$dayjs(this.endDate)
+                .subtract(7, "days")
+                .format("YYYY-MM-DD");
+            this.beginDate = this.$dayjs(this.beginDate)
+                .subtract(7, "days")
+                .format("YYYY-MM-DD");
             this.searchData();
         }
     }

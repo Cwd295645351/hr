@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 22:58:22
+ * @LastEditTime: 2021-01-30 16:16:54
 -->
 <template>
     <div class="situation">
@@ -163,6 +163,7 @@
             <el-table
                 :data="tableData"
                 style="width: 100%"
+                border
                 max-height="730"
                 v-loading="loading"
             >
@@ -415,6 +416,7 @@
                 <el-table-column
                     align="center"
                     label="电话面试情况"
+                    show-overflow-tooltip
                     width="200"
                 >
                     <template slot-scope="scope">
@@ -434,6 +436,7 @@
                 <el-table-column
                     align="center"
                     prop="remark"
+                    show-overflow-tooltip
                     label="备注"
                     width="200"
                 >
@@ -478,6 +481,19 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div class="page">
+                <el-pagination
+                    @size-change="changePageSize"
+                    @current-change="changePageIndex"
+                    :current-page="pageIndex"
+                    background
+                    :page-sizes="[10, 20, 30, 40]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total"
+                >
+                </el-pagination>
+            </div>
         </div>
         <el-drawer
             title="修改面试情况"
@@ -515,6 +531,7 @@ import { getMajorList, getChannelList } from "../../../../apis/common";
 import {
     getInterviewList,
     addInterviewee,
+    importInterviewee,
     editInterviewee,
     deleteInterviewee
 } from "../../../../apis/interview/interview";
@@ -628,6 +645,7 @@ export default {
             },
             pageIndex: 0,
             pageSize: 10,
+            total: 0,
             // 当前更多搜索条件
             currentMoreInfo: {
                 pass: false, // 是否通过部门筛选
@@ -737,40 +755,27 @@ export default {
                     let arr = [];
                     outdata.map((v) => {
                         let obj = {};
-                        // 之后自己控制专业id
-                        obj.majorId = "";
-                        // obj.user_name = v["序号"];
-                        obj.userId = this.userId;
-                        obj.date = v["日期"];
+
+                        obj.userId = _this.userId;
+                        obj.date = _this
+                            .$dayjs(new Date())
+                            .format("YYYY-MM-DD");
                         obj.name = v["姓名"];
-                        // obj.user_class = v["简历情况"];
-                        obj.phoneInterviewSituation = v["电话沟通情况"];
-                        obj.remark = v["备注"];
+                        obj.majorId = _this.filterMajor(v["专业"]);
+                        obj.majorName = v["专业"];
+                        obj.property = "社招";
                         obj.phoneNum = v["联系方式"];
-
-                        const interviewer = v["面试官"];
-                        const interviewTime = v["面试时间"]
-                            .replaceAll("/", "-")
-                            .split(" ");
+                        obj.email = "123@qq.com";
+                        obj.status = "join";
+                        obj.remark = v["备注"];
+                        _this.filterChanel(v["渠道"], obj);
                         obj.schedules = {
-                            date: interviewTime[0],
-                            time: interviewTime[1],
-                            interviewer: interviewer,
-                            form: ""
+                            date: v["日期"],
+                            time: v["时间"],
+                            interviewer: v["面试官"],
+                            form: v["面试形式"]
                         };
-
-                        const channelName = v["渠道"];
-                        switch (channelName) {
-                            case "BOSS直聘":
-                                obj.channelId = "boss";
-                                break;
-                            case "建筑英才网(投递)":
-                                obj.channelId = "buildHRDeliver";
-                                break;
-                            case "建筑英才网(搜索)":
-                                obj.channelId = "buildHRSearch";
-                                break;
-                        }
+                        obj.phoneInterviewSituation = v["电话沟通情况"];
 
                         const status = v["录用结果"];
                         if (status == "意向录用") {
@@ -780,31 +785,12 @@ export default {
                         arr.push(obj);
                     });
                     /* _this.datotal = arr;
-          _this.tableData = _this.datotal.slice(0, 10);
-          _this.totalPage = arr.length; */
+                    _this.tableData = _this.datotal.slice(0, 10);
+                    _this.totalPage = arr.length; */
                     console.log(arr);
-                    /* _this.axios
-                        .post(_this.URL.addStudents, {
-                            token: _this.token,
-                            students: arr
-                        })
-                        .then((res) => {
-                            if (res.data.code == 200) {
-                                _this.$message({
-                                    message: res.data.message,
-                                    type: "success"
-                                });
-                                _this.search();
-                            } else {
-                                this.$message.error(res.data.message);
-                                if (
-                                    res.data.code == 1011 ||
-                                    res.data.code == 1013
-                                ) {
-                                    this.$router.push("/");
-                                }
-                            }
-                        }); */
+                    importInterviewee(arr).then((res) => {
+                        console.log(res);
+                    });
                     return arr;
                 };
                 reader.readAsArrayBuffer(f);
@@ -814,6 +800,96 @@ export default {
             } else {
                 reader.readAsBinaryString(f);
             }
+        },
+        // 过滤专业
+        filterMajor(majorName) {
+            switch (majorName) {
+                case "建筑":
+                    return "architecture";
+                case "结构":
+                    return "structure";
+                case "给排水":
+                    return "drainage";
+                case "弱电":
+                    return "weakElectric";
+                case "暖通":
+                    return "HVAC";
+                case "项目助理":
+                    return "projectAssistant";
+                case "市场专员":
+                    return "marketingSpecialist";
+                case "财务":
+                    return "finance";
+                case "BIM":
+                    return "BIM";
+                case "电气":
+                    return "electricity";
+            }
+        },
+        // 过滤渠道
+        filterChanel(channelName, obj) {
+            let channelId = "others";
+            if (channelName != undefined) {
+                if (channelName.includes("BOSS")) {
+                    channelId = "boss";
+                    channelName = "BOSS直聘";
+                } else if (channelName.includes("北极星")) {
+                    channelId = "gcjob";
+                    channelName = "北极星工程招聘";
+                } else if (channelName.includes("猎聘")) {
+                    channelId = "liepin";
+                    channelName = "猎聘";
+                } else if (channelName.includes("云招聘")) {
+                    channelId = "yunzhaopin";
+                    channelName = "云招聘";
+                } else if (channelName.includes("智联招聘")) {
+                    channelId = "zhaopin";
+                    channelName = "智联招聘";
+                } else if (
+                    channelName.includes("建筑英才网") &&
+                    channelName.includes("搜索")
+                ) {
+                    channelId = "buildHRSearch";
+                    channelName = "建筑英才网(搜索)";
+                } else if (channelName.includes("建筑英才网")) {
+                    channelId = "buildHRDeliver";
+                    channelName = "建筑英才网(投递)";
+                } else if (
+                    channelName.includes("前程无忧") &&
+                    channelName.includes("搜索")
+                ) {
+                    channelId = "51jobSearch";
+                    channelName = "前程无忧(搜索)";
+                } else if (channelName.includes("前程无忧")) {
+                    channelId = "51jobDeliver";
+                    channelName = "前程无忧(投递)";
+                } else if (
+                    channelName.includes("双选会") ||
+                    channelName.includes("校招")
+                ) {
+                    channelId = "doubleElection";
+                    channelName = "双选会";
+                } else if (
+                    channelName.includes("邮箱") ||
+                    channelName.includes("自荐")
+                ) {
+                    channelName = "邮箱投递";
+                    obj.remark = channelName + "\n" + obj.remark;
+                    channelId = "mailDelivery";
+                    console.log(obj.remark);
+                } else if (
+                    channelName.includes("内推") ||
+                    channelName.includes("内部推荐")
+                ) {
+                    channelName = "内部推荐";
+                    channelId = "internalRecommended";
+                }
+            } else {
+                channelName = "其他";
+                channelId = "others";
+            }
+            obj.channelName = channelName;
+            obj.channelId = channelId;
         },
         //超出最大上传文件数量时的处理方法
         handleExceed() {
@@ -850,6 +926,17 @@ export default {
             } else {
                 this.$message.error(message);
             }
+        },
+        // 更换每页大小
+        changePageSize(size) {
+            this.pageSize = size;
+            this.pageIndex = 0;
+            this.search();
+        },
+        // 翻页
+        changePageIndex(index) {
+            this.pageIndex = index - 1;
+            this.search();
         },
         // 搜索
         async search() {
@@ -911,6 +998,7 @@ export default {
                     });
                     return item;
                 });
+                this.total = data.total;
                 console.log("查询结果", data);
             } else {
                 this.$message.error(message);
@@ -1107,6 +1195,10 @@ export default {
         padding-right: 5px;
         border-right: 1px solid #c5c5c5;
         margin-right: 5px;
+    }
+    .page{
+        margin-top: 10px;
+        text-align: right;
     }
 }
 /deep/ .upload-demo {

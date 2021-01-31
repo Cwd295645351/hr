@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 21:17:05
+ * @LastEditTime: 2021-01-30 11:38:25
 -->
 <template>
     <div class="statistics">
@@ -108,7 +108,7 @@ export default {
                         let str = params[0].axisValueLabel;
                         params.forEach((item, index) => {
                             str += `<br/>${item.seriesName}：${item.value}`;
-                            if (index != 4) {
+                            if (item.seriesName != "转化率") {
                                 str += "份";
                             } else {
                                 str += "%";

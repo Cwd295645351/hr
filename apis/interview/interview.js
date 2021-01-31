@@ -4,12 +4,13 @@
  * @Author: Chen
  * @Date: 2021-01-23 13:41:03
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-27 22:02:00
+ * @LastEditTime: 2021-01-30 00:33:11
  */
 
 import {
 	GET_INTERVIEW_LIST,
-	ADD_INTERVIEWEE,
+    ADD_INTERVIEWEE,
+    IMPORT_INTERVIEWEE,
 	EDIT_INTERVIEWEE,
 	DELETE_INTERVIEWEE
 } from "../InterviewUrlConfig";
@@ -23,6 +24,11 @@ export const getInterviewList = (data)=>{
 // 新增面试者
 export const addInterviewee = (data)=>{
     return axios.post(ADD_INTERVIEWEE,data);
+}
+
+// 批量导入面试者
+export const importInterviewee = (data)=>{
+    return axios.post(IMPORT_INTERVIEWEE,data);
 }
 
 // 修改面试者
