@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 15:11:01
+ * @LastEditTime: 2021-01-31 20:09:43
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -17,11 +17,25 @@ const router = Router({
 
 // 获取面试统计信息
 router.get("/getStatisticsData", async (ctx, next) => {
+	const TOTLE_KEY = "总数";
+	const CONVERSION_RATE = "转化率";
+	const CONVERSION_PERCENT = "初始转化率";
+	// 返回对象
+	let retData = {};
 	const params = ctx.query;
-	console.log(111, params);
-	const retData = {
+	// 数量对象
+	const numData = {
 		总数: [0, 0, 0, 0, 0, 0]
 	};
+	// 转化率对象
+	const rateData = {
+		总数转化率: [0, 0, 0, 0, 0, 0]
+	};
+	// 初始转化率对象
+	const percentData = {
+		总数初始转化率: [0, 0, 0, 0, 0, 0]
+	};
+
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.beginDate) == false) {
@@ -38,57 +52,88 @@ router.get("/getStatisticsData", async (ctx, next) => {
 	}
 	const channelArr = await getChannelList();
 	channelArr.forEach((item) => {
-		retData[item.channelName] = [0, 0, 0, 0, 0, 0];
+		rateData[item.channelName + CONVERSION_RATE] = [0, 0, 0, 0, 0, 0]; // 转化率
+		percentData[item.channelName + CONVERSION_PERCENT] = [0, 0, 0, 0, 0, 0]; // 初始转化率
+		numData[item.channelName] = [0, 0, 0, 0, 0, 0];
 	});
 	const res = await getStatisticsData(params);
-	const TOTLE_KEY = "总数";
-	const CONVERSION_RATE = "转化率";
+
+	// 统计各个渠道的面试份数
 	res.forEach((item) => {
-		retData[TOTLE_KEY][0]++;
-		retData[item.channelName][0]++;
+		numData[TOTLE_KEY][0]++;
+		numData[item.channelName][0]++;
 		// 判断状态
 		switch (item.status) {
 			// 通过初筛
 			case "pass":
-				retData[TOTLE_KEY][1]++;
-				retData[item.channelName][1]++;
+				numData[TOTLE_KEY][1]++;
+				numData[item.channelName][1]++;
 				break;
 			// 已约面
 			case "attendInterview":
-				retData[TOTLE_KEY][2]++;
-				retData[item.channelName][2]++;
+				numData[TOTLE_KEY][1]++;
+				numData[item.channelName][1]++;
+				numData[TOTLE_KEY][2]++;
+				numData[item.channelName][2]++;
 				break;
 			// 已到面
 			case "faced":
-				retData[TOTLE_KEY][3]++;
-				retData[item.channelName][3]++;
+				numData[TOTLE_KEY][1]++;
+				numData[item.channelName][1]++;
+				numData[TOTLE_KEY][2]++;
+				numData[item.channelName][2]++;
+				numData[TOTLE_KEY][3]++;
+				numData[item.channelName][3]++;
 				break;
 			// 已录用
 			case "employ":
-				retData[TOTLE_KEY][4]++;
-				retData[item.channelName][4]++;
+				numData[TOTLE_KEY][1]++;
+				numData[item.channelName][1]++;
+				numData[TOTLE_KEY][2]++;
+				numData[item.channelName][2]++;
+				numData[TOTLE_KEY][3]++;
+				numData[item.channelName][3]++;
+				numData[TOTLE_KEY][4]++;
+				numData[item.channelName][4]++;
 				break;
 			// 已入职
 			case "join":
-				retData[TOTLE_KEY][5]++;
-				retData[item.channelName][5]++;
+				numData[TOTLE_KEY][1]++;
+				numData[item.channelName][1]++;
+				numData[TOTLE_KEY][2]++;
+				numData[item.channelName][2]++;
+				numData[TOTLE_KEY][3]++;
+				numData[item.channelName][3]++;
+				numData[TOTLE_KEY][4]++;
+				numData[item.channelName][4]++;
+				numData[TOTLE_KEY][5]++;
+				numData[item.channelName][5]++;
 				break;
 		}
 	});
-	retData[CONVERSION_RATE] = [];
-	console.log(retData);
 
-	const totalArr = retData[TOTLE_KEY];
-	let nowNum = totalArr[totalArr.length - 1];
-	// 获取转化率
-	for (let i = totalArr.length - 1; i > 0; i--) {
-		let lastNum = nowNum + totalArr[i - 1];
-		retData[CONVERSION_RATE].unshift(
-			lastNum > 0 ? ((nowNum * 100) / lastNum).toFixed(2) : 0
-		);
-		nowNum += totalArr[i - 1];
+	// 获取各个渠道的转化率和初始转化率
+	for (let key in numData) {
+		const numArr = numData[key];
+		for (let i = numArr.length - 1; i > 0; i--) {
+			// 获取转化率（当前阶段占上个阶段的比例）
+			rateData[key + CONVERSION_RATE][i] =
+				numArr[i - 1] > 0
+					? ((numArr[i] * 100) / numArr[i - 1]).toFixed(2)
+					: "0.00";
+			// 获取初始转化率（当前阶段占初始阶段的比例）
+			percentData[key + CONVERSION_PERCENT][i] =
+				numArr[0] > 0
+					? ((numArr[i] * 100) / numArr[0]).toFixed(2)
+					: "0.00";
+		}
+		// 设置初始阶段的转化率和初始转化率
+		rateData[key + CONVERSION_RATE][0] = numArr[0] > 0 ? "100.00" : "0.00";
+		percentData[key + CONVERSION_PERCENT][0] =
+			numArr[0] > 0 ? "100.00" : "0.00";
 	}
-	retData[CONVERSION_RATE].unshift(nowNum > 0 ? 100 : 0);
+	console.log(numData, rateData, percentData);
+	retData = Object.assign(numData, rateData, percentData);
 	ctx.body = new SuccessModel(retData, "获取成功");
 });
 
