@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-30 16:16:54
+ * @LastEditTime: 2021-01-31 15:03:22
 -->
 <template>
     <div class="situation">
@@ -104,7 +104,7 @@
                                         v-model="currentMoreInfo.pass"
                                     ></el-switch>
                                 </el-form-item>
-                                <el-form-item size="small" label="参加面试">
+                                <el-form-item size="small" label="已约面">
                                     <el-switch
                                         v-model="
                                             currentMoreInfo.attendInterview
@@ -577,7 +577,7 @@ export default {
                     value: "pass"
                 },
                 {
-                    label: "参加面试",
+                    label: "已约面",
                     value: "attendInterview"
                 },
                 {
@@ -637,7 +637,7 @@ export default {
                 email: "", // 邮箱
                 status: {
                     pass: false, // 是否通过部门筛选
-                    attendInterview: false, // 是否参加面试
+                    attendInterview: false, // 是否已约面
                     faced: false, // 是否到面
                     employ: false, // 是否录用
                     join: false // 是否入职
@@ -649,7 +649,7 @@ export default {
             // 当前更多搜索条件
             currentMoreInfo: {
                 pass: false, // 是否通过部门筛选
-                attendInterview: false, // 是否参加面试
+                attendInterview: false, // 是否已约面
                 faced: false, // 是否到面
                 employ: false, // 是否录用
                 join: false // 是否入职
@@ -766,7 +766,6 @@ export default {
                         obj.property = "社招";
                         obj.phoneNum = v["联系方式"];
                         obj.email = "123@qq.com";
-                        obj.status = "join";
                         obj.remark = v["备注"];
                         _this.filterChanel(v["渠道"], obj);
                         obj.schedules = {
@@ -777,10 +776,7 @@ export default {
                         };
                         obj.phoneInterviewSituation = v["电话沟通情况"];
 
-                        const status = v["录用结果"];
-                        if (status == "意向录用") {
-                        } else if (status == "不录用") {
-                        }
+                        _this.filterStatus(obj, v["面试结果"], v["录用结果"]);
 
                         arr.push(obj);
                     });
@@ -799,6 +795,28 @@ export default {
                 reader.readAsArrayBuffer(f);
             } else {
                 reader.readAsBinaryString(f);
+            }
+        },
+        // 过滤状态
+        filterStatus(obj, interviewResult, jobResult) {
+            if (jobResult != undefined) {
+                if (jobResult.includes("入职")) {
+                    obj.status = "join";
+                } else if (jobResult.includes("拒")) {
+                    obj.status = "employ";
+                } else if (jobResult.includes("不录用")) {
+                    obj.status = "faced";
+                }
+            } else {
+                if (interviewResult.includes("不录用")) {
+                    obj.status = "faced";
+                } else if (interviewResult.includes("意向录用")) {
+                    obj.status = "employ";
+                } else if (interviewResult.includes("已约面")) {
+                    obj.status = "attendInterview";
+                } else if (interviewResult.includes("爽约")) {
+                    obj.status = "attendInterview";
+                }
             }
         },
         // 过滤专业
@@ -1196,7 +1214,7 @@ export default {
         border-right: 1px solid #c5c5c5;
         margin-right: 5px;
     }
-    .page{
+    .page {
         margin-top: 10px;
         text-align: right;
     }
