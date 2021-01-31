@@ -82,7 +82,6 @@ export const addInterviewee = async (data) => {
 // 批量导入面试者
 export const importInterviewee = async (data) => {
 	xssData(data);
-	console.log(data);
 	const res = await Interview.insertMany(data);
 	return res;
 };

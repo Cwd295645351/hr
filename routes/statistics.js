@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 20:09:43
+ * @LastEditTime: 2021-02-01 00:13:32
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -132,7 +132,6 @@ router.get("/getStatisticsData", async (ctx, next) => {
 		percentData[key + CONVERSION_PERCENT][0] =
 			numArr[0] > 0 ? "100.00" : "0.00";
 	}
-	console.log(numData, rateData, percentData);
 	retData = Object.assign(numData, rateData, percentData);
 	ctx.body = new SuccessModel(retData, "获取成功");
 });

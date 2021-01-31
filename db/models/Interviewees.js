@@ -86,7 +86,6 @@ const IntervieweesSchema = mongoose.Schema(
 					}
 				},
 				set:(v)=>{
-					console.log("trst11111111111111",v);
 					return v;
 				}
 			},

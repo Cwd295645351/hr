@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-28 23:15:38
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 22:37:19
+ * @LastEditTime: 2021-02-01 00:13:52
  */
 // const Koa = require('koa')
 import Koa from "koa";
@@ -55,7 +55,6 @@ app.use(async (ctx, next) => {
 
 // 配置日志
 const ENV = process.env.NODE_ENV;
-console.log("当前环境：", ENV);
 if (ENV != "production") {
 	// 开发环境 / 测试环境
 	app.use(
