@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-30 11:38:25
+ * @LastEditTime: 2021-01-31 15:15:31
 -->
 <template>
     <div class="statistics">
@@ -144,7 +144,7 @@ export default {
                         data: [
                             "初始简历",
                             "通过筛选",
-                            "通过邀约",
+                            "已约面",
                             "到面",
                             "录用",
                             "入职"
@@ -321,7 +321,7 @@ export default {
                                     : 0;
                             let obj = {
                                 channelName: key,
-                                proportion: proportion + "%"
+                                proportion: proportion
                             };
                             regionData.push(obj);
                         }
@@ -341,7 +341,20 @@ export default {
                         };
                     }
                 }
-                this.regionData = regionData;
+                regionData.sort((first, second) => {
+                    if (
+                        parseFloat(first.proportion) >
+                        parseFloat(second.proportion)
+                    ) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                });
+                this.regionData = regionData.map((item) => {
+                    item.proportion += "%";
+                    return item;
+                });
             } else {
                 this.$message.error(message);
             }
