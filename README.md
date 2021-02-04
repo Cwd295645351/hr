@@ -1,25 +1,26 @@
-# hr
+# hr-manage
 
-#### 介绍
-he
+### 介绍
+本项目用于对面试者相关信息的统计整合，方便直观地看到各个渠道和专业的面试情况，还能查看某个时间段的面试日程
 
-#### 软件架构
-软件架构说明
+### 软件架构
+- 本项目前端使用`Vue`语言，采用`vue-cli3`进行开发；
+- 后端采用`koa2`进行开发，线上使用`pm2`运行；
+- 用户信息存在`redis`中，后台数据库为`MongoDB`;
+- 后续将采用`Nginx`进行分发;
 
 
-#### 安装教程
+### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  进入`front`文件夹，命令行输入`npm i`加载依赖
+2.  进入`backend`文件夹，命令行输入`npm i`加载依赖，启动`redis`
 
-#### 使用说明
+### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  开发环境：进入`front`文件夹，输入`npm run serve`启动前端；进入`backend`文件夹，输入`npm run dev`启动后端；
+2.  生产环境：进入`front`文件夹，输入`npm run build`将代码进行打包，接着将打好的包放到`backend`的`public`目录下（没有就创一个），接着启动`npm run prd`即可开启`pm2`
 
-#### 参与贡献
+### 参与贡献
 
 1.  Fork 本仓库
 2.  新建 Feat_xxx 分支
@@ -27,11 +28,15 @@ he
 4.  新建 Pull Request
 
 
-#### 特技
+### 版本日志
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+#### v1.0
+1. 对面试者的信息的统计，查看面试情况表
+2. 面试统计信息，查看不同专业入职比例、不同渠道入职比例
+3. 面试日程，浏览每一天的面试情况
+
+#### v1.1
+1. 不同简历状态和不同专业呈现不同的颜色
+2. 修复面试情况表查询结果重复的bug
+3. 修复面试情况表点击【查询】按钮，页码不跳到第1页的bug
+
