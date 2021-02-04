@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2020-12-17 23:00:18
+ * @LastEditTime: 2021-02-03 21:40:14
 -->
 <template>
     <div class="interview">
@@ -98,6 +98,7 @@ export default {
     .main {
         width: calc(100% - 65px);
         height: 100%;
+        overflow-x: hidden;
     }
 }
 </style>

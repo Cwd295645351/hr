@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 16:34:07
+ * @LastEditTime: 2021-02-03 21:21:46
 -->
 <template>
     <div class="situation">
@@ -133,7 +133,9 @@
                     </el-popover>
                 </el-form-item>
                 <el-form-item size="small">
-                    <el-button type="primary" @click="search(1)">查询</el-button>
+                    <el-button type="primary" @click="search(1)"
+                        >查询</el-button
+                    >
                     <el-button v-show="addLineTag == false" @click="addLine"
                         >新增</el-button
                     >
@@ -164,14 +166,11 @@
                 :data="tableData"
                 style="width: 100%"
                 border
+                class="table-box"
                 max-height="730"
                 v-loading="loading"
             >
-                <el-table-column
-                    align="center"
-                    label="日期"
-                    width="95"
-                >
+                <el-table-column align="center" label="日期" width="95">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-date-picker
@@ -186,11 +185,7 @@
                         <div v-else>{{ scope.row.date }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column
-                    align="center"
-                    label="专业"
-                    width="80"
-                >
+                <el-table-column align="center" label="专业" width="80">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-select
@@ -207,7 +202,21 @@
                                 ></el-option>
                             </el-select>
                         </div>
-                        <div v-else>{{ scope.row.majorName }}</div>
+                        <div
+                         :class="[
+                                'major',
+                                { architecture: scope.row.majorId == 'architecture' },
+                                { structure: scope.row.majorId == 'structure' },
+                                { drainage: scope.row.majorId == 'drainage' },
+                                { weakElectric: scope.row.majorId == 'weakElectric' },
+                                { HVAC: scope.row.majorId == 'HVAC' },
+                                { projectAssistant: scope.row.majorId == 'projectAssistant' },
+                                { marketingSpecialist: scope.row.majorId == 'marketingSpecialist' },
+                                { finance: scope.row.majorId == 'finance' },
+                                { BIM: scope.row.majorId == 'BIM' },
+                                { electricity: scope.row.majorId == 'electricity' }
+                            ]"
+                         v-else>{{ scope.row.majorName }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column width="60" align="center" label="性质">
@@ -252,11 +261,7 @@
                         <div v-else>{{ scope.row.channelName }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column
-                    align="center"
-                    label="姓名"
-                    width="80"
-                >
+                <el-table-column align="center" label="姓名" width="80">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
@@ -316,7 +321,22 @@
                                 ></el-option>
                             </el-select>
                         </div>
-                        <div v-else>{{ scope.row.statusName }}</div>
+                        <div
+                            :class="[
+                                'status',
+                                { join: scope.row.status == 'join' },
+                                { employ: scope.row.status == 'employ' },
+                                { faced: scope.row.status == 'faced' },
+                                {
+                                    attendInterview:
+                                        scope.row.status == 'attendInterview'
+                                },
+                                { pass: scope.row.status == 'pass' }
+                            ]"
+                            v-else
+                        >
+                            {{ scope.row.statusName }}
+                        </div>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -383,11 +403,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column
-                        width="60"
-                        align="center"
-                        label="面试形式"
-                    >
+                    <el-table-column width="60" align="center" label="面试形式">
                         <template slot-scope="scope">
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-select
@@ -451,7 +467,7 @@
                         </div>
                     </template>
                 </el-table-column>
-                
+
                 <el-table-column align="center" label="相关材料" width="100">
                     <template slot-scope="scope">
                         <div
@@ -660,6 +676,7 @@ export default {
             editLine: {}
         };
     },
+
     mounted() {
         const userInfo = this.$tools.getUserInfo();
         this.userId = userInfo.userId;
@@ -956,6 +973,7 @@ export default {
         },
         // 搜索
         async search(index) {
+            this.pageIndex = index;
             if (this.addLineTag) {
                 this.addLineTag = false;
                 this.newLine = {};
@@ -1208,10 +1226,62 @@ export default {
     /deep/ .el-date-editor.el-input__inner {
         width: 140px;
     }
-    .modify {
-        padding-right: 5px;
-        border-right: 1px solid #c5c5c5;
-        margin-right: 5px;
+    .table-box {
+        .modify {
+            padding-right: 5px;
+            border-right: 1px solid #c5c5c5;
+            margin-right: 5px;
+        }
+        .status {
+            color: #fff;
+            border-radius: 4px;
+            &.join {
+                background: #fdb13f;
+            }
+            &.employ {
+                background: #ff4d4d;
+            }
+            &.faced {
+                background: #A64DFF;
+            }
+            &.attendInterview {
+                background: #4d4dff;
+            }
+            &.pass {
+                background: #ffa64d;
+            }
+        }
+        .major{
+            color: #fff;
+            border-radius: 4px;
+            &.architecture{
+                background: #4DA6FF;
+            }
+            &.structure{
+                background: #4d4dff;
+            }
+            &.drainage{
+                background: #FF4D4D;
+            }
+            &.HVAC{
+                background: #1ee08f;
+            }
+            &.projectAssistant{
+                background: #FFA64D;
+            }
+            &.marketingSpecialist{
+                background: #A64DFF;
+            }
+            &.finance{
+                background: #FFFF4D;
+            }
+            &.BIM{
+                background: #00D1D1;
+            }
+            &.electricity{
+                background: #FF4DFF;
+            }
+        }
     }
     .page {
         margin-top: 10px;
