@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-25 23:47:49
+ * @LastEditTime: 2021-02-06 23:06:59
 -->
 <template>
     <div class="login">
@@ -41,6 +41,9 @@
                     </el-form-item>
                 </el-form>
             </div>
+        </div>
+        <div class="beian">
+            <a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2021017006号</a>
         </div>
     </div>
 </template>
@@ -137,6 +140,12 @@ export default {
             width: 90%;
             margin: 0 auto;
         }
+    }
+    .beian{
+        position: absolute;
+        width: 100%;;
+        text-align: center;
+        bottom: 20px;
     }
 }
 </style>
