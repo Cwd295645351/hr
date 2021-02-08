@@ -4,11 +4,14 @@
  * @Author: Chen
  * @Date: 2021-01-10 17:33:06
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-10 17:35:31
+ * @LastEditTime: 2021-02-08 23:39:09
  */
 
 import Channel from "../db/models/Channel";
 import Major from "../db/models/Major";
+import path from "path";
+import fs from "fs";
+import { createContext } from "vm";
 
 // 根据专业Id获取专业Name
 export const getMajorNameById = async (id) => {

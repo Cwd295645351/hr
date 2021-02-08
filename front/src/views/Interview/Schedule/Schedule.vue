@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 17:04:42
+ * @LastEditTime: 2021-02-07 21:13:45
 -->
 <template>
     <div class="schedule">
@@ -120,7 +120,7 @@ export default {
             this.endDate = this.$dayjs(
                 this.$dayjs(sundayDate).add(7, "days")
             ).format("YYYY-MM-DD");
-        }else{
+        } else {
             this.beginDate = this.$dayjs(
                 this.$dayjs(mondayDate).subtract(6, "days")
             ).format("YYYY-MM-DD");
@@ -209,11 +209,12 @@ export default {
                     height: 20px;
                     font-size: 16px;
                     line-height: 20px;
-                    background: #eee;
+                    background: #ffba89;
                 }
                 .scroll-box {
                     height: calc(100% - 20px);
                     overflow: auto;
+                    background: #97d9ff30;
                     .data-item {
                         display: flex;
                         align-items: center;

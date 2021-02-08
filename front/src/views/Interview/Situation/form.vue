@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-27 23:27:53
+ * @LastEditTime: 2021-02-08 23:43:35
 -->
 <template>
     <div class="form-box">
@@ -34,6 +34,36 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="招工性质">
+                <el-select
+                    v-model="editLine.property"
+                    placeholder="选择性质"
+                    size="small"
+                    clearable
+                >
+                    <el-option
+                        v-for="(item, index) in propertyOptions"
+                        :key="item + '_propertyOptions_' + index"
+                        :label="item.label"
+                        :value="item.value"
+                    ></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="渠道">
+                <el-select
+                    v-model="editLine.channelId"
+                    size="small"
+                    placeholder="请选择渠道"
+                    clearable
+                >
+                    <el-option
+                        v-for="(item, index) in channelOptions"
+                        :key="item + '_channelOptions_' + index"
+                        :label="item.channelName"
+                        :value="item.channelId"
+                    ></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="姓名">
                 <el-input
                     v-model="editLine.name"
@@ -58,36 +88,7 @@
                     clearable
                 ></el-input>
             </el-form-item>
-            <el-form-item label="渠道">
-                <el-select
-                    v-model="editLine.channelId"
-                    size="small"
-                    placeholder="请选择渠道"
-                    clearable
-                >
-                    <el-option
-                        v-for="(item, index) in channelOptions"
-                        :key="item + '_channelOptions_' + index"
-                        :label="item.channelName"
-                        :value="item.channelId"
-                    ></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="招工性质">
-                <el-select
-                    v-model="editLine.property"
-                    placeholder="选择性质"
-                    size="small"
-                    clearable
-                >
-                    <el-option
-                        v-for="(item, index) in propertyOptions"
-                        :key="item + '_propertyOptions_' + index"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
-                </el-select>
-            </el-form-item>
+
             <el-form-item label="当前简历状态">
                 <el-select
                     v-model="editLine.status"
@@ -103,8 +104,25 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-
-            <el-form-item label="面试日期" v-show="editLine.status!='pass'">
+            <el-form-item label="备注">
+                <el-input
+                    type="textarea"
+                    autosize
+                    placeholder="请输入备注"
+                    v-model="editLine.remark"
+                ></el-input>
+            </el-form-item>
+            <el-form-item label="入职时间" v-if="editLine.status == 'join'">
+                <el-date-picker
+                    v-model="editLine.joinDate"
+                    type="date"
+                    size="small"
+                    value-format="yyyy-MM-dd"
+                    placeholder="请选择入职时间"
+                    clearable
+                ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="面试日期" v-show="editLine.status != 'pass'">
                 <el-date-picker
                     v-model="editLine.schedules.date"
                     type="date"
@@ -114,7 +132,7 @@
                     clearable
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="面试时间" v-show="editLine.status!='pass'">
+            <el-form-item label="面试时间" v-show="editLine.status != 'pass'">
                 <el-time-select
                     v-model="editLine.schedules.time"
                     size="small"
@@ -127,8 +145,7 @@
                     clearable
                 ></el-time-select>
             </el-form-item>
-            
-            <el-form-item label="面试形式" v-show="editLine.status!='pass'">
+            <el-form-item label="面试形式" v-show="editLine.status != 'pass'">
                 <el-select
                     v-model="editLine.schedules.form"
                     placeholder="选择面试形式"
@@ -143,7 +160,7 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="面试官" v-show="editLine.status!='pass'">
+            <el-form-item label="面试官" v-show="editLine.status != 'pass'">
                 <el-input
                     v-model="editLine.schedules.interviewer"
                     size="small"
@@ -159,19 +176,14 @@
                     v-model="editLine.phoneInterviewSituation"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="备注">
-                <el-input
-                    type="textarea"
-                    autosize
-                    placeholder="请输入备注"
-                    v-model="editLine.remark"
-                ></el-input>
-            </el-form-item>
             <el-form-item label="相关材料">
                 <el-upload
                     ref="upload"
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    :action="url"
                     :on-preview="handlePreview"
+                    :on-change="fileChange"
+                    :on-success="uploadSuccess"
+                    :headers="fileUploadHeaders"
                     :on-remove="handleRemove"
                     :file-list="fileList"
                     :auto-upload="false"
@@ -193,11 +205,25 @@
 </template>
 
 <script>
+import { FILE_UPLOAD, HOST } from "../../../../apis/InterviewUrlConfig";
+
 export default {
     data() {
         return {
-            fileList: this.editLine.fileList
+            // 文件列表
+            fileList: this.editLine.fileList,
+            // 文件上传地址
+            url: FILE_UPLOAD
         };
+    },
+    computed: {
+        // 文件上传头
+        fileUploadHeaders() {
+            let userInfo = this.$tools.getUserInfo();
+            return {
+                Authorization: userInfo ? `Bearer ${userInfo.accessToken}` : ""
+            };
+        }
     },
     props: [
         "editLine",
@@ -210,14 +236,32 @@ export default {
     created() {},
     mounted() {},
     methods: {
+        // 文件上传
         submitUpload() {
             this.$refs.upload.submit();
         },
+        // 文件移除
         handleRemove(file, fileList) {
             console.log("去除文件", file, fileList);
         },
+        uploadSuccess(response, file, fileList) {
+            console.log("上传文件成功：", fileList);
+            // this.editLine
+        },
+        // 文件预览
         handlePreview(file) {
+            if (file.status == "success") {
+                if (file.url) {
+                    window.open(file.url, "_blank");
+                } else {
+                    window.open(HOST + file.response.path, "_blank");
+                }
+            }
             console.log(file);
+        },
+        // 文件更改
+        fileChange(file, fileList) {
+            this.fileList = fileList;
         }
     }
 };

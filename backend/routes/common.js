@@ -4,12 +4,11 @@
  * @Author: Chen
  * @Date: 2021-01-10 22:39:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-10 22:47:01
+ * @LastEditTime: 2021-02-08 23:39:24
  */
 import Router from "koa-router";
 import { getMajorList, getChannelList } from "../controller/common";
 import { SuccessModel, ErrorModel } from "../model/resModel";
-
 
 const router = Router({
 	prefix: "/api/common"
@@ -33,6 +32,13 @@ router.get("/getChannelList", async (ctx, next) => {
 	} else {
 		ctx.body = new ErrorModel("", "获取失败");
 	}
+});
+
+// 上传文件
+router.post("/uploadFile", async (ctx, next) => {
+	const files = ctx.request.files.file;
+	files.path = files.path.slice(6);
+	ctx.body = JSON.stringify(files);
 });
 
 export default router;

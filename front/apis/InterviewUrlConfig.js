@@ -4,10 +4,10 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:22:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 23:01:37
+ * @LastEditTime: 2021-02-08 22:48:27
  */
 
-const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:8000";
+export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:8000";
 
 export const LOGIN = `${HOST}/api/user/login`; // 登录
 export const REFRESH_TOKEN = `${HOST}/api/user/refreshToken`; // 刷新token
@@ -25,3 +25,5 @@ export const GET_INTERVIEW_STATISTICS = `${HOST}/api/statistics/getStatisticsDat
 export const GET_ENTRY_RATE = `${HOST}/api/statistics/getEntryRate`; // 获取不同专业入职比例
 
 export const GET_SCHEDULE = `${HOST}/api/schedule/getSchedule`; // 获取面试日程
+
+export const FILE_UPLOAD = `${HOST}/api/common/uploadFile`; // 文件上传

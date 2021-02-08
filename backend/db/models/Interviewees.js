@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 15:34:54
+ * @LastEditTime: 2021-02-08 22:53:12
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -69,23 +69,27 @@ const IntervieweesSchema = mongoose.Schema(
 			type: String,
 			required: true
 		},
-		// schedules: {
-		// 	// 面试日程
-		// 	type: Object,
-		// 	required: true
-		// },
+		joinDate: {
+			// 入职时间
+			type: Date,
+			get: (v) => {
+				if (v) {
+					return dayjs(v).format("YYYY-MM-DD");
+				}
+			}
+		},
 		schedules: {
 			// 面试日程
 			date: {
 				type: Date,
 				get: (v) => {
-					if(v){
+					if (v) {
 						return dayjs(v).format("YYYY-MM-DD");
-					}else{
+					} else {
 						return "";
 					}
 				},
-				set:(v)=>{
+				set: (v) => {
 					return v;
 				}
 			},
@@ -104,10 +108,13 @@ const IntervieweesSchema = mongoose.Schema(
 			type: String,
 			required: true
 		},
+		fileList: {
+			// 相关材料
+			type: Array
+		},
 		remark: {
 			// 备注
-			type: String,
-			required: true
+			type: String
 		}
 	},
 	{ timestamps: true }

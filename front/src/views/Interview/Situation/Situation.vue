@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-03 21:21:46
+ * @LastEditTime: 2021-02-08 23:35:43
 -->
 <template>
     <div class="situation">
@@ -203,20 +203,39 @@
                             </el-select>
                         </div>
                         <div
-                         :class="[
+                            :class="[
                                 'major',
-                                { architecture: scope.row.majorId == 'architecture' },
+                                {
+                                    architecture:
+                                        scope.row.majorId == 'architecture'
+                                },
                                 { structure: scope.row.majorId == 'structure' },
                                 { drainage: scope.row.majorId == 'drainage' },
-                                { weakElectric: scope.row.majorId == 'weakElectric' },
+                                {
+                                    weakElectric:
+                                        scope.row.majorId == 'weakElectric'
+                                },
                                 { HVAC: scope.row.majorId == 'HVAC' },
-                                { projectAssistant: scope.row.majorId == 'projectAssistant' },
-                                { marketingSpecialist: scope.row.majorId == 'marketingSpecialist' },
+                                {
+                                    projectAssistant:
+                                        scope.row.majorId == 'projectAssistant'
+                                },
+                                {
+                                    marketingSpecialist:
+                                        scope.row.majorId ==
+                                        'marketingSpecialist'
+                                },
                                 { finance: scope.row.majorId == 'finance' },
                                 { BIM: scope.row.majorId == 'BIM' },
-                                { electricity: scope.row.majorId == 'electricity' }
+                                {
+                                    electricity:
+                                        scope.row.majorId == 'electricity'
+                                }
                             ]"
-                         v-else>{{ scope.row.majorName }}</div>
+                            v-else
+                        >
+                            {{ scope.row.majorName }}
+                        </div>
                     </template>
                 </el-table-column>
                 <el-table-column width="60" align="center" label="性质">
@@ -336,6 +355,29 @@
                             v-else
                         >
                             {{ scope.row.statusName }}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="入职时间" width="95">
+                    <template slot-scope="scope">
+                        <div
+                            v-if="
+                                scope.$index == 0 &&
+                                addLineTag == true &&
+                                scope.row.status == 'join'
+                            "
+                        >
+                            <el-date-picker
+                                v-model="newLine.joinDate"
+                                type="date"
+                                size="small"
+                                value-format="yyyy-MM-dd"
+                                placeholder="选择日期"
+                                clearable
+                            ></el-date-picker>
+                        </div>
+                        <div v-else-if="scope.row.status == 'join'">
+                            {{ scope.row.joinDate }}
                         </div>
                     </template>
                 </el-table-column>
@@ -475,7 +517,14 @@
                         ></div>
                         <!-- <div v-else>{{ scope.row.relatedMaterials }}</div> -->
                         <div v-else>
-                            <a href="/files/test-pdf.pdf" target="_blank">11</a>
+                            <div
+                                v-for="item in scope.row.fileList"
+                                :key="item.url"
+                            >
+                                <a :href="HOST + item.url" target="_blank">{{
+                                    item.name
+                                }}</a>
+                            </div>
                         </div>
                     </template>
                 </el-table-column>
@@ -518,6 +567,7 @@
         >
             <div>
                 <my-form
+                    ref="editLine"
                     :editLine="editLine"
                     :majorOptions="majorOptions"
                     :channelOptions="channelOptions"
@@ -542,6 +592,7 @@
 <script>
 import myForm from "./form";
 import { getMajorList, getChannelList } from "../../../../apis/common";
+import { HOST } from "../../../../apis/InterviewUrlConfig";
 import {
     getInterviewList,
     addInterviewee,
@@ -556,6 +607,7 @@ export default {
     data() {
         let that = this;
         return {
+            HOST: HOST,
             // 抽屉打开标志
             operateDialogTag: false,
             // 新增标志,true为正在新增，false为已保存
@@ -790,6 +842,7 @@ export default {
                             form: v["面试形式"]
                         };
                         obj.phoneInterviewSituation = v["电话沟通情况"];
+                        obj.joinDate = v["入职时间"];
 
                         _this.filterStatus(obj, v["面试结果"], v["录用结果"]);
 
@@ -1079,6 +1132,7 @@ export default {
                 channelId: "",
                 property: "",
                 status: "",
+                joinDate: "",
                 phoneInterviewSituation: "",
                 remark: "",
                 schedules: {
@@ -1150,6 +1204,19 @@ export default {
         },
         // 提交编辑面试者
         async submitEditInterviewee() {
+            // 整理文件列表
+            let fileList = [];
+            this.$refs.editLine.fileList.forEach((item) => {
+                if (item.status === "success") {
+                    let url = item.url ? item.url : item.response.path;
+                    fileList.push({
+                        name: item.name,
+                        url: url
+                    });
+                }
+            });
+            this.editLine.fileList = fileList;
+
             this.loading = true;
             const params = JSON.parse(JSON.stringify(this.editLine));
             params.userId = this.userId;
@@ -1242,7 +1309,7 @@ export default {
                 background: #ff4d4d;
             }
             &.faced {
-                background: #A64DFF;
+                background: #a64dff;
             }
             &.attendInterview {
                 background: #4d4dff;
@@ -1251,35 +1318,35 @@ export default {
                 background: #ffa64d;
             }
         }
-        .major{
+        .major {
             color: #fff;
             border-radius: 4px;
-            &.architecture{
-                background: #4DA6FF;
+            &.architecture {
+                background: #4da6ff;
             }
-            &.structure{
+            &.structure {
                 background: #4d4dff;
             }
-            &.drainage{
-                background: #FF4D4D;
+            &.drainage {
+                background: #ff4d4d;
             }
-            &.HVAC{
+            &.HVAC {
                 background: #1ee08f;
             }
-            &.projectAssistant{
-                background: #FFA64D;
+            &.projectAssistant {
+                background: #ffa64d;
             }
-            &.marketingSpecialist{
-                background: #A64DFF;
+            &.marketingSpecialist {
+                background: #a64dff;
             }
-            &.finance{
-                background: #FFFF4D;
+            &.finance {
+                background: #ffff4d;
             }
-            &.BIM{
-                background: #00D1D1;
+            &.BIM {
+                background: #00d1d1;
             }
-            &.electricity{
-                background: #FF4DFF;
+            &.electricity {
+                background: #ff4dff;
             }
         }
     }

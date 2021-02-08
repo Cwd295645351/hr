@@ -4,13 +4,12 @@
  * @Author:
  * @Date: 2020-12-28 23:15:38
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-01 00:13:52
+ * @LastEditTime: 2021-02-08 23:45:11
  */
 // const Koa = require('koa')
 import Koa from "koa";
 import json from "koa-json";
 import onerror from "koa-onerror";
-import bodyparser from "koa-bodyparser";
 import logger from "koa-logger";
 import koaStatic from "koa-static";
 import session from "koa-generic-session";
@@ -28,6 +27,7 @@ import situation from "./routes/situation";
 import statistics from "./routes/statistics";
 import schedule from "./routes/schedule";
 import common from "./routes/common";
+import koaBody from "koa-body";
 
 const app = new Koa();
 const SECRET_KEY = "admin_jwt_token";
@@ -36,11 +36,6 @@ const SECRET_KEY = "admin_jwt_token";
 onerror(app);
 
 // middlewares
-app.use(
-	bodyparser({
-		enableTypes: ["json", "form", "text"]
-	})
-);
 app.use(json());
 app.use(logger());
 app.use(koaStatic(__dirname + "/public"));
@@ -128,6 +123,27 @@ app.use(
 		secret: SECRET_KEY
 	}).unless({
 		path: [/\/api\/user\/login/]
+	})
+);
+
+// 文件上传处理
+app.use(
+	koaBody({
+		multipart: true,
+		formidable: {
+			maxFileSize: 200 * 1024 * 1024, // 设置上传文件大小最大限制，默认2M
+			keepExtensions: true,
+			maxFields: 2 * 1024 * 1024, // 文件上传大小
+			uploadDir: path.join(__dirname, "public/upload/"),
+			onFileBegin: (name, file) => {
+				// 文件存储之前对文件进行重命名处理
+				const fileFormat = file.name.split(".");
+				let savePath = `${Date.now()}.${
+					fileFormat[fileFormat.length - 1]
+				}`;
+				file.path = `public/upload/${savePath}`;
+			}
+		}
 	})
 );
 

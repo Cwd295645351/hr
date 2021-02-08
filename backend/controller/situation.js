@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-03 21:16:06
+ * @LastEditTime: 2021-02-08 23:25:21
  */
 
 import xss from "xss";
@@ -110,6 +110,7 @@ export const editInterviewee = async (data) => {
 			status: data.status,
 			schedules: data.schedules,
 			phoneInterviewSituation: data.phoneInterviewSituation,
+			fileList: data.fileList,
 			remark: data.remark
 		},
 		{ new: true }
