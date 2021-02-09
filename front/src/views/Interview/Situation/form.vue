@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-08 23:43:35
+ * @LastEditTime: 2021-02-09 22:07:51
 -->
 <template>
     <div class="form-box">
@@ -182,10 +182,9 @@
                     :action="url"
                     :on-preview="handlePreview"
                     :on-change="fileChange"
-                    :on-success="uploadSuccess"
-                    :headers="fileUploadHeaders"
                     :on-remove="handleRemove"
-                    :file-list="fileList"
+                    :headers="fileUploadHeaders"
+                    :file-list="editLine.fileList"
                     :auto-upload="false"
                 >
                     <el-button slot="trigger" size="small" type="primary"
@@ -210,8 +209,6 @@ import { FILE_UPLOAD, HOST } from "../../../../apis/InterviewUrlConfig";
 export default {
     data() {
         return {
-            // 文件列表
-            fileList: this.editLine.fileList,
             // 文件上传地址
             url: FILE_UPLOAD
         };
@@ -242,11 +239,7 @@ export default {
         },
         // 文件移除
         handleRemove(file, fileList) {
-            console.log("去除文件", file, fileList);
-        },
-        uploadSuccess(response, file, fileList) {
-            console.log("上传文件成功：", fileList);
-            // this.editLine
+            this.editLine.fileList = fileList;
         },
         // 文件预览
         handlePreview(file) {
@@ -257,11 +250,10 @@ export default {
                     window.open(HOST + file.response.path, "_blank");
                 }
             }
-            console.log(file);
         },
         // 文件更改
         fileChange(file, fileList) {
-            this.fileList = fileList;
+            this.editLine.fileList = fileList;
         }
     }
 };

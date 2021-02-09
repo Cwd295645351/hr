@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-08 23:35:43
+ * @LastEditTime: 2021-02-09 22:06:48
 -->
 <template>
     <div class="situation">
@@ -896,8 +896,6 @@ export default {
                     return "structure";
                 case "给排水":
                     return "drainage";
-                case "弱电":
-                    return "weakElectric";
                 case "暖通":
                     return "HVAC";
                 case "项目助理":
@@ -1206,7 +1204,7 @@ export default {
         async submitEditInterviewee() {
             // 整理文件列表
             let fileList = [];
-            this.$refs.editLine.fileList.forEach((item) => {
+            this.editLine.fileList.forEach((item) => {
                 if (item.status === "success") {
                     let url = item.url ? item.url : item.response.path;
                     fileList.push({
@@ -1235,6 +1233,7 @@ export default {
                 this.loading = false;
                 if (retCode === 0) {
                     this.operateDialogTag = false;
+                    this.editLine.fileList = [];
                     this.$message.success(message);
                     this.search(1);
                 } else {
