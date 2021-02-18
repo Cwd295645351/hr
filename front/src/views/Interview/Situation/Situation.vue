@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 11:50:17
+ * @LastEditTime: 2021-02-18 12:02:29
 -->
 <template>
     <div class="situation">
@@ -851,9 +851,10 @@ export default {
                     /* _this.datotal = arr;
                     _this.tableData = _this.datotal.slice(0, 10);
                     _this.totalPage = arr.length; */
-                    console.log(arr);
+                    // console.log(arr);
                     importInterviewee(arr).then((res) => {
-                        console.log(res);
+                        // console.log(res);
+                        this.search(1);
                     });
                     return arr;
                 };
@@ -963,9 +964,7 @@ export default {
                     } else {
                         obj.remark = channelName;
                     }
-                    console.log("邮箱投递结果：",obj.remark);
                     channelId = "mailDelivery";
-                    console.log(obj.remark);
                 } else if (
                     channelName.includes("内推") ||
                     channelName.includes("内部推荐")
@@ -997,7 +996,6 @@ export default {
             const {
                 data: { data, retCode, message }
             } = await getMajorList();
-            console.log(data);
             if (retCode === 0) {
                 this.majorOptions = data;
             } else {
@@ -1009,7 +1007,6 @@ export default {
             const {
                 data: { data, retCode, message }
             } = await getChannelList();
-            console.log(data);
             if (retCode === 0) {
                 this.channelOptions = data;
             } else {
@@ -1074,7 +1071,7 @@ export default {
                     params.status.push(key);
                 }
             }
-            console.log("搜索条件为：", params);
+            // console.log("搜索条件为：", params);
             const {
                 data: { data, retCode, message }
             } = await getInterviewList(params);
@@ -1089,7 +1086,7 @@ export default {
                     return item;
                 });
                 this.total = data.total;
-                console.log("查询结果", data);
+                // console.log("查询结果", data);
             } else {
                 this.$message.error(message);
             }
@@ -1169,7 +1166,7 @@ export default {
                 console.error(err);
                 this.loading = false;
             }
-            console.log("新增数据", this.newLine);
+            // console.log("新增数据", this.newLine);
         },
         // 修改面试流程
         editInfo(row) {
