@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 23:02:32
+ * @LastEditTime: 2021-02-18 23:12:18
  */
 
 import Interview from "../db/models/Interviewees";
@@ -28,7 +28,7 @@ export const getStatisticsData = async (params) => {
 	mp.majorId = new RegExp(params.majorId, "ig");
 	const res = await Interview.find(mp, {
 		channelName: 1,
-		status: 1
+		statusId: 1
 	});
 	return res;
 };
@@ -50,7 +50,7 @@ export const getEntryRate = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
-	mp.status = "join";
+	mp.statusId = "join";
 	const res = await Interview.find(mp, { majorName: 1 });
 	return res;
 };

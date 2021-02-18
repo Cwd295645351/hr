@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-01 00:13:32
+ * @LastEditTime: 2021-02-18 23:06:44
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -63,12 +63,14 @@ router.get("/getStatisticsData", async (ctx, next) => {
 		numData[TOTLE_KEY][0]++;
 		numData[item.channelName][0]++;
 		// 判断状态
-		switch (item.status) {
+		switch (item.statusId) {
 			// 通过初筛
 			case "pass":
 				numData[TOTLE_KEY][1]++;
 				numData[item.channelName][1]++;
 				break;
+			// 爽约
+			case "breakPromise":
 			// 已约面
 			case "attendInterview":
 				numData[TOTLE_KEY][1]++;
@@ -76,6 +78,8 @@ router.get("/getStatisticsData", async (ctx, next) => {
 				numData[TOTLE_KEY][2]++;
 				numData[item.channelName][2]++;
 				break;
+			// 不录用，已回复
+			case "noHire":
 			// 已到面
 			case "faced":
 				numData[TOTLE_KEY][1]++;
@@ -85,7 +89,9 @@ router.get("/getStatisticsData", async (ctx, next) => {
 				numData[TOTLE_KEY][3]++;
 				numData[item.channelName][3]++;
 				break;
-			// 已录用
+			// 拒Offer
+			case "refuseOffer":
+			// 意向录用
 			case "employ":
 				numData[TOTLE_KEY][1]++;
 				numData[item.channelName][1]++;
@@ -132,8 +138,18 @@ router.get("/getStatisticsData", async (ctx, next) => {
 		percentData[key + CONVERSION_PERCENT][0] =
 			numArr[0] > 0 ? "100.00" : "0.00";
 	}
+
+	// 横轴数据
+	const xData = [
+		"初始简历",
+		"通过筛选",
+		"已约面",
+		"到面",
+		"意向录用",
+		"入职"
+	];
 	retData = Object.assign(numData, rateData, percentData);
-	ctx.body = new SuccessModel(retData, "获取成功");
+	ctx.body = new SuccessModel({ yData: retData, xData: xData }, "获取成功");
 });
 
 // 获取不同专业入职比例

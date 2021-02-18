@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 22:21:18
+ * @LastEditTime: 2021-02-18 23:12:55
 -->
 <template>
     <div class="situation">
@@ -774,7 +774,7 @@ export default {
                         obj.majorName = v["专业"];
                         obj.property = "社招";
                         obj.phoneNum = v["联系方式"];
-                        obj.email = "123@qq.com";
+                        obj.email = "";
                         obj.remark = v["备注"];
                         _this.filterChanel(v["渠道"], obj);
                         obj.schedules = {
@@ -825,9 +825,6 @@ export default {
                 if (interviewResult.includes("不录用")) {
                     obj.statusId = "noHire";
                     obj.statusName = "不录用，已回复";
-                } else if (interviewResult.includes("意向录用")) {
-                    obj.statusId = "employ";
-                    obj.statusName = "意向录用";
                 } else if (interviewResult.includes("爽约")) {
                     obj.statusId = "breakPromise";
                     obj.statusName = "爽约";

@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 19:06:35
+ * @LastEditTime: 2021-02-18 23:11:07
 -->
 <template>
     <div class="statistics">
@@ -138,14 +138,7 @@ export default {
                 xAxis: [
                     {
                         type: "category",
-                        data: [
-                            "初始简历",
-                            "通过筛选",
-                            "已约面",
-                            "到面",
-                            "录用",
-                            "入职"
-                        ],
+                        data: [],
                         // name: "阶段",
                         nameTextStyle: {
                             color: "#666",
@@ -303,18 +296,21 @@ export default {
             if (retCode === 0) {
                 // console.log(data);
                 const regionData = [];
-                const proportionArr = [];
+                const yData = data.yData;
                 let index = 0;
-                for (let key in data) {
+
+                // 面试统计信息
+                this.options.xAxis[0].data = data.xData;
+                for (let key in yData) {
                     this.options.legend.data.push(key);
                     if (!key.includes("转化")) {
                         if (key != "总数") {
                             // 获取不同渠道入职比例
                             const proportion =
-                                data["总数"][5] > 0
+                                yData["总数"][5] > 0
                                     ? (
-                                          (data[key][5] * 100) /
-                                          data["总数"][5]
+                                          (yData[key][5] * 100) /
+                                          yData["总数"][5]
                                       ).toFixed(2)
                                     : 0;
                             let obj = {
@@ -322,15 +318,12 @@ export default {
                                 proportion: proportion
                             };
                             regionData.push(obj);
-
-                            
-                            proportionArr.push()
                         }
 
                         this.options.series[index++] = {
                             name: key,
                             type: "bar",
-                            data: data[key],
+                            data: yData[key],
                             yAxisIndex: 0
                         };
                         
@@ -338,11 +331,13 @@ export default {
                         this.options.series[index++] = {
                             name: key,
                             type: "line",
-                            data: data[key],
+                            data: yData[key],
                             yAxisIndex: 1
                         };
                     }
                 }
+                
+                // 不同渠道入职比例
                 regionData.sort((first, second) => {
                     if (
                         parseFloat(first.proportion) >
