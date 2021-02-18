@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-09 22:06:48
+ * @LastEditTime: 2021-02-18 11:50:17
 -->
 <template>
     <div class="situation">
@@ -386,7 +386,7 @@
                     prop="remark"
                     show-overflow-tooltip
                     label="备注"
-                    width="220"
+                    width="209"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -469,7 +469,7 @@
                             <div v-else>{{ scope.row.schedules.form }}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column width="150" align="center" label="面试官">
+                    <el-table-column width="80" align="center" label="面试官">
                         <template slot-scope="scope">
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-input
@@ -528,7 +528,7 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column align="center" label="操作" width="100">
+                <el-table-column align="center" label="操作" width="90">
                     <template slot-scope="scope">
                         <div v-if="addLineTag == false || scope.$index > 0">
                             <el-link
@@ -958,7 +958,12 @@ export default {
                     channelName.includes("自荐")
                 ) {
                     channelName = "邮箱投递";
-                    obj.remark = channelName + "\n" + obj.remark;
+                    if (obj.remark != undefined) {
+                        obj.remark = channelName + "\n" + obj.remark;
+                    } else {
+                        obj.remark = channelName;
+                    }
+                    console.log("邮箱投递结果：",obj.remark);
                     channelId = "mailDelivery";
                     console.log(obj.remark);
                 } else if (
