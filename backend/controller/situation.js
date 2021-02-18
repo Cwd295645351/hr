@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 21:56:22
+ * @LastEditTime: 2021-02-18 23:18:14
  */
 
 import xss from "xss";
@@ -112,6 +112,7 @@ export const editInterviewee = async (data) => {
 			channelId: data.channelId,
 			channelName: data.channelName,
 			statusId: data.statusId,
+			joinDate: data.joinDate,
 			statusName: data.statusName,
 			schedules: data.schedules,
 			phoneInterviewSituation: data.phoneInterviewSituation,
