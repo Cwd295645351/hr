@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-30 00:38:06
+ * @LastEditTime: 2021-02-18 12:51:12
  */
 import Router from "koa-router";
 import {
@@ -89,6 +89,7 @@ router.post("/editInterviewee", async (ctx, next) => {
 	}
 });
 
+// 删除面试者
 router.post("/deleteInterviewee", async (ctx, next) => {
 	const data = ctx.request.body;
 	if (!data.userId || data.userId == "") {

@@ -4,13 +4,13 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 12:02:29
+ * @LastEditTime: 2021-02-18 22:21:18
 -->
 <template>
     <div class="situation">
         <div class="searchBar">
             <el-form :inline="true" :model="searchCondition">
-                <el-form-item size="small" label="起止日期:">
+                <el-form-item size="small" label="日期">
                     <el-date-picker
                         v-model="searchCondition.beginDate"
                         type="date"
@@ -27,7 +27,7 @@
                         clearable
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item size="small" label="专业:">
+                <el-form-item size="small" label="专业">
                     <el-select
                         v-model="searchCondition.majorId"
                         placeholder="请选择专业"
@@ -41,7 +41,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item size="small" label="渠道:">
+                <el-form-item size="small" label="渠道">
                     <el-select
                         v-model="searchCondition.channelId"
                         placeholder="请选择渠道"
@@ -55,82 +55,42 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item size="small" label="姓名:">
+                <el-form-item size="small" label="姓名">
                     <el-input
                         v-model="searchCondition.name"
                         placeholder="请输入姓名"
                         clearable
                     ></el-input>
                 </el-form-item>
-                <el-form-item size="small" label="手机号:">
+                <el-form-item size="small" label="手机">
                     <el-input
                         v-model="searchCondition.phoneNum"
                         placeholder="请输入手机号"
                         clearable
                     ></el-input>
                 </el-form-item>
-                <el-form-item size="small" label="邮箱:">
+                <el-form-item size="small" label="邮箱">
                     <el-input
                         v-model="searchCondition.email"
                         placeholder="请输入邮箱"
                         clearable
                     ></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-popover
-                        placement="bottom"
-                        popper-class="popBox"
-                        v-model="popTag"
-                        width="250"
-                        trigger="click"
-                        @hide="hideHandle"
+                <el-form-item size="small" label="状态">
+                    <el-select
+                        v-model="searchCondition.statusId"
+                        multiple
+                        collapse-tags
+                        placeholder="请选择状态"
+                        clearable
                     >
-                        <div class="more-info">
-                            <div class="topbar">
-                                <div class="tip">更多信息</div>
-                                <div class="operation">
-                                    <div @click="cancelMoreInfo">取消</div>
-                                    <div @click="clearMoreInfo">重置</div>
-                                    <div @click="confirmMoreInfo">确认</div>
-                                </div>
-                            </div>
-                            <el-form
-                                ref="status"
-                                :model="currentMoreInfo"
-                                label-width="80px"
-                            >
-                                <el-form-item size="small" label="通过初筛">
-                                    <el-switch
-                                        v-model="currentMoreInfo.pass"
-                                    ></el-switch>
-                                </el-form-item>
-                                <el-form-item size="small" label="已约面">
-                                    <el-switch
-                                        v-model="
-                                            currentMoreInfo.attendInterview
-                                        "
-                                    ></el-switch>
-                                </el-form-item>
-                                <el-form-item size="small" label="是否到面">
-                                    <el-switch
-                                        v-model="currentMoreInfo.faced"
-                                    ></el-switch>
-                                </el-form-item>
-                                <el-form-item size="small" label="是否录用">
-                                    <el-switch
-                                        v-model="currentMoreInfo.employ"
-                                    ></el-switch>
-                                </el-form-item>
-                                <el-form-item size="small" label="是否入职">
-                                    <el-switch
-                                        v-model="currentMoreInfo.join"
-                                    ></el-switch>
-                                </el-form-item>
-                            </el-form>
-                        </div>
-                        <div class="more-button" slot="reference">更多</div>
-                        <!-- <el-link slot="reference" type="info">更多</el-link> -->
-                    </el-popover>
+                        <el-option
+                            v-for="(item, index) in statusOptions"
+                            :key="item + '_' + index"
+                            :label="item.statusName"
+                            :value="item.statusId"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item size="small">
                     <el-button type="primary" @click="search(1)"
@@ -154,9 +114,7 @@
                         :limit="1"
                         :auto-upload="false"
                     >
-                        <el-button size="small" type="primary"
-                            >批量上传</el-button
-                        >
+                        <el-button size="small" type="primary">上传</el-button>
                     </el-upload>
                 </el-form-item>
             </el-form>
@@ -327,7 +285,7 @@
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-select
-                                v-model="newLine.status"
+                                v-model="newLine.statusId"
                                 size="small"
                                 placeholder="请选择简历状态"
                                 clearable
@@ -335,22 +293,28 @@
                                 <el-option
                                     v-for="(item, index) in statusOptions"
                                     :key="item + '_statusOptions_' + index"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :label="item.statusName"
+                                    :value="item.statusId"
                                 ></el-option>
                             </el-select>
                         </div>
                         <div
                             :class="[
                                 'status',
-                                { join: scope.row.status == 'join' },
-                                { employ: scope.row.status == 'employ' },
-                                { faced: scope.row.status == 'faced' },
+                                { join: scope.row.statusId == 'join' },
+                                { employ: scope.row.statusId == 'employ' },
+                                { faced: scope.row.statusId == 'faced' },
                                 {
                                     attendInterview:
-                                        scope.row.status == 'attendInterview'
+                                        scope.row.statusId == 'attendInterview'
                                 },
-                                { pass: scope.row.status == 'pass' }
+                                { pass: scope.row.statusId == 'pass' },
+                                { refuse: scope.row.statusId == 'refuseOffer' },
+                                {
+                                    hire:
+                                        scope.row.statusId == 'breakPromise' ||
+                                        scope.row.statusId == 'noHire'
+                                }
                             ]"
                             v-else
                         >
@@ -364,7 +328,7 @@
                             v-if="
                                 scope.$index == 0 &&
                                 addLineTag == true &&
-                                scope.row.status == 'join'
+                                scope.row.statusId == 'join'
                             "
                         >
                             <el-date-picker
@@ -376,7 +340,7 @@
                                 clearable
                             ></el-date-picker>
                         </div>
-                        <div v-else-if="scope.row.status == 'join'">
+                        <div v-else-if="scope.row.statusId == 'join'">
                             {{ scope.row.joinDate }}
                         </div>
                     </template>
@@ -408,8 +372,8 @@
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-date-picker
                                     v-if="
-                                        newLine.status &&
-                                        newLine.status != 'pass'
+                                        newLine.statusId &&
+                                        newLine.statusId != 'pass'
                                     "
                                     v-model="newLine.schedules.date"
                                     type="date"
@@ -427,8 +391,8 @@
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-time-select
                                     v-if="
-                                        newLine.status &&
-                                        newLine.status != 'pass'
+                                        newLine.statusId &&
+                                        newLine.statusId != 'pass'
                                     "
                                     v-model="newLine.schedules.time"
                                     size="small"
@@ -450,8 +414,8 @@
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-select
                                     v-if="
-                                        newLine.status &&
-                                        newLine.status != 'pass'
+                                        newLine.statusId &&
+                                        newLine.statusId != 'pass'
                                     "
                                     v-model="newLine.schedules.form"
                                     placeholder="选择面试形式"
@@ -474,8 +438,8 @@
                             <div v-if="scope.$index == 0 && addLineTag == true">
                                 <el-input
                                     v-if="
-                                        newLine.status &&
-                                        newLine.status != 'pass'
+                                        newLine.statusId &&
+                                        newLine.statusId != 'pass'
                                     "
                                     v-model="newLine.schedules.interviewer"
                                     size="small"
@@ -591,7 +555,11 @@
 
 <script>
 import myForm from "./form";
-import { getMajorList, getChannelList } from "../../../../apis/common";
+import {
+    getMajorList,
+    getStatusList,
+    getChannelList
+} from "../../../../apis/common";
 import { HOST } from "../../../../apis/InterviewUrlConfig";
 import {
     getInterviewList,
@@ -637,28 +605,7 @@ export default {
             // 渠道数组
             channelOptions: [],
             // 当前简历状态数组
-            statusOptions: [
-                {
-                    label: "通过初筛",
-                    value: "pass"
-                },
-                {
-                    label: "已约面",
-                    value: "attendInterview"
-                },
-                {
-                    label: "已到面",
-                    value: "faced"
-                },
-                {
-                    label: "已录用",
-                    value: "employ"
-                },
-                {
-                    label: "已入职",
-                    value: "join"
-                }
-            ],
+            statusOptions: [],
             // 专业数组
             majorOptions: [],
             // 性质数组
@@ -701,13 +648,7 @@ export default {
                 channelId: "", // 渠道,
                 phoneNum: "", // 手机号
                 email: "", // 邮箱
-                status: {
-                    pass: false, // 是否通过部门筛选
-                    attendInterview: false, // 是否已约面
-                    faced: false, // 是否到面
-                    employ: false, // 是否录用
-                    join: false // 是否入职
-                }
+                statusId: []
             },
             pageIndex: 0,
             pageSize: 10,
@@ -733,6 +674,7 @@ export default {
         const userInfo = this.$tools.getUserInfo();
         this.userId = userInfo.userId;
         this.getMajorList();
+        this.getStatusList();
         this.getChannelList();
         this.search(1);
     },
@@ -854,7 +796,7 @@ export default {
                     // console.log(arr);
                     importInterviewee(arr).then((res) => {
                         // console.log(res);
-                        this.search(1);
+                        _this.search(1);
                     });
                     return arr;
                 };
@@ -870,21 +812,25 @@ export default {
         filterStatus(obj, interviewResult, jobResult) {
             if (jobResult != undefined) {
                 if (jobResult.includes("入职")) {
-                    obj.status = "join";
+                    obj.statusId = "join";
+                    obj.statusName = "已入职";
                 } else if (jobResult.includes("拒")) {
-                    obj.status = "employ";
+                    obj.statusId = "refuseOffer";
+                    obj.statusName = "拒Offer";
                 } else if (jobResult.includes("不录用")) {
-                    obj.status = "faced";
+                    obj.statusId = "noHire";
+                    obj.statusName = "不录用，已回复";
                 }
             } else {
                 if (interviewResult.includes("不录用")) {
-                    obj.status = "faced";
+                    obj.statusId = "noHire";
+                    obj.statusName = "不录用，已回复";
                 } else if (interviewResult.includes("意向录用")) {
-                    obj.status = "employ";
-                } else if (interviewResult.includes("已约面")) {
-                    obj.status = "attendInterview";
+                    obj.statusId = "employ";
+                    obj.statusName = "意向录用";
                 } else if (interviewResult.includes("爽约")) {
-                    obj.status = "attendInterview";
+                    obj.statusId = "breakPromise";
+                    obj.statusName = "爽约";
                 }
             }
         },
@@ -1002,6 +948,17 @@ export default {
                 this.$message.error(message);
             }
         },
+        // 获取状态列表
+        async getStatusList() {
+            const {
+                data: { data, retCode, message }
+            } = await getStatusList();
+            if (retCode === 0) {
+                this.statusOptions = data;
+            } else {
+                this.$message.error(message);
+            }
+        },
         // 获取渠道列表
         async getChannelList() {
             const {
@@ -1062,63 +1019,22 @@ export default {
                 channelId: this.searchCondition.channelId,
                 phoneNum: this.searchCondition.phoneNum,
                 email: this.searchCondition.email,
-                status: [],
+                statusId: this.searchCondition.statusId,
                 pageIndex: index,
                 pageSize: this.pageSize
             };
-            for (let key in this.searchCondition.status) {
-                if (this.searchCondition.status[key]) {
-                    params.status.push(key);
-                }
-            }
             // console.log("搜索条件为：", params);
             const {
                 data: { data, retCode, message }
             } = await getInterviewList(params);
             this.loading = false;
             if (retCode === 0) {
-                this.tableData = data.datas.map((item) => {
-                    this.statusOptions.forEach((status) => {
-                        if (item.status == status.value) {
-                            item.statusName = status.label;
-                        }
-                    });
-                    return item;
-                });
+                this.tableData = data.datas;
                 this.total = data.total;
                 // console.log("查询结果", data);
             } else {
                 this.$message.error(message);
             }
-        },
-        // 取消更多条件框
-        cancelMoreInfo() {
-            this.popTag = false;
-        },
-        // 清空更多条件
-        clearMoreInfo() {
-            this.currentMoreInfo = {
-                isPass: false,
-                isInterview: false,
-                isFaceInterview: false,
-                isEmployment: false,
-                isEntry: false
-            };
-        },
-        // 更多条件框隐藏时的回调方法
-        hideHandle() {
-            if (event.target.innerText != "确认") {
-                this.currentMoreInfo = JSON.parse(
-                    JSON.stringify(this.searchCondition.status)
-                );
-            }
-        },
-        // 确认更多信息
-        confirmMoreInfo() {
-            this.searchCondition.status = JSON.parse(
-                JSON.stringify(this.currentMoreInfo)
-            );
-            this.popTag = false;
         },
         // 新增一行
         addLine() {
@@ -1131,7 +1047,7 @@ export default {
                 email: "",
                 channelId: "",
                 property: "",
-                status: "",
+                statusId: "",
                 joinDate: "",
                 phoneInterviewSituation: "",
                 remark: "",
@@ -1207,7 +1123,7 @@ export default {
             // 整理文件列表
             let fileList = [];
             this.editLine.fileList.forEach((item) => {
-                if (item.status === "success") {
+                if (item.statusId === "success") {
                     let url = item.url ? item.url : item.response.path;
                     fileList.push({
                         name: item.name,
@@ -1220,7 +1136,7 @@ export default {
             this.loading = true;
             const params = JSON.parse(JSON.stringify(this.editLine));
             params.userId = this.userId;
-            if (params.status == "pass") {
+            if (params.statusId == "pass") {
                 params.schedules = {
                     date: "",
                     time: "",
@@ -1317,6 +1233,12 @@ export default {
             }
             &.pass {
                 background: #ffa64d;
+            }
+            &.hire {
+                background: #9b9b9b;
+            }
+            &.refuse {
+                background: #85b96f;
             }
         }
         .major {

@@ -4,10 +4,10 @@
  * @Author: Chen
  * @Date: 2021-01-23 13:44:44
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-24 22:31:03
+ * @LastEditTime: 2021-02-18 13:05:05
  */
 
-import { GET_MAJOR_LIST, GET_CHANNEL_LIST } from "./InterviewUrlConfig";
+import { GET_MAJOR_LIST, GET_STATUS_LIST, GET_CHANNEL_LIST } from "./InterviewUrlConfig";
 import axios from "./AxiosConfig";
 
 // 获取专业列表
@@ -18,5 +18,10 @@ export const getMajorList = () => {
 // 获取渠道列表
 export const getChannelList = () => {
 	return axios.get(GET_CHANNEL_LIST);
+};
+
+// 获取状态列表
+export const getStatusList = () => {
+	return axios.get(GET_STATUS_LIST);
 };
 

@@ -4,14 +4,14 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-08 23:25:21
+ * @LastEditTime: 2021-02-18 21:56:22
  */
 
 import xss from "xss";
 import mongoose from "../db/db";
 
 import Interview from "../db/models/Interviewees";
-import { getMajorNameById, getChannelNameById } from "./common";
+import { getMajorNameById, getChannelNameById, getStatusNameById } from "./common";
 
 // 遍历对象，将对象属性进行xss防御
 const xssData = (data) => {
@@ -51,9 +51,9 @@ export const getList = async (params) => {
 	mp.name = new RegExp(params.name, "ig");
 	mp.phoneNum = new RegExp(params.phoneNum, "ig");
 	mp.email = new RegExp(params.email, "ig");
-	if (params.status.length > 0) {
-		mp.status = {
-			$in: params.status
+	if (params.statusId.length > 0) {
+		mp.statusId = {
+			$in: params.statusId
 		};
 	}
 
@@ -75,6 +75,8 @@ export const addInterviewee = async (data) => {
 	data.majorName = majorName;
 	const channelName = await getChannelNameById(data.channelId);
 	data.channelName = channelName;
+	const statusName = await getStatusNameById(data.statusId);
+	data.statusName = statusName;
 	const res = await Interview.create(data);
 	return res;
 };
@@ -93,6 +95,8 @@ export const editInterviewee = async (data) => {
 	data.majorName = majorName;
 	const channelName = await getChannelNameById(data.channelId);
 	data.channelName = channelName;
+	const statusName = await getStatusNameById(data.statusId);
+	data.statusName = statusName;
 	const res = await Interview.findOneAndUpdate(
 		{
 			_id: mongoose.Types.ObjectId(data.id),
@@ -107,7 +111,8 @@ export const editInterviewee = async (data) => {
 			email: data.email,
 			channelId: data.channelId,
 			channelName: data.channelName,
-			status: data.status,
+			statusId: data.statusId,
+			statusName: data.statusName,
 			schedules: data.schedules,
 			phoneInterviewSituation: data.phoneInterviewSituation,
 			fileList: data.fileList,

@@ -4,14 +4,12 @@
  * @Author: Chen
  * @Date: 2021-01-10 17:33:06
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-08 23:39:09
+ * @LastEditTime: 2021-02-18 12:49:25
  */
 
 import Channel from "../db/models/Channel";
 import Major from "../db/models/Major";
-import path from "path";
-import fs from "fs";
-import { createContext } from "vm";
+import Status from "../db/models/Status";
 
 // 根据专业Id获取专业Name
 export const getMajorNameById = async (id) => {
@@ -25,6 +23,12 @@ export const getChannelNameById = async (id) => {
 	return res ? res.channelName : null;
 };
 
+// 根据状态Id获取渠道Name
+export const getStatusNameById = async (id) => {
+	const res = await Status.findOne({ statusId: id });
+	return res ? res.statusName : null;
+};
+
 // 获取渠道
 export const getChannelList = async () => {
 	const res = await Channel.find();
@@ -34,5 +38,11 @@ export const getChannelList = async () => {
 // 获取专业
 export const getMajorList = async () => {
 	const res = await Major.find();
+	return res;
+};
+
+// 获取状态
+export const getStatusList = async () => {
+	const res = await Status.find();
 	return res;
 };

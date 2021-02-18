@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-09 22:07:51
+ * @LastEditTime: 2021-02-18 21:46:24
 -->
 <template>
     <div class="form-box">
@@ -91,7 +91,7 @@
 
             <el-form-item label="当前简历状态">
                 <el-select
-                    v-model="editLine.status"
+                    v-model="editLine.statusId"
                     size="small"
                     placeholder="请选择简历状态"
                     clearable
@@ -99,8 +99,8 @@
                     <el-option
                         v-for="(item, index) in statusOptions"
                         :key="item + '_statusOptions_' + index"
-                        :label="item.label"
-                        :value="item.value"
+                        :label="item.statusName"
+                        :value="item.statusId"
                     ></el-option>
                 </el-select>
             </el-form-item>
@@ -112,7 +112,7 @@
                     v-model="editLine.remark"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="入职时间" v-if="editLine.status == 'join'">
+            <el-form-item label="入职时间" v-if="editLine.statusId == 'join'">
                 <el-date-picker
                     v-model="editLine.joinDate"
                     type="date"
@@ -122,7 +122,7 @@
                     clearable
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="面试日期" v-show="editLine.status != 'pass'">
+            <el-form-item label="面试日期" v-show="editLine.statusId != 'pass'">
                 <el-date-picker
                     v-model="editLine.schedules.date"
                     type="date"
@@ -132,7 +132,7 @@
                     clearable
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="面试时间" v-show="editLine.status != 'pass'">
+            <el-form-item label="面试时间" v-show="editLine.statusId != 'pass'">
                 <el-time-select
                     v-model="editLine.schedules.time"
                     size="small"
@@ -145,7 +145,7 @@
                     clearable
                 ></el-time-select>
             </el-form-item>
-            <el-form-item label="面试形式" v-show="editLine.status != 'pass'">
+            <el-form-item label="面试形式" v-show="editLine.statusId != 'pass'">
                 <el-select
                     v-model="editLine.schedules.form"
                     placeholder="选择面试形式"
@@ -160,7 +160,7 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="面试官" v-show="editLine.status != 'pass'">
+            <el-form-item label="面试官" v-show="editLine.statusId != 'pass'">
                 <el-input
                     v-model="editLine.schedules.interviewer"
                     size="small"
