@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 11:20:58
+ * @LastEditTime: 2021-02-18 11:55:52
  */
 module.exports = {
 	//基本路径
@@ -21,7 +21,7 @@ module.exports = {
 	//是否为 Babel 或 TypeScript 使用 thread-loader。该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建，在适当的时候开启几个子进程去并发的执行压缩
 	// parallel: require('os').cpus().length > 1,
 	//生产环境是否生成 sourceMap 文件，一般情况不建议打开
-	// productionSourceMap: false,
+	productionSourceMap: process.env.NODE_ENV === "dev",
 	devServer: {
 		// host: 'localhost',
 		host: "localhost",
@@ -56,7 +56,10 @@ module.exports = {
 				// 关闭 webpack 的性能提示
 				performance: {
 					hints: false
-				}
+				},
+				// sourceMap配置
+				devtool:
+					process.env.NODE_ENV === "dev" ? "source-map" : undefined
 			};
 		}
 	}
