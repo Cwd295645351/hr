@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 23:12:55
+ * @LastEditTime: 2021-02-19 23:15:16
 -->
 <template>
     <div class="situation">
@@ -348,9 +348,8 @@
                 <el-table-column
                     align="center"
                     prop="remark"
-                    show-overflow-tooltip
                     label="备注"
-                    width="209"
+                    width="150"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -361,8 +360,8 @@
                                 v-model="newLine.remark"
                             ></el-input>
                         </div>
-                        <div v-else>
-                            <pre>{{ scope.row.remark }}</pre>
+                        <div class="remark" v-else>
+                            {{ scope.row.remark }}
                         </div>
                     </template>
                 </el-table-column>
@@ -456,8 +455,7 @@
                 <el-table-column
                     align="center"
                     label="电话面试情况"
-                    show-overflow-tooltip
-                    width="220"
+                    width="278"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -468,8 +466,16 @@
                                 v-model="newLine.phoneInterviewSituation"
                             ></el-input>
                         </div>
-                        <div v-else>
-                            <pre>{{ scope.row.phoneInterviewSituation }}</pre>
+                        <div class="phone-interview-situation" v-else>
+                            <el-tooltip
+                                :content="scope.row.phoneInterviewSituation"
+                                popper-class="phone-situation-tooltip"
+                                placement="top"
+                            >
+                                <div>
+                                    {{ scope.row.phoneInterviewSituation }}
+                                </div>
+                            </el-tooltip>
                         </div>
                     </template>
                 </el-table-column>
@@ -1269,6 +1275,16 @@ export default {
                 background: #ff4dff;
             }
         }
+        .phone-interview-situation {
+            height: 100px;
+            text-align: left;
+        }
+        .remark {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            text-align: left;
+        }
     }
     .page {
         margin-top: 10px;
@@ -1306,7 +1322,10 @@ export default {
         }
     }
 }
-/* .el-popper .popper__arrow::after {
-  border-bottom-color: #eee !important;
-} */
+.phone-situation-tooltip {
+    width: 278px;
+    line-height: 1.5;
+    font-size: 14px;
+    background: #828181 !important;
+}
 </style>
