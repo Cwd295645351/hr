@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-19 23:15:16
+ * @LastEditTime: 2021-02-23 22:48:12
 -->
 <template>
     <div class="situation">
@@ -1067,7 +1067,7 @@ export default {
         // 保存新增
         async addInterviewee() {
             this.loading = true;
-            this.addLineTag = false;
+            
             const params = JSON.parse(JSON.stringify(this.newLine));
             params.userId = this.userId;
             try {
@@ -1077,6 +1077,7 @@ export default {
                 this.loading = false;
                 if (retCode === 0) {
                     this.$message.success(message);
+                    this.addLineTag = false;
                     this.search(1);
                 } else {
                     this.$message.error(message);
@@ -1094,7 +1095,7 @@ export default {
         },
         // 删除数据
         async deleteData(row) {
-            this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+            this.$confirm("此操作将永久删除该面试者, 是否继续?", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"

@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-08 22:53:12
+ * @LastEditTime: 2021-02-23 23:24:36
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -21,7 +21,11 @@ const IntervieweesSchema = mongoose.Schema(
 			type: Date,
 			required: true,
 			get: (v) => {
-				return dayjs(v).format("YYYY-MM-DD");
+				if (v) {
+					return dayjs(v).format("YYYY-MM-DD");
+				} else {
+					return "";
+				}
 			}
 		},
 		majorId: {
@@ -64,7 +68,12 @@ const IntervieweesSchema = mongoose.Schema(
 			type: String,
 			required: true
 		},
-		status: {
+		statusId: {
+			// 状态
+			type: String,
+			required: true
+		},
+		statusName: {
 			// 状态
 			type: String,
 			required: true
@@ -75,6 +84,8 @@ const IntervieweesSchema = mongoose.Schema(
 			get: (v) => {
 				if (v) {
 					return dayjs(v).format("YYYY-MM-DD");
+				} else {
+					return "";
 				}
 			}
 		},

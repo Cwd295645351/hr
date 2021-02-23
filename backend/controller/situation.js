@@ -4,14 +4,18 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 23:18:14
+ * @LastEditTime: 2021-02-23 23:14:01
  */
 
 import xss from "xss";
 import mongoose from "../db/db";
 
 import Interview from "../db/models/Interviewees";
-import { getMajorNameById, getChannelNameById, getStatusNameById } from "./common";
+import {
+	getMajorNameById,
+	getChannelNameById,
+	getStatusNameById
+} from "./common";
 
 // 遍历对象，将对象属性进行xss防御
 const xssData = (data) => {
@@ -71,14 +75,23 @@ export const getList = async (params) => {
 // 添加面试者
 export const addInterviewee = async (data) => {
 	xssData(data);
-	const majorName = await getMajorNameById(data.majorId);
-	data.majorName = majorName;
-	const channelName = await getChannelNameById(data.channelId);
-	data.channelName = channelName;
-	const statusName = await getStatusNameById(data.statusId);
-	data.statusName = statusName;
-	const res = await Interview.create(data);
-	return res;
+	try {
+		const majorName = await getMajorNameById(data.majorId);
+		data.majorName = majorName;
+		const channelName = await getChannelNameById(data.channelId);
+		data.channelName = channelName;
+		const statusName = await getStatusNameById(data.statusId);
+		data.statusName = statusName;
+		const res = await Interview.create(data);
+		return {
+			retCode: 0
+		};
+	} catch (e) {
+		return {
+			retCode: 1,
+			err: e
+		};
+	}
 };
 
 // 批量导入面试者
@@ -91,37 +104,47 @@ export const importInterviewee = async (data) => {
 // 修改面试者
 export const editInterviewee = async (data) => {
 	xssData(data);
-	const majorName = await getMajorNameById(data.majorId);
-	data.majorName = majorName;
-	const channelName = await getChannelNameById(data.channelId);
-	data.channelName = channelName;
-	const statusName = await getStatusNameById(data.statusId);
-	data.statusName = statusName;
-	const res = await Interview.findOneAndUpdate(
-		{
-			_id: mongoose.Types.ObjectId(data.id),
-			userId: data.userId
-		},
-		{
-			date: data.date,
-			majorId: data.majorId,
-			majorName: data.majorName,
-			name: data.name,
-			phoneNum: data.phoneNum,
-			email: data.email,
-			channelId: data.channelId,
-			channelName: data.channelName,
-			statusId: data.statusId,
-			joinDate: data.joinDate,
-			statusName: data.statusName,
-			schedules: data.schedules,
-			phoneInterviewSituation: data.phoneInterviewSituation,
-			fileList: data.fileList,
-			remark: data.remark
-		},
-		{ new: true }
-	);
-	return res;
+	try {
+		const majorName = await getMajorNameById(data.majorId);
+		data.majorName = majorName;
+		const channelName = await getChannelNameById(data.channelId);
+		data.channelName = channelName;
+		const statusName = await getStatusNameById(data.statusId);
+		data.statusName = statusName;
+		const res = await Interview.findOneAndUpdate(
+			{
+				_id: mongoose.Types.ObjectId(data.id),
+				userId: data.userId
+			},
+			{
+				date: data.date,
+				majorId: data.majorId,
+				majorName: data.majorName,
+				name: data.name,
+				property: data.property,
+				phoneNum: data.phoneNum,
+				email: data.email,
+				channelId: data.channelId,
+				channelName: data.channelName,
+				statusId: data.statusId,
+				joinDate: data.joinDate,
+				statusName: data.statusName,
+				schedules: data.schedules,
+				phoneInterviewSituation: data.phoneInterviewSituation,
+				fileList: data.fileList,
+				remark: data.remark
+			},
+			{ new: true }
+		);
+		return {
+			retCode: 0
+		};
+	} catch (e) {
+		return {
+			retCode: 1,
+			err: e
+		};
+	}
 };
 
 // 删除面试者
