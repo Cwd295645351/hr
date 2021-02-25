@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-23 22:48:12
+ * @LastEditTime: 2021-02-25 23:30:22
 -->
 <template>
     <div class="situation">
@@ -491,9 +491,16 @@
                                 v-for="item in scope.row.fileList"
                                 :key="item.url"
                             >
-                                <a :href="HOST + item.url" target="_blank">{{
-                                    item.name
-                                }}</a>
+                                <a
+                                    :href="
+                                        'https://view.xdocin.com/xdoc?_xdoc=' +
+                                        HOST +
+                                        item.url +
+                                        '&_pdf=true'
+                                    "
+                                    target="_blank"
+                                    >{{ item.name }}</a
+                                >
                             </div>
                         </div>
                     </template>
@@ -1067,7 +1074,7 @@ export default {
         // 保存新增
         async addInterviewee() {
             this.loading = true;
-            
+
             const params = JSON.parse(JSON.stringify(this.newLine));
             params.userId = this.userId;
             try {
@@ -1127,7 +1134,7 @@ export default {
             // 整理文件列表
             let fileList = [];
             this.editLine.fileList.forEach((item) => {
-                if (item.statusId === "success") {
+                if (item.status === "success") {
                     let url = item.url ? item.url : item.response.path;
                     fileList.push({
                         name: item.name,

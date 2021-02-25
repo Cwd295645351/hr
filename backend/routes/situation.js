@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-23 23:22:10
+ * @LastEditTime: 2021-02-25 00:18:59
  */
 import Router from "koa-router";
 import {
@@ -125,10 +125,17 @@ router.post("/editInterviewee", async (ctx, next) => {
 		return;
 	}
 	const res = await editInterviewee(interviewee);
-	if (res) {
-		ctx.body = new SuccessModel("", "修改成功");
+	if (res.retCode == 0) {
+		ctx.body = new SuccessModel("", "编辑成功");
 	} else {
-		ctx.body = new ErrorModel(null, "修改失败");
+		let message = [];
+		const errors = res.err.errors;
+		for (let key in errors) {
+			if (errors[key].kind === "required") {
+				message.push(`${findName(errors[key].path)}不能为空`);
+			}
+		}
+		ctx.body = new ErrorModel(null, message.join(","));
 	}
 });
 
