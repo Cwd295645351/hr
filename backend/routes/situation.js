@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-25 00:18:59
+ * @LastEditTime: 2021-03-07 12:18:47
  */
 import Router from "koa-router";
 import {
@@ -120,13 +120,18 @@ router.post("/editInterviewee", async (ctx, next) => {
 		ctx.body = new ErrorModel(null, "简历状态不能为空");
 		return;
 	}
-	if (!interviewee.phoneInterviewSituation || interviewee.phoneInterviewSituation == "") {
+	if (
+		!interviewee.phoneInterviewSituation ||
+		interviewee.phoneInterviewSituation == ""
+	) {
 		ctx.body = new ErrorModel(null, "电话面试情况不能为空");
 		return;
 	}
 	const res = await editInterviewee(interviewee);
 	if (res.retCode == 0) {
 		ctx.body = new SuccessModel("", "编辑成功");
+	} else if (res.retCode == -1) {
+		ctx.body = new ErrorModel("", "编辑失败");
 	} else {
 		let message = [];
 		const errors = res.err.errors;

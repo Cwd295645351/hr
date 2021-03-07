@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-23 23:14:01
+ * @LastEditTime: 2021-03-07 12:18:15
  */
 
 import xss from "xss";
@@ -136,9 +136,15 @@ export const editInterviewee = async (data) => {
 			},
 			{ new: true }
 		);
-		return {
-			retCode: 0
-		};
+		if (res) {
+			return {
+				retCode: 0
+			};
+		} else {
+			return {
+				retCode: -1
+			};
+		}
 	} catch (e) {
 		return {
 			retCode: 1,
