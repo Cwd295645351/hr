@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:17:20
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-31 17:02:22
+ * @LastEditTime: 2021-02-27 21:30:58
  */
 import Router from "koa-router";
 import getSchedule from "../controller/schedule";
@@ -43,10 +43,16 @@ router.get("/getSchedule", async (ctx, next) => {
 	// 整合结果
 	let map = new Map();
 	res.forEach((item) => {
+		let interviewers = item.schedules.interviewer.split("/");
+		interviewers = interviewers.map((item) => {
+			item = item.slice(0, 1);
+			return item;
+		});
+
 		let scheduleObj = {
 			name: item.name,
 			time: item.schedules.time,
-			interviewer: item.schedules.interviewer,
+			interviewer: interviewers.join("/"),
 			form: item.schedules.form,
 			property: item.property,
 			majorName: item.majorName
