@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:17:20
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-27 21:30:58
+ * @LastEditTime: 2021-03-13 20:34:52
  */
 import Router from "koa-router";
 import getSchedule from "../controller/schedule";
@@ -18,6 +18,10 @@ const router = Router({
 // 获取面试日程
 router.get("/getSchedule", async (ctx, next) => {
 	const params = ctx.query;
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.beginDate) == false) {

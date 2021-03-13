@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 15:25:24
+ * @LastEditTime: 2021-03-13 20:32:28
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -31,6 +31,10 @@ const getChannelOriginNums = async (params) => {
 // 获取初始简历数
 router.get("/getOriginNumsList", async (ctx, next) => {
 	const params = ctx.query;
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.beginDate) == false) {
@@ -142,24 +146,11 @@ router.post("/deleteOriginNums", async (ctx, next) => {
 
 // 获取面试统计信息
 router.get("/getStatisticsData", async (ctx, next) => {
-	const TOTLE_KEY = "总数";
-	const CONVERSION_RATE = "转化率";
-	const CONVERSION_PERCENT = "初始转化率";
-	// 返回对象
-	let retData = {};
 	const params = ctx.query;
-	// 数量对象
-	const numData = {
-		总数: [0, 0, 0, 0, 0, 0]
-	};
-	// 转化率对象
-	const rateData = {
-		总数转化率: [0, 0, 0, 0, 0, 0]
-	};
-	// 初始转化率对象
-	const percentData = {
-		总数初始转化率: [0, 0, 0, 0, 0, 0]
-	};
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
 
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
@@ -175,6 +166,24 @@ router.get("/getStatisticsData", async (ctx, next) => {
 			return;
 		}
 	}
+	const TOTLE_KEY = "总数";
+	const CONVERSION_RATE = "转化率";
+	const CONVERSION_PERCENT = "初始转化率";
+	// 返回对象
+	let retData = {};
+	// 数量对象
+	const numData = {
+		总数: [0, 0, 0, 0, 0, 0]
+	};
+	// 转化率对象
+	const rateData = {
+		总数转化率: [0, 0, 0, 0, 0, 0]
+	};
+	// 初始转化率对象
+	const percentData = {
+		总数初始转化率: [0, 0, 0, 0, 0, 0]
+	};
+
 	// 获取渠道列表
 	const channelArr = await getChannelList();
 	channelArr.forEach((item) => {
@@ -244,7 +253,9 @@ router.get("/getStatisticsData", async (ctx, next) => {
 	});
 
 	// 获取各个渠道初始简历数
-	const originNum = await getChannelOriginNums(params);
+	const originNumResult = await getChannelOriginNums(params);
+	const originNum = originNumResult.datas;
+	console.log(originNum);
 	const originData = {};
 	originNum.forEach((item) => {
 		if (originData[item.channelName]) {
@@ -298,6 +309,10 @@ router.get("/getEntryRate", async (ctx, next) => {
 	const params = ctx.query;
 	const retData = {};
 	const returnData = [];
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.beginDate) == false) {

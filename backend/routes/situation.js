@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-07 12:18:47
+ * @LastEditTime: 2021-03-13 19:37:40
  */
 import Router from "koa-router";
 import {
@@ -23,6 +23,10 @@ const router = Router({
 // 获取面试者列表
 router.post("/getList", async (ctx, next) => {
 	const params = ctx.request.body;
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
 	if (params.beginDate != "") {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.beginDate) == false) {
@@ -61,6 +65,7 @@ router.post("/addInterviewee", async (ctx, next) => {
 	const interviewee = ctx.request.body;
 	if (!interviewee.userId || interviewee.userId == "") {
 		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
 	}
 	const res = await addInterviewee(interviewee);
 	if (res.retCode == 0) {
