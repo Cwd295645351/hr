@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-07 21:13:45
+ * @LastEditTime: 2021-03-13 20:36:22
 -->
 <template>
     <div class="schedule">
@@ -94,6 +94,8 @@ import { getSchedule } from "../../../../apis/interview/schedule";
 export default {
     data() {
         return {
+            // 用户Id
+            userId: "",
             // 开始时间
             beginDate: "",
             // 结束时间
@@ -130,12 +132,15 @@ export default {
         }
     },
     mounted() {
+        const userInfo = this.$tools.getUserInfo();
+        this.userId = userInfo.userId;
         this.searchData();
     },
     methods: {
         // 搜索
         async searchData() {
             const params = {
+                userId: this.userId,
                 beginDate: this.beginDate,
                 endDate: this.endDate
             };

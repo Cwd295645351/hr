@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 23:11:07
+ * @LastEditTime: 2021-03-13 20:32:39
 -->
 <template>
     <div class="statistics">
@@ -86,6 +86,8 @@ export default {
     data() {
         let _this = this;
         return {
+            // 用户Id
+            userId: "",
             // 不同专业入职比例
             proportionData: [],
             // 不同渠道入职比例
@@ -209,6 +211,7 @@ export default {
                 ]
             },
             loading: false,
+            // 搜索条件
             searchCondition: {
                 beginDate: "", // 开始日期
                 endDate: "", // 结束日期
@@ -241,6 +244,8 @@ export default {
     },
     created() {},
     mounted() {
+        const userInfo = this.$tools.getUserInfo();
+        this.userId = userInfo.userId;
         this.chart = this.$echarts.init(document.getElementById("statistics"));
         this.getMajorList();
         this.searchData();
@@ -285,6 +290,7 @@ export default {
         // 获取面试统计信息
         async getInterviewStatistics(beginDate, endDate) {
             const params = {
+                userId: this.userId,
                 beginDate: beginDate,
                 endDate: endDate,
                 majorId: this.searchCondition.majorId
@@ -360,6 +366,7 @@ export default {
         // 获取不同专业入职比例
         async getEntryRate(beginDate, endDate) {
             const params = {
+                userId: this.userId,
                 beginDate: beginDate,
                 endDate: endDate
             };
