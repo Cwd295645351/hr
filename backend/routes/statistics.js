@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-07 14:58:37
+ * @LastEditTime: 2021-03-13 15:25:24
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -28,6 +28,7 @@ const getChannelOriginNums = async (params) => {
 	return originNum;
 };
 
+// 获取初始简历数
 router.get("/getOriginNumsList", async (ctx, next) => {
 	const params = ctx.query;
 	if (params.beginDate != "") {
@@ -343,5 +344,43 @@ router.get("/getEntryRate", async (ctx, next) => {
 	});
 	ctx.body = new SuccessModel(returnData, "获取成功");
 });
+
+// 根据字段获取中文
+function findName(str) {
+	let res = "";
+	switch (str) {
+		case "date":
+			res = "日期";
+			break;
+		case "majorId":
+		case "majorName":
+			res = "专业";
+			break;
+		case "name":
+			res = "姓名";
+			break;
+		case "property":
+			res = "性质";
+			break;
+		case "phoneNum":
+			res = "手机号";
+			break;
+		case "email":
+			res = "邮箱";
+			break;
+		case "channelId":
+		case "channelName":
+			res = "渠道";
+			break;
+		case "statusId":
+		case "statusName":
+			res = "简历状态";
+			break;
+		case "phoneInterviewSituation":
+			res = "电话面试情况";
+			break;
+	}
+	return res;
+}
 
 export default router;

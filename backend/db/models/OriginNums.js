@@ -4,9 +4,10 @@
  * @Author: Chen
  * @Date: 2021-02-27 22:19:05
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-07 11:59:30
+ * @LastEditTime: 2021-03-13 15:25:09
  */
 import mongoose from "../db";
+import dayjs from "dayjs";
 
 const OriginNumsSchema = mongoose.Schema(
 	{
@@ -18,15 +19,13 @@ const OriginNumsSchema = mongoose.Schema(
 		date: {
 			// 日期
 			type: Date,
+			required: true,
 			get: (v) => {
 				if (v) {
 					return dayjs(v).format("YYYY-MM-DD");
 				} else {
 					return "";
 				}
-			},
-			set: (v) => {
-				return v;
 			}
 		},
 		majorId: {
@@ -53,6 +52,10 @@ const OriginNumsSchema = mongoose.Schema(
 	{ timestamps: true }
 );
 
+// 使格式化时间能输出
+OriginNumsSchema.set("toJSON", { getters: true });
+
+// OriginNums 对应 collection
 const OriginNums = mongoose.model("origins", OriginNumsSchema);
 
 export default OriginNums;

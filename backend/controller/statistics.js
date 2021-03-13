@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-07 14:49:58
+ * @LastEditTime: 2021-03-13 15:03:09
  */
 
 import xss from "xss";
@@ -93,7 +93,8 @@ export const getOriginNums = async (params) => {
 	mp.majorId = new RegExp(params.majorId, "ig");
 	const res = await OriginNums.find(mp, {
 		channelName: 1,
-		num: 1
+		num: 1,
+		date: 1
 	});
 	return res ? res : 0;
 };
