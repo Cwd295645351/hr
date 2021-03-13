@@ -4,15 +4,139 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 23:06:44
+ * @LastEditTime: 2021-03-07 14:58:37
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
-import { getStatisticsData, getEntryRate } from "../controller/statistics";
+import {
+	getStatisticsData,
+	getEntryRate,
+	getOriginNums,
+	addOriginNums,
+	editOriginNums,
+	deleteOriginNums
+} from "../controller/statistics";
 import { getChannelList, getMajorList } from "../controller/common";
 
 const router = Router({
 	prefix: "/api/statistics"
+});
+
+// 获取各个渠道的初始数量
+const getChannelOriginNums = async (params) => {
+	const originNum = await getOriginNums(params);
+	return originNum;
+};
+
+router.get("/getOriginNumsList", async (ctx, next) => {
+	const params = ctx.query;
+	if (params.beginDate != "") {
+		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
+		if (reg.test(params.beginDate) == false) {
+			ctx.body = new ErrorModel(null, "开始时间不规范");
+			return;
+		}
+	}
+	if (params.endDate != "") {
+		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
+		if (reg.test(params.endDate) == false) {
+			ctx.body = new ErrorModel(null, "结束时间不规范");
+			return;
+		}
+	}
+	const res = await getChannelOriginNums(params);
+	if (res) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel(null, "获取失败");
+	}
+});
+
+// 新增初始简历数
+router.post("/addOriginNums", async (ctx, next) => {
+	const originObj = ctx.request.body;
+	if (!originObj.userId || originObj.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+	}
+	const res = await addOriginNums(originObj);
+	if (res.retCode == 0) {
+		ctx.body = new SuccessModel("", "新增成功");
+	} else {
+		let message = [];
+		const errors = res.err.errors;
+		for (let key in errors) {
+			if (errors[key].kind === "required") {
+				message.push(`${findName(errors[key].path)}不能为空`);
+			}
+		}
+		ctx.body = new ErrorModel(null, message.join(","));
+	}
+});
+
+// 编辑初始简历数
+router.post("/editOriginNums", async (ctx, next) => {
+	const originObj = ctx.request.body;
+	if (!originObj.userId || originObj.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+	}
+	if (!originObj.id || originObj.id == "") {
+		ctx.body = new ErrorModel(null, "id不能为空");
+		return;
+	}
+	if (!originObj.date || originObj.date == "") {
+		ctx.body = new ErrorModel(null, "日期不能为空");
+		return;
+	}
+	if (!originObj.majorId || originObj.majorId == "") {
+		ctx.body = new ErrorModel(null, "专业不能为空");
+		return;
+	}
+	if (!originObj.channelId || originObj.channelId == "") {
+		ctx.body = new ErrorModel(null, "渠道不能为空");
+		return;
+	}
+	if (!originObj.num || originObj.num == "") {
+		ctx.body = new ErrorModel(null, "初始简历数不能为空");
+		return;
+	}
+	const res = await editOriginNums(originObj);
+	if (res.retCode == 0) {
+		ctx.body = new SuccessModel("", "编辑成功");
+	} else if (res.retCode == -1) {
+		ctx.body = new ErrorModel("", "编辑失败");
+	} else {
+		let message = [];
+		const errors = res.err.errors;
+		for (let key in errors) {
+			if (errors[key].kind === "required") {
+				message.push(`${findName(errors[key].path)}不能为空`);
+			}
+		}
+		ctx.body = new ErrorModel(null, message.join(","));
+	}
+});
+
+// 删除初始简历数
+router.post("/deleteOriginNums", async (ctx, next) => {
+	const data = ctx.request.body;
+	if (!data.userId || data.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
+	if (!data.id || data.id == "") {
+		ctx.body = new ErrorModel(null, "id不能为空");
+		return;
+	}
+	try {
+		const res = await deleteOriginNums(data);
+		if (res) {
+			ctx.body = new SuccessModel("", "删除成功");
+		} else {
+			ctx.body = new ErrorModel(null, "删除失败");
+		}
+	} catch (e) {
+		ctx.body = new ErrorModel(null, "删除失败");
+	}
 });
 
 // 获取面试统计信息
@@ -50,19 +174,19 @@ router.get("/getStatisticsData", async (ctx, next) => {
 			return;
 		}
 	}
+	// 获取渠道列表
 	const channelArr = await getChannelList();
 	channelArr.forEach((item) => {
 		rateData[item.channelName + CONVERSION_RATE] = [0, 0, 0, 0, 0, 0]; // 转化率
 		percentData[item.channelName + CONVERSION_PERCENT] = [0, 0, 0, 0, 0, 0]; // 初始转化率
-		numData[item.channelName] = [0, 0, 0, 0, 0, 0];
+		numData[item.channelName] = [0, 0, 0, 0, 0, 0]; // 数量
 	});
 	const res = await getStatisticsData(params);
 
 	// 统计各个渠道的面试份数
 	res.forEach((item) => {
-		numData[TOTLE_KEY][0]++;
 		numData[item.channelName][0]++;
-		// 判断状态
+		// 判断当前简历处于哪种状态
 		switch (item.statusId) {
 			// 通过初筛
 			case "pass":
@@ -118,24 +242,40 @@ router.get("/getStatisticsData", async (ctx, next) => {
 		}
 	});
 
+	// 获取各个渠道初始简历数
+	const originNum = await getChannelOriginNums(params);
+	const originData = {};
+	originNum.forEach((item) => {
+		if (originData[item.channelName]) {
+			originData[item.channelName] += item.num;
+		} else {
+			originData[item.channelName] = item.num;
+		}
+	});
+	for (let channelName in originData) {
+		numData[TOTLE_KEY][0] += originData[channelName];
+		numData[channelName][0] = originData[channelName];
+	}
+
 	// 获取各个渠道的转化率和初始转化率
-	for (let key in numData) {
-		const numArr = numData[key];
+	for (let channelName in numData) {
+		const numArr = numData[channelName];
 		for (let i = numArr.length - 1; i > 0; i--) {
 			// 获取转化率（当前阶段占上个阶段的比例）
-			rateData[key + CONVERSION_RATE][i] =
+			rateData[channelName + CONVERSION_RATE][i] =
 				numArr[i - 1] > 0
 					? ((numArr[i] * 100) / numArr[i - 1]).toFixed(2)
 					: "0.00";
 			// 获取初始转化率（当前阶段占初始阶段的比例）
-			percentData[key + CONVERSION_PERCENT][i] =
+			percentData[channelName + CONVERSION_PERCENT][i] =
 				numArr[0] > 0
 					? ((numArr[i] * 100) / numArr[0]).toFixed(2)
 					: "0.00";
 		}
 		// 设置初始阶段的转化率和初始转化率
-		rateData[key + CONVERSION_RATE][0] = numArr[0] > 0 ? "100.00" : "0.00";
-		percentData[key + CONVERSION_PERCENT][0] =
+		rateData[channelName + CONVERSION_RATE][0] =
+			numArr[0] > 0 ? "100.00" : "0.00";
+		percentData[channelName + CONVERSION_PERCENT][0] =
 			numArr[0] > 0 ? "100.00" : "0.00";
 	}
 
@@ -171,10 +311,13 @@ router.get("/getEntryRate", async (ctx, next) => {
 			return;
 		}
 	}
+	// 获取专业列表
 	const majorArr = await getMajorList();
 	majorArr.forEach((item) => {
 		retData[item.majorName] = 0;
 	});
+
+	// 获取不同专业入职比例
 	const res = await getEntryRate(params);
 	const total = res.length;
 	if (total > 0) {
@@ -183,11 +326,14 @@ router.get("/getEntryRate", async (ctx, next) => {
 		});
 		for (let key in retData) {
 			let obj = {};
+			// 专业名称
 			obj.majorName = key;
+			// 比例
 			obj.proportion = ((retData[key] * 100) / total).toFixed(2);
 			returnData.push(obj);
 		}
 	}
+	// 返回结果按比例降序
 	returnData.sort((first, second) => {
 		if (parseFloat(first.proportion) > parseFloat(second.proportion)) {
 			return -1;
