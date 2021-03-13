@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 15:03:09
+ * @LastEditTime: 2021-03-13 20:37:28
  */
 
 import xss from "xss";
@@ -12,7 +12,7 @@ import mongoose from "../db/db";
 
 import Interview from "../db/models/Interviewees";
 import OriginNums from "../db/models/OriginNums";
-import { getChannelNameById } from "./common";
+import { getChannelNameById, getMajorNameById } from "./common";
 
 // 遍历对象，将对象属性进行xss防御
 const xssData = (data) => {
@@ -93,10 +93,15 @@ export const getOriginNums = async (params) => {
 	mp.majorId = new RegExp(params.majorId, "ig");
 	const res = await OriginNums.find(mp, {
 		channelName: 1,
+		majorName: 1,
 		num: 1,
 		date: 1
 	});
-	return res ? res : 0;
+	const length = await OriginNums.find(mp).count();
+	return {
+		datas: res,
+		total: length
+	};
 };
 
 // 新增初始简历数
@@ -105,6 +110,8 @@ export const addOriginNums = async (data) => {
 	try {
 		const channelName = await getChannelNameById(data.channelId);
 		data.channelName = channelName;
+		const majorName = await getMajorNameById(data.majorId);
+		data.majorName = majorName;
 		const res = await OriginNums.create(data);
 		return {
 			retCode: 0
@@ -157,14 +164,11 @@ export const editOriginNums = async (data) => {
 };
 
 // 删除初始简历数
-export const deleteOriginNums = async (data) =>{
+export const deleteOriginNums = async (data) => {
 	const mp = {
 		_id: mongoose.Types.ObjectId(data.id),
 		userId: data.userId
 	};
-	console.log(mp);
-	const res1 = await OriginNums.findOne(mp);
 	const res = await OriginNums.findOneAndDelete(mp);
-	console.log(res1,res);
 	return res;
-}
+};

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-02-27 22:19:05
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 15:25:09
+ * @LastEditTime: 2021-03-13 19:30:35
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -30,6 +30,11 @@ const OriginNumsSchema = mongoose.Schema(
 		},
 		majorId: {
 			// 专业id
+			type: String,
+			required: true
+		},
+		majorName: {
+			// 专业名称
 			type: String,
 			required: true
 		},
