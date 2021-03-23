@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-03 21:40:14
+ * @LastEditTime: 2021-03-13 14:58:40
 -->
 <template>
     <div class="interview">
@@ -28,6 +28,7 @@
         <div class="main">
             <Situation v-if="activeMenu == 'situation'"></Situation>
             <Statistics v-else-if="activeMenu == 'statistics'"></Statistics>
+            <OriginNums v-else-if="activeMenu == 'originNums'"></OriginNums>
             <Schedule v-else-if="activeMenu == 'schedule'"></Schedule>
         </div>
     </div>
@@ -36,9 +37,10 @@
 <script>
 import Situation from "./Situation/Situation";
 import Statistics from "./Statistics/Statistics";
+import OriginNums from "./OriginNums/OriginNums";
 import Schedule from "./Schedule/Schedule";
 export default {
-    components: { Situation, Statistics, Schedule },
+    components: { Situation, Statistics, Schedule, OriginNums },
     data() {
         return {
             // 当前菜单
@@ -54,6 +56,11 @@ export default {
                     title: "统计信息",
                     route: "statistics",
                     icon: "el-icon-pie-chart"
+                },
+                {
+                    title: "初始简历",
+                    route: "originNums",
+                    icon: "el-icon-notebook-2"
                 },
                 {
                     title: "面试日程",

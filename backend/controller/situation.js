@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-07 12:18:15
+ * @LastEditTime: 2021-03-23 21:06:35
  */
 
 import xss from "xss";
@@ -62,7 +62,7 @@ export const getList = async (params) => {
 	}
 
 	const res = await Interview.find(mp)
-		.sort({ date: 1, _id: 1 })
+		.sort({ date: -1, _id: 1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
 	const length = await Interview.find(mp).count();

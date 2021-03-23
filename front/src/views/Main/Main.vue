@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 22:12:01
+ * @LastEditTime: 2021-02-27 22:07:05
 -->
 <template>
     <div class="main">
@@ -23,6 +23,7 @@
                     {{ item.title }}
                 </div>
             </div>
+            <div class="log-off">退出</div>
         </div>
         <router-view v-if="current_module"></router-view>
         <!-- <div class="content" v-else>
@@ -163,6 +164,14 @@ export default {
             font-weight: bold;
             font-size: 20px;
             color: #fff;
+        }
+        .log-off {
+            position: absolute;
+            right: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
         }
         .active {
             color: #0000ff;

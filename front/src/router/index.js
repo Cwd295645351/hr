@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-28 22:47:32
+ * @LastEditTime: 2021-03-13 14:26:20
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -35,12 +35,12 @@ const routes = [
 				component: () => import("../views/Interview/Interview.vue")
 			},
 			{
-				path: "user",
-				name: "User",
+				path: "user", // 用户
+				name: "User", 
 				component: () => import("../views/User/User.vue")
 			},
 			{
-				path: "salary",
+				path: "salary",  // 薪酬
 				name: "Salary",
 				component: () => import("../views/Salary/Salary.vue")
 			}
