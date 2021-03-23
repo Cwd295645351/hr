@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 20:37:28
+ * @LastEditTime: 2021-03-23 22:49:01
  */
 
 import xss from "xss";
@@ -76,6 +76,9 @@ export const getEntryRate = async (params) => {
 // 获取初始简历数量
 export const getOriginNums = async (params) => {
 	let mp = {};
+
+	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
+	const pageSize = parseInt(params.pageSize);
 	if (params.beginDate && params.endDate) {
 		mp.date = {
 			$gte: new Date(params.beginDate),
@@ -91,12 +94,16 @@ export const getOriginNums = async (params) => {
 		};
 	}
 	mp.majorId = new RegExp(params.majorId, "ig");
-	const res = await OriginNums.find(mp, {
+	let retParams = {
 		channelName: 1,
 		majorName: 1,
 		num: 1,
 		date: 1
-	});
+	};
+	const res = await OriginNums.find(mp, retParams)
+		.sort({ date: -1, _id: 1 })
+		.skip(pageIndex * pageSize)
+		.limit(pageSize);
 	const length = await OriginNums.find(mp).count();
 	return {
 		datas: res,

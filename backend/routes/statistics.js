@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 20:32:28
+ * @LastEditTime: 2021-03-23 23:05:29
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -69,11 +69,18 @@ router.post("/addOriginNums", async (ctx, next) => {
 	} else {
 		let message = [];
 		const errors = res.err.errors;
+		console.log(errors);
 		for (let key in errors) {
 			if (errors[key].kind === "required") {
-				message.push(`${findName(errors[key].path)}不能为空`);
+				let errName = findName(errors[key].path);
+				if(errName!="简历数"){
+					message.push(`${errName}不能为空`);
+				}else{
+					message.push(`${errName}不能为0`);
+				}
 			}
 		}
+		message = [...new Set(message)];
 		ctx.body = new ErrorModel(null, message.join(","));
 	}
 });
@@ -196,6 +203,7 @@ router.get("/getStatisticsData", async (ctx, next) => {
 	// 统计各个渠道的面试份数
 	res.forEach((item) => {
 		numData[item.channelName][0]++;
+		numData[TOTLE_KEY][0]++;
 		// 判断当前简历处于哪种状态
 		switch (item.statusId) {
 			// 通过初筛
@@ -393,6 +401,9 @@ function findName(str) {
 			break;
 		case "phoneInterviewSituation":
 			res = "电话面试情况";
+			break;
+		case "num":
+			res = "简历数";
 			break;
 	}
 	return res;
