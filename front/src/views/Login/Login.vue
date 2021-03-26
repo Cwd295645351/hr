@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-06 23:06:59
+ * @LastEditTime: 2021-03-27 00:04:17
 -->
 <template>
     <div class="login">
@@ -43,7 +43,31 @@
             </div>
         </div>
         <div class="beian">
-            <a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2021017006号</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank"
+                >粤ICP备2021017006号</a
+            >
+            <a
+                target="_blank"
+                href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030502007113"
+                style="
+                    display: inline-block;
+                    text-decoration: none;
+                    height: 20px;
+                    line-height: 20px;
+                "
+                ><img src="../../assets/beian.png" style="float: left" />
+                <p
+                    style="
+                        float: left;
+                        height: 20px;
+                        line-height: 20px;
+                        margin: 0px 0px 0px 5px;
+                        color: #939393;
+                    "
+                >
+                    粤公网安备 44030502007113号
+                </p></a
+            >
         </div>
     </div>
 </template>
@@ -141,10 +165,17 @@ export default {
             margin: 0 auto;
         }
     }
-    .beian{
+    .beian {
         position: absolute;
-        width: 100%;;
-        text-align: center;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        width: 100%;
+        bottom: 20px;
+    }
+    .gongan-beian {
+        position: absolute;
+        width: 100%;
         bottom: 20px;
     }
 }
