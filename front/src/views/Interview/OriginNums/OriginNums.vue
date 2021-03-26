@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-23 22:56:54
+ * @LastEditTime: 2021-03-26 23:43:20
 -->
 <template>
     <div class="originNums">
@@ -134,6 +134,21 @@
                         <div v-else>{{ scope.row.num }}</div>
                     </template>
                 </el-table-column>
+                <el-table-column align="center" label="操作" width="90">
+                    <template slot-scope="scope">
+                        <div v-if="addLineTag == false || scope.$index > 0">
+                            <el-link
+                                @click="editInfo(scope.row)"
+                                type="info"
+                                class="modify"
+                                >修改</el-link
+                            >
+                            <el-link @click="deleteData(scope.row)" type="info"
+                                >删除</el-link
+                            >
+                        </div>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="page">
                 <el-pagination
@@ -149,6 +164,33 @@
                 </el-pagination>
             </div>
         </div>
+        <el-drawer
+            title="修改面试简历数"
+            :before-close="handleClose"
+            :visible.sync="operateDialogTag"
+            direction="rtl"
+            ref="drawer"
+        >
+            <div>
+                <my-form
+                    ref="editLine"
+                    :editLine="editLine"
+                    :channelOptions="channelOptions"
+                    :majorOptions="majorOptions"
+                ></my-form>
+                <div class="demo-drawer__footer">
+                    <el-button :disable="loading" @click="cancelForm"
+                        >取 消</el-button
+                    >
+                    <el-button
+                        type="primary"
+                        @click="submitEdit"
+                        :loading="loading"
+                        >{{ loading ? "提交中 ..." : "确 定" }}</el-button
+                    >
+                </div>
+            </div>
+        </el-drawer>
     </div>
 </template>
 
@@ -159,8 +201,10 @@ import {
     editOriginNums,
     deleteOriginNums
 } from "../../../../apis/interview/statistics";
+import myForm from "./form";
 import { getMajorList, getChannelList } from "../../../../apis/common";
 export default {
+    components: { myForm },
     data() {
         const _this = this;
         return {
@@ -182,9 +226,16 @@ export default {
             },
             // 新增标志,true为正在新增，false为已保存
             addLineTag: false,
+            // 修改初始简历数侧拉
+            operateDialogTag: false,
+            // 新增一行
             newLine: {},
+            // 编辑信息
+            editLine: {},
             // 专业数组
             majorOptions: [],
+            // 渠道数组
+            channelOptions: [],
             // 开始时间限制条件
             beginDateOptions: {
                 disabledDate(time) {
@@ -211,8 +262,8 @@ export default {
     mounted() {
         const userInfo = this.$tools.getUserInfo();
         this.userId = userInfo.userId;
-        this.getMajorList();
         this.getChannelList();
+        this.getMajorList();
         this.search(1);
     },
     methods: {
@@ -301,6 +352,40 @@ export default {
             };
             this.tableData.unshift(this.newLine);
         },
+        // 修改面试流程
+        editInfo(row) {
+            this.operateDialogTag = true;
+            this.editLine = JSON.parse(JSON.stringify(row));
+        },
+        // 删除数据
+        async deleteData(row) {
+            this.$confirm("此操作将永久删除该初始简历数, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(async () => {
+                    const params = {
+                        userId: this.userId,
+                        id: row.id
+                    };
+                    const {
+                        data: { data, retCode, message }
+                    } = await deleteOriginNums(params);
+                    if (retCode === 0) {
+                        this.search(1);
+                        this.$message.success(message);
+                    } else {
+                        this.$message.error(message);
+                    }
+                })
+                .catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消删除"
+                    });
+                });
+        },
         // 保存新增
         async addOriginNums() {
             this.loading = true;
@@ -323,6 +408,42 @@ export default {
                 this.loading = false;
             }
             // console.log("新增数据", this.newLine);
+        },
+        // 关闭抽屉
+        handleClose(done) {
+            if (this.loading) {
+                return;
+            }
+            this.$confirm("是否未保存修改就退出？")
+                .then(async (_) => {
+                    done();
+                })
+                .catch((_) => {});
+        },
+        // 确认编辑
+        async submitEdit() {
+            const params = JSON.parse(JSON.stringify(this.editLine));
+            params.userId = this.userId;
+            try {
+                const {
+                    data: { data, retCode, message }
+                } = await editOriginNums(params);
+                this.loading = false;
+                if (retCode === 0) {
+                    this.operateDialogTag = false;
+                    this.$message.success(message);
+                    this.search(1);
+                } else {
+                    this.$message.error(message);
+                }
+            } catch (err) {
+                console.error(err);
+                this.loading = false;
+            }
+        },
+        cancelForm() {
+            this.loading = false;
+            this.operateDialogTag = false;
         }
     }
 };
