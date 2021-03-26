@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-23 22:49:01
+ * @LastEditTime: 2021-03-26 23:50:05
  */
 
 import xss from "xss";
@@ -94,13 +94,7 @@ export const getOriginNums = async (params) => {
 		};
 	}
 	mp.majorId = new RegExp(params.majorId, "ig");
-	let retParams = {
-		channelName: 1,
-		majorName: 1,
-		num: 1,
-		date: 1
-	};
-	const res = await OriginNums.find(mp, retParams)
+	const res = await OriginNums.find(mp)
 		.sort({ date: -1, _id: 1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
@@ -137,6 +131,8 @@ export const editOriginNums = async (data) => {
 	try {
 		const channelName = await getChannelNameById(data.channelId);
 		data.channelName = channelName;
+		const majorName = await getMajorNameById(data.majorId);
+		data.majorName = majorName;
 		const mp = {
 			_id: mongoose.Types.ObjectId(data.id),
 			userId: data.userId
@@ -146,6 +142,7 @@ export const editOriginNums = async (data) => {
 			{
 				date: data.date,
 				majorId: data.majorId,
+				majorName: data.majorName,
 				channelId: data.channelId,
 				channelName: data.channelName,
 				num: data.num
