@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-23 22:53:56
+ * @LastEditTime: 2021-04-05 23:40:38
 -->
 <template>
     <div class="situation">
@@ -773,8 +773,136 @@ export default {
                         wb.Sheets[wb.SheetNames[0]]
                     );
                     // outdata就是读取的数据（不包含标题行即表头，表头会作为对象的下标）
-                    // 此处可对数据进行处理
+
                     let arr = [];
+
+                    for (let i = 1; i <= 34; ) {
+                        let dates = outdata[i];
+                        let morningData = outdata[i + 1];
+                        let afternoonData = outdata[i + 2];
+
+                        // 遍历早上的数据
+                        for (let key in morningData) {
+                            let date = dates[key];
+                            if (key != "__EMPTY") {
+                                let lineData = morningData[key];
+                                // 查找当前人数
+                                let res = lineData.split("；");
+                                res.forEach((item) => {
+                                    let resData = item.split(" ");
+
+                                    let name = resData[1].slice(
+                                        0,
+                                        resData[1].indexOf("（")
+                                    );
+
+                                    let info = resData[1].slice(
+                                        resData[1].indexOf("（") + 1,
+                                        resData[1].indexOf("）")
+                                    );
+                                    let infoArr = info.split("，");
+                                    let majorName = infoArr[0];
+                                    let majorId = _this.filterMajor(majorName);
+                                    let property = infoArr[1];
+                                    let form = infoArr[2];
+                                    let interviewer = infoArr[3];
+
+                                    let obj = {
+                                        userId: _this.userId,
+                                        date: _this
+                                            .$dayjs(new Date())
+                                            .format("YYYY-MM-DD"),
+                                        name: name,
+                                        majorId: majorId,
+                                        majorName: majorName,
+                                        property: property,
+                                        schedules: {
+                                            date: date,
+                                            time: resData[0],
+                                            interviewer: interviewer,
+                                            form: form
+                                        }
+                                    };
+                                    arr.push(obj);
+                                });
+                            }
+                        }
+                        // 遍历下午的数据
+                        for (let key in afternoonData) {
+                            if (key != "__EMPTY") {
+                                let date = dates[key];
+                                let lineData = afternoonData[key];
+                                // 查找当前人数
+                                let res = lineData.split("；");
+                                res.forEach((item) => {
+                                    let resData = item.split(" ");
+                                    let time = resData[0];
+                                    let hour = 12 + +time.slice(0, 1);
+                                    time = hour + time.slice(1);
+
+                                    let name = resData[1].slice(
+                                        0,
+                                        resData[1].indexOf("（")
+                                    );
+
+                                    let info = resData[1].slice(
+                                        resData[1].indexOf("（") + 1,
+                                        resData[1].indexOf("）")
+                                    );
+                                    let infoArr = info.split("，");
+                                    let majorName = infoArr[0];
+                                    let majorId = _this.filterMajor(majorName);
+                                    let property = infoArr[1];
+                                    let form = infoArr[2];
+                                    let interviewer = infoArr[3];
+
+                                    let obj = {
+                                        userId: _this.userId,
+                                        date: _this
+                                            .$dayjs(new Date())
+                                            .format("YYYY-MM-DD"),
+                                        name: name,
+                                        majorId: majorId,
+                                        majorName: majorName,
+                                        property: property,
+                                        phoneNum: "",
+                                        email: "",
+                                        channelId: "",
+                                        channelName: "",
+                                        statusId: "",
+                                        statusName: "",
+                                        joinDate: "",
+                                        schedules: {
+                                            date: date,
+                                            time: time,
+                                            interviewer: interviewer,
+                                            form: form
+                                        },
+                                        phoneInterviewSituation: "",
+                                        remark: ""
+                                    };
+                                    arr.push(obj);
+                                });
+                            }
+                        }
+
+                        i = i + 3;
+                    }
+                    console.log(arr);
+
+                    importInterviewee(arr).then((res) => {
+                        // console.log(res);
+                        _this.search(1);
+                    });
+                    return arr;
+
+
+
+
+
+
+                    // 此处可对数据进行处理
+                   /*  let arr = [];
                     outdata.map((v) => {
                         let obj = {};
 
@@ -803,15 +931,12 @@ export default {
 
                         arr.push(obj);
                     });
-                    /* _this.datotal = arr;
-                    _this.tableData = _this.datotal.slice(0, 10);
-                    _this.totalPage = arr.length; */
                     // console.log(arr);
                     importInterviewee(arr).then((res) => {
                         // console.log(res);
                         _this.search(1);
                     });
-                    return arr;
+                    return arr; */
                 };
                 reader.readAsArrayBuffer(f);
             };
@@ -865,6 +990,8 @@ export default {
                     return "BIM";
                 case "电气":
                     return "electricity";
+                case "绿建":
+                    return "greenBuilding";
             }
         },
         // 过滤渠道
