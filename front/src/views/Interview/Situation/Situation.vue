@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-05 23:40:38
+ * @LastEditTime: 2021-04-07 22:30:58
 -->
 <template>
     <div class="situation">
@@ -816,12 +816,21 @@ export default {
                                         majorId: majorId,
                                         majorName: majorName,
                                         property: property,
+                                        phoneNum: "",
+                                        email: "",
+                                        channelId: "",
+                                        channelName: "",
+                                        statusId: "",
+                                        statusName: "",
+                                        joinDate: "",
                                         schedules: {
                                             date: date,
                                             time: resData[0],
                                             interviewer: interviewer,
                                             form: form
-                                        }
+                                        },
+                                        phoneInterviewSituation: "",
+                                        remark: ""
                                     };
                                     arr.push(obj);
                                 });
@@ -957,12 +966,12 @@ export default {
                     obj.statusName = "拒Offer";
                 } else if (jobResult.includes("不录用")) {
                     obj.statusId = "noHire";
-                    obj.statusName = "不录用，已回复";
+                    obj.statusName = "不录用";
                 }
             } else {
                 if (interviewResult.includes("不录用")) {
                     obj.statusId = "noHire";
-                    obj.statusName = "不录用，已回复";
+                    obj.statusName = "不录用";
                 } else if (interviewResult.includes("爽约")) {
                     obj.statusId = "breakPromise";
                     obj.statusName = "爽约";
@@ -1291,7 +1300,7 @@ export default {
                     this.operateDialogTag = false;
                     this.editLine.fileList = [];
                     this.$message.success(message);
-                    this.search(1);
+                    this.search(this.pageIndex);
                 } else {
                     this.$message.error(message);
                 }

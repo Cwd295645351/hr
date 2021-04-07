@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-23 23:24:36
+ * @LastEditTime: 2021-04-07 21:22:07
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -19,7 +19,6 @@ const IntervieweesSchema = mongoose.Schema(
 		date: {
 			// 登记日期
 			type: Date,
-			required: true,
 			get: (v) => {
 				if (v) {
 					return dayjs(v).format("YYYY-MM-DD");
@@ -30,53 +29,43 @@ const IntervieweesSchema = mongoose.Schema(
 		},
 		majorId: {
 			// 专业id
-			type: String,
-			required: true
+			type: String
 		},
 		majorName: {
 			// 专业名称
-			type: String,
-			required: true
+			type: String
 		},
 		name: {
 			// 姓名
-			type: String,
-			required: true
+			type: String
 		},
 		property: {
 			// 招工性质
-			type: String,
-			required: true // 导入表格时先注释掉
+			type: String
 		},
 		phoneNum: {
 			// 电话号码
-			type: String,
-			required: true
+			type: String
 		},
 		email: {
 			// 邮箱
-			type: String,
-			required: true //导入表格时先注释掉
+			type: String
 		},
 		channelId: {
 			// 渠道id
-			type: String,
-			required: true
+			type: String
 		},
 		channelName: {
 			// 渠道名称
-			type: String,
-			required: true
+			type: String
 		},
 		statusId: {
 			// 状态
-			type: String,
-			required: true
+			type: String
 		},
 		statusName: {
 			// 状态
-			type: String,
-			required: true
+			type: String
 		},
 		joinDate: {
 			// 入职时间
@@ -116,8 +105,7 @@ const IntervieweesSchema = mongoose.Schema(
 		},
 		phoneInterviewSituation: {
 			// 电话面试情况
-			type: String,
-			required: true
+			type: String
 		},
 		fileList: {
 			// 相关材料

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 19:37:40
+ * @LastEditTime: 2021-04-07 21:54:47
  */
 import Router from "koa-router";
 import {
@@ -87,49 +87,6 @@ router.post("/editInterviewee", async (ctx, next) => {
 	const interviewee = ctx.request.body;
 	if (!interviewee.userId || interviewee.userId == "") {
 		ctx.body = new ErrorModel(null, "userId不能为空");
-		return;
-	}
-	if (!interviewee.id || interviewee.id == "") {
-		ctx.body = new ErrorModel(null, "id不能为空");
-		return;
-	}
-	if (!interviewee.date || interviewee.date == "") {
-		ctx.body = new ErrorModel(null, "日期不能为空");
-		return;
-	}
-	if (!interviewee.majorId || interviewee.majorId == "") {
-		ctx.body = new ErrorModel(null, "专业不能为空");
-		return;
-	}
-	if (!interviewee.name || interviewee.name == "") {
-		ctx.body = new ErrorModel(null, "姓名不能为空");
-		return;
-	}
-	if (!interviewee.property || interviewee.property == "") {
-		ctx.body = new ErrorModel(null, "性质不能为空");
-		return;
-	}
-	if (!interviewee.phoneNum || interviewee.phoneNum == "") {
-		ctx.body = new ErrorModel(null, "手机号不能为空");
-		return;
-	}
-	if (!interviewee.email || interviewee.email == "") {
-		ctx.body = new ErrorModel(null, "邮箱不能为空");
-		return;
-	}
-	if (!interviewee.channelId || interviewee.channelId == "") {
-		ctx.body = new ErrorModel(null, "渠道不能为空");
-		return;
-	}
-	if (!interviewee.statusId || interviewee.statusId == "") {
-		ctx.body = new ErrorModel(null, "简历状态不能为空");
-		return;
-	}
-	if (
-		!interviewee.phoneInterviewSituation ||
-		interviewee.phoneInterviewSituation == ""
-	) {
-		ctx.body = new ErrorModel(null, "电话面试情况不能为空");
 		return;
 	}
 	const res = await editInterviewee(interviewee);
