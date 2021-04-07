@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 20:36:22
+ * @LastEditTime: 2021-04-07 22:20:26
 -->
 <template>
     <div class="schedule">
@@ -20,23 +20,66 @@
         </div>
         <div class="content" v-if="datas.length > 0">
             <div class="item week">
-                <div v-for="week in weeks" :key="'top_' + week">{{ week }}</div>
+                <div v-for="week in weekdays" :key="'top_' + week">
+                    {{ week }}
+                </div>
+                <div
+                    v-for="week in weekend"
+                    class="weekend"
+                    :key="'top_' + week"
+                >
+                    {{ week }}
+                </div>
             </div>
             <div class="item">
-                <div v-for="i of 7" :key="'top_' + i">
+                <div
+                    v-for="i of 7"
+                    :class="{ weekend: i == 6 || i == 7 }"
+                    :key="'top_' + i"
+                >
                     <div class="date">{{ datas[i - 1].date }}</div>
-                    <div class="scroll-box">
+                    <div class="scroll-box morning">
                         <div
-                            class="data-item"
-                            v-for="(item, index) in datas[i - 1].interview"
+                            :class="[
+                                'data-item',
+                                { 'break-promise': item.statusName == '爽约' }
+                            ]"
+                            v-for="(item, index) in datas[i - 1]
+                                .morningInterview"
                             :key="datas[i - 1].date + '_' + index"
                         >
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
                             <div>{{ item.majorName }}</div>
+                            ,
                             <div>{{ item.property }}</div>
+                            ,
                             <div>{{ item.form }}</div>
+                            ,
+                            <div>{{ item.interviewer }}</div>
+                            <div>)</div>
+                        </div>
+                    </div>
+                    <div class="scroll-box afternoon">
+                        <div
+                            :class="[
+                                'data-item',
+                                { 'break-promise': item.statusName == '爽约' }
+                            ]"
+                            v-for="(item, index) in datas[i - 1]
+                                .afternoonInterview"
+                            :key="datas[i - 1].date + '_' + index"
+                        >
+                            <div>{{ item.time }}</div>
+                            <div>{{ item.name }}</div>
+                            <div>(</div>
+                            <div>{{ item.majorName }}</div>
+                            ,
+                            <div>{{ item.property }}</div>
+                            ,
+                            <div>{{ item.form }}</div>
+                            ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
                         </div>
@@ -44,20 +87,54 @@
                 </div>
             </div>
             <div class="item">
-                <div v-for="i of 7" :key="'middle_' + i">
+                <div
+                    v-for="i of 7"
+                    :class="{ weekend: i == 6 || i == 7 }"
+                    :key="'middle_' + i"
+                >
                     <div class="date">{{ datas[i - 1 + 7].date }}</div>
-                    <div class="scroll-box">
+                    <div class="scroll-box morning">
                         <div
-                            class="data-item"
-                            v-for="(item, index) in datas[i - 1 + 7].interview"
+                            :class="[
+                                'data-item',
+                                { 'break-promise': item.statusName == '爽约' }
+                            ]"
+                            v-for="(item, index) in datas[i - 1 + 7]
+                                .morningInterview"
                             :key="datas[i - 1 + 7].date + '_' + index"
                         >
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
                             <div>{{ item.majorName }}</div>
+                            ,
                             <div>{{ item.property }}</div>
+                            ,
                             <div>{{ item.form }}</div>
+                            ,
+                            <div>{{ item.interviewer }}</div>
+                            <div>)</div>
+                        </div>
+                    </div>
+                    <div class="scroll-box afternoon">
+                        <div
+                            :class="[
+                                'data-item',
+                                { 'break-promise': item.statusName == '爽约' }
+                            ]"
+                            v-for="(item, index) in datas[i - 1 + 7]
+                                .afternoonInterview"
+                            :key="datas[i - 1 + 7].date + '_' + index"
+                        >
+                            <div>{{ item.time }}</div>
+                            <div>{{ item.name }}</div>
+                            <div>(</div>
+                            <div>{{ item.majorName }}</div>
+                            ,
+                            <div>{{ item.property }}</div>
+                            ,
+                            <div>{{ item.form }}</div>
+                            ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
                         </div>
@@ -65,20 +142,54 @@
                 </div>
             </div>
             <div class="item">
-                <div v-for="i of 7" :key="'bottom_' + i">
+                <div
+                    v-for="i of 7"
+                    :class="{ weekend: i == 6 || i == 7 }"
+                    :key="'bottom_' + i"
+                >
                     <div class="date">{{ datas[i - 1 + 14].date }}</div>
-                    <div class="scroll-box">
+                    <div class="scroll-box morning">
                         <div
-                            class="data-item"
-                            v-for="(item, index) in datas[i - 1 + 14].interview"
+                            :class="[
+                                'data-item',
+                                { 'break-promise': item.statusName == '爽约' }
+                            ]"
+                            v-for="(item, index) in datas[i - 1 + 14]
+                                .morningInterview"
                             :key="datas[i - 1 + 14].date + '_' + index"
                         >
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
                             <div>{{ item.majorName }}</div>
+                            ,
                             <div>{{ item.property }}</div>
+                            ,
                             <div>{{ item.form }}</div>
+                            ,
+                            <div>{{ item.interviewer }}</div>
+                            <div>)</div>
+                        </div>
+                    </div>
+                    <div class="scroll-box afternoon">
+                        <div
+                            :class="[
+                                'data-item',
+                                { 'break-promise': item.statusName == '爽约' }
+                            ]"
+                            v-for="(item, index) in datas[i - 1 + 14]
+                                .afternoonInterview"
+                            :key="datas[i - 1 + 14].date + '_' + index"
+                        >
+                            <div>{{ item.time }}</div>
+                            <div>{{ item.name }}</div>
+                            <div>(</div>
+                            <div>{{ item.majorName }}</div>
+                            ,
+                            <div>{{ item.property }}</div>
+                            ,
+                            <div>{{ item.form }}</div>
+                            ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
                         </div>
@@ -101,7 +212,8 @@ export default {
             // 结束时间
             endDate: "",
             // 表头
-            weeks: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+            weekdays: ["周一", "周二", "周三", "周四", "周五"],
+            weekend: ["周六", "周日"],
             // 面试日程内容
             datas: []
         };
@@ -148,7 +260,16 @@ export default {
                 data: { data, retCode, message }
             } = await getSchedule(params);
             if (retCode === 0) {
-                this.datas = data;
+                this.datas = data.map((item) => {
+                    let interview = item.interview;
+                    item.morningInterview = interview.filter((item) => {
+                        return item.time < "12:00";
+                    });
+                    item.afternoonInterview = interview.filter((item) => {
+                        return item.time > "12:00";
+                    });
+                    return item;
+                });
             } else {
                 this.$message.error(message);
             }
@@ -217,13 +338,15 @@ export default {
                     background: #ffba89;
                 }
                 .scroll-box {
-                    height: calc(100% - 20px);
+                    height: calc((100% - 20px) / 2);
                     overflow: auto;
-                    background: #97d9ff30;
                     .data-item {
                         display: flex;
                         align-items: center;
                         margin: 10px;
+                        &.break-promise {
+                            color: #ff0000;
+                        }
                         div {
                             margin-right: 4px;
                         }
@@ -244,8 +367,21 @@ export default {
                         background: transparent;
                         border-radius: 10px;
                     }
+                    + .scroll-box {
+                        border-top: 1px solid #999;
+                    }
+                    &.morning {
+                        background: #97d9ff30;
+                    }
+                    &.afternoon {
+                        background: #e0f97b30;
+                    }
                 }
             }
+        }
+        .weekend {
+            width: 220px !important;
+            flex: none !important;
         }
         .week {
             height: 4%;
