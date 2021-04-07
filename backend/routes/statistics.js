@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-23 23:05:29
+ * @LastEditTime: 2021-04-07 22:31:49
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -73,9 +73,9 @@ router.post("/addOriginNums", async (ctx, next) => {
 		for (let key in errors) {
 			if (errors[key].kind === "required") {
 				let errName = findName(errors[key].path);
-				if(errName!="简历数"){
+				if (errName != "简历数") {
 					message.push(`${errName}不能为空`);
-				}else{
+				} else {
 					message.push(`${errName}不能为0`);
 				}
 			}
@@ -180,83 +180,108 @@ router.get("/getStatisticsData", async (ctx, next) => {
 	let retData = {};
 	// 数量对象
 	const numData = {
-		总数: [0, 0, 0, 0, 0, 0]
+		总数: [0, 0, 0, 0, 0, 0, 0]
 	};
 	// 转化率对象
 	const rateData = {
-		总数转化率: [0, 0, 0, 0, 0, 0]
+		总数转化率: [0, 0, 0, 0, 0, 0, 0]
 	};
 	// 初始转化率对象
 	const percentData = {
-		总数初始转化率: [0, 0, 0, 0, 0, 0]
+		总数初始转化率: [0, 0, 0, 0, 0, 0, 0]
 	};
 
 	// 获取渠道列表
 	const channelArr = await getChannelList();
 	channelArr.forEach((item) => {
-		rateData[item.channelName + CONVERSION_RATE] = [0, 0, 0, 0, 0, 0]; // 转化率
-		percentData[item.channelName + CONVERSION_PERCENT] = [0, 0, 0, 0, 0, 0]; // 初始转化率
-		numData[item.channelName] = [0, 0, 0, 0, 0, 0]; // 数量
+		rateData[item.channelName + CONVERSION_RATE] = [0, 0, 0, 0, 0, 0, 0]; // 转化率
+		percentData[item.channelName + CONVERSION_PERCENT] = [
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0
+		]; // 初始转化率
+		numData[item.channelName] = [0, 0, 0, 0, 0, 0, 0]; // 数量
 	});
 	const res = await getStatisticsData(params);
 
 	// 统计各个渠道的面试份数
 	res.forEach((item) => {
-		numData[item.channelName][0]++;
-		numData[TOTLE_KEY][0]++;
-		// 判断当前简历处于哪种状态
-		switch (item.statusId) {
-			// 通过初筛
-			case "pass":
-				numData[TOTLE_KEY][1]++;
-				numData[item.channelName][1]++;
-				break;
-			// 爽约
-			case "breakPromise":
-			// 已约面
-			case "attendInterview":
-				numData[TOTLE_KEY][1]++;
-				numData[item.channelName][1]++;
-				numData[TOTLE_KEY][2]++;
-				numData[item.channelName][2]++;
-				break;
-			// 不录用，已回复
-			case "noHire":
-			// 已到面
-			case "faced":
-				numData[TOTLE_KEY][1]++;
-				numData[item.channelName][1]++;
-				numData[TOTLE_KEY][2]++;
-				numData[item.channelName][2]++;
-				numData[TOTLE_KEY][3]++;
-				numData[item.channelName][3]++;
-				break;
-			// 拒Offer
-			case "refuseOffer":
-			// 意向录用
-			case "employ":
-				numData[TOTLE_KEY][1]++;
-				numData[item.channelName][1]++;
-				numData[TOTLE_KEY][2]++;
-				numData[item.channelName][2]++;
-				numData[TOTLE_KEY][3]++;
-				numData[item.channelName][3]++;
-				numData[TOTLE_KEY][4]++;
-				numData[item.channelName][4]++;
-				break;
-			// 已入职
-			case "join":
-				numData[TOTLE_KEY][1]++;
-				numData[item.channelName][1]++;
-				numData[TOTLE_KEY][2]++;
-				numData[item.channelName][2]++;
-				numData[TOTLE_KEY][3]++;
-				numData[item.channelName][3]++;
-				numData[TOTLE_KEY][4]++;
-				numData[item.channelName][4]++;
-				numData[TOTLE_KEY][5]++;
-				numData[item.channelName][5]++;
-				break;
+		if (item.channelName) {
+			numData[item.channelName][0]++;
+			numData[TOTLE_KEY][0]++;
+			// 判断当前简历处于哪种状态
+			switch (item.statusId) {
+				// 通过初筛
+				case "pass":
+					numData[TOTLE_KEY][1]++;
+					numData[item.channelName][1]++;
+					break;
+				// 爽约
+				case "breakPromise":
+				// 已约面
+				case "attendInterview":
+					numData[TOTLE_KEY][1]++;
+					numData[item.channelName][1]++;
+					numData[TOTLE_KEY][2]++;
+					numData[item.channelName][2]++;
+					break;
+				// 不录用，已回复
+				case "noHire":
+				// 已到面
+				case "faced":
+					numData[TOTLE_KEY][1]++;
+					numData[item.channelName][1]++;
+					numData[TOTLE_KEY][2]++;
+					numData[item.channelName][2]++;
+					numData[TOTLE_KEY][3]++;
+					numData[item.channelName][3]++;
+					break;
+				// 拒Offer
+				case "refuseOffer":
+				// 意向录用
+				case "employ":
+					numData[TOTLE_KEY][1]++;
+					numData[item.channelName][1]++;
+					numData[TOTLE_KEY][2]++;
+					numData[item.channelName][2]++;
+					numData[TOTLE_KEY][3]++;
+					numData[item.channelName][3]++;
+					numData[TOTLE_KEY][4]++;
+					numData[item.channelName][4]++;
+					break;
+				// 待入职
+				case "joining":
+					numData[TOTLE_KEY][1]++;
+					numData[item.channelName][1]++;
+					numData[TOTLE_KEY][2]++;
+					numData[item.channelName][2]++;
+					numData[TOTLE_KEY][3]++;
+					numData[item.channelName][3]++;
+					numData[TOTLE_KEY][4]++;
+					numData[item.channelName][4]++;
+					numData[TOTLE_KEY][5]++;
+					numData[item.channelName][5]++;
+					break;
+				// 已入职
+				case "join":
+					numData[TOTLE_KEY][1]++;
+					numData[item.channelName][1]++;
+					numData[TOTLE_KEY][2]++;
+					numData[item.channelName][2]++;
+					numData[TOTLE_KEY][3]++;
+					numData[item.channelName][3]++;
+					numData[TOTLE_KEY][4]++;
+					numData[item.channelName][4]++;
+					numData[TOTLE_KEY][5]++;
+					numData[item.channelName][5]++;
+					numData[TOTLE_KEY][6]++;
+					numData[item.channelName][6]++;
+					break;
+			}
 		}
 	});
 
@@ -306,6 +331,7 @@ router.get("/getStatisticsData", async (ctx, next) => {
 		"已约面",
 		"到面",
 		"意向录用",
+		"待入职",
 		"入职"
 	];
 	retData = Object.assign(numData, rateData, percentData);
