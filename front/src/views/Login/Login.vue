@@ -3,20 +3,15 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen
- * @LastEditTime: 2021-03-27 00:04:17
+ * @LastEditors: Chen Weidong
+ * @LastEditTime: 2021-03-28 19:28:34
 -->
 <template>
     <div class="login">
         <div class="login-box">
             <div class="title">信息统计</div>
             <div class="form">
-                <el-form
-                    label-position="left"
-                    :model="form"
-                    :rules="rules"
-                    ref="form"
-                >
+                <el-form label-position="left" :model="form" :rules="rules" ref="form">
                     <el-form-item prop="username">
                         <el-input
                             prefix-icon="el-icon-user-solid"
@@ -35,17 +30,13 @@
                         ></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="login('form')"
-                            >登录</el-button
-                        >
+                        <el-button type="primary" @click="login('form')">登录</el-button>
                     </el-form-item>
                 </el-form>
             </div>
         </div>
         <div class="beian">
-            <a href="https://beian.miit.gov.cn/" target="_blank"
-                >粤ICP备2021017006号</a
-            >
+            <a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2021017006号</a>
             <a
                 target="_blank"
                 href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030502007113"
@@ -55,7 +46,8 @@
                     height: 20px;
                     line-height: 20px;
                 "
-                ><img src="../../assets/beian.png" style="float: left" />
+            >
+                <img src="../../assets/beian.png" style="float: left" />
                 <p
                     style="
                         float: left;
@@ -64,10 +56,8 @@
                         margin: 0px 0px 0px 5px;
                         color: #939393;
                     "
-                >
-                    粤公网安备 44030502007113号
-                </p></a
-            >
+                >粤公网安备 44030502007113号</p>
+            </a>
         </div>
     </div>
 </template>
@@ -141,42 +131,72 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.login {
-    width: 100vw;
-    height: 100vh;
-    background: #f4f4f4;
-    .login-box {
-        width: 400px;
-        height: 300px;
-        background: white;
-        position: absolute;
-        border-radius: 20px;
-        left: 50vw;
-        top: 50vh;
-        transform: translate(-50%, -50%);
-        .title {
-            font-weight: bold;
-            font-size: 35px;
-            height: 60px;
-            margin: 20px;
+@media only screen and (min-width: 760px) {
+    .login {
+        width: 100vw;
+        height: 100vh;
+        background: #f4f4f4;
+        .login-box {
+            width: 400px;
+            height: 300px;
+            background: white;
+            position: absolute;
+            border-radius: 20px;
+            left: 50vw;
+            top: 50vh;
+            transform: translate(-50%, -50%);
+            .title {
+                font-weight: bold;
+                font-size: 35px;
+                height: 60px;
+                margin: 20px;
+            }
+            .form {
+                width: 90%;
+                margin: 0 auto;
+            }
         }
-        .form {
-            width: 90%;
-            margin: 0 auto;
+        .beian {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            bottom: 20px;
         }
     }
-    .beian {
-        position: absolute;
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        width: 100%;
-        bottom: 20px;
+}
+@media only screen and (max-width: 760px) {
+    html {
+        font-size: 62.5%;
     }
-    .gongan-beian {
-        position: absolute;
-        width: 100%;
-        bottom: 20px;
+    .login {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background: #f4f4f4;
+        .login-box {
+            width: 100%;
+            height: 70%;
+            display: flex;
+            padding-top: 30%;
+            flex-direction: column;
+            .title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            .form {
+                flex: 1;
+                padding: 1rem;
+                .el-button {
+                    width: 100%;
+                    font-size: 1rem;
+                }
+            }
+        }
+        .beian {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
     }
 }
 </style>
