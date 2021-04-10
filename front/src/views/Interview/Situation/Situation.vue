@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-07 22:30:58
+ * @LastEditTime: 2021-04-09 19:27:16
 -->
 <template>
     <div class="situation">
@@ -328,7 +328,8 @@
                             v-if="
                                 scope.$index == 0 &&
                                 addLineTag == true &&
-                                scope.row.statusId == 'join'
+                                (scope.row.statusId == 'join' ||
+                                    scope.row.statusId == 'joining')
                             "
                         >
                             <el-date-picker
@@ -340,7 +341,12 @@
                                 clearable
                             ></el-date-picker>
                         </div>
-                        <div v-else-if="scope.row.statusId == 'join'">
+                        <div
+                            v-else-if="
+                                scope.row.statusId == 'join' ||
+                                scope.row.statusId == 'joining'
+                            "
+                        >
                             {{ scope.row.joinDate }}
                         </div>
                     </template>
@@ -905,13 +911,8 @@ export default {
                     });
                     return arr;
 
-
-
-
-
-
                     // 此处可对数据进行处理
-                   /*  let arr = [];
+                    /*  let arr = [];
                     outdata.map((v) => {
                         let obj = {};
 

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 21:46:24
+ * @LastEditTime: 2021-04-09 19:23:47
 -->
 <template>
     <div class="form-box">
@@ -112,7 +112,7 @@
                     v-model="editLine.remark"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="入职时间" v-if="editLine.statusId == 'join'">
+            <el-form-item label="入职时间" v-if="editLine.statusId == 'join' || editLine.statusId == 'joining'">
                 <el-date-picker
                     v-model="editLine.joinDate"
                     type="date"
