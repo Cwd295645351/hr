@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-07 22:20:26
+ * @LastEditTime: 2021-04-11 22:30:54
 -->
 <template>
     <div class="schedule">
@@ -335,7 +335,7 @@ export default {
                     height: 20px;
                     font-size: 16px;
                     line-height: 20px;
-                    background: #ffba89;
+                    background: #ffbe66;
                 }
                 .scroll-box {
                     height: calc((100% - 20px) / 2);

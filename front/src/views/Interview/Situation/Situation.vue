@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-09 19:27:16
+ * @LastEditTime: 2021-04-11 22:11:14
 -->
 <template>
     <div class="situation">
@@ -188,6 +188,10 @@
                                 {
                                     electricity:
                                         scope.row.majorId == 'electricity'
+                                },
+                                {
+                                    greenBuilding:
+                                        scope.row.majorId == 'greenBuilding'
                                 }
                             ]"
                             v-else
@@ -310,6 +314,7 @@
                                 },
                                 { pass: scope.row.statusId == 'pass' },
                                 { refuse: scope.row.statusId == 'refuseOffer' },
+                                { joining: scope.row.statusId == 'joining' },
                                 {
                                     hire:
                                         scope.row.statusId == 'breakPromise' ||
@@ -1368,56 +1373,62 @@ export default {
             color: #fff;
             border-radius: 4px;
             &.join {
-                background: #fdb13f;
+                background: #ff7473;
             }
             &.employ {
-                background: #ff4d4d;
+                background: #56a902;
             }
             &.faced {
-                background: #a64dff;
+                background: #47b8e0;
             }
             &.attendInterview {
-                background: #4d4dff;
+                background: #58c9b9;
             }
             &.pass {
-                background: #ffa64d;
+                background: #a593e0;
             }
             &.hire {
-                background: #9b9b9b;
+                background: #6e7783;
             }
             &.refuse {
-                background: #85b96f;
+                background: #ffc952;
+            }
+            &.joining {
+                background: #af4034;
             }
         }
         .major {
             color: #fff;
             border-radius: 4px;
             &.architecture {
-                background: #4da6ff;
+                background: #ff9933;
             }
             &.structure {
-                background: #4d4dff;
+                background: #0099cc;
             }
             &.drainage {
-                background: #ff4d4d;
+                background: #99cc00;
             }
             &.HVAC {
-                background: #1ee08f;
+                background: #ff6666;
             }
             &.projectAssistant {
-                background: #ffa64d;
+                background: #ff6600;
             }
             &.marketingSpecialist {
-                background: #a64dff;
+                background: #009966;
             }
             &.finance {
-                background: #ffff4d;
+                background: #ffcc33;
             }
             &.BIM {
-                background: #00d1d1;
+                background: #666999;
             }
             &.electricity {
-                background: #ff4dff;
+                background: #cc9999;
+            }
+            &.greenBuilding {
+                background: #cc3399;
             }
         }
         .phone-interview-situation {
