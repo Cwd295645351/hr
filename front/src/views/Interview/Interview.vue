@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 14:58:40
+ * @LastEditTime: 2021-04-12 22:12:59
 -->
 <template>
     <div class="interview">
@@ -48,6 +48,11 @@ export default {
             // 所有菜单
             menus: [
                 {
+                    title: "面试日程",
+                    route: "schedule",
+                    icon: "el-icon-date"
+                },
+                {
                     title: "面试情况",
                     route: "situation",
                     icon: "el-icon-document"
@@ -61,11 +66,6 @@ export default {
                     title: "初始简历",
                     route: "originNums",
                     icon: "el-icon-notebook-2"
-                },
-                {
-                    title: "面试日程",
-                    route: "schedule",
-                    icon: "el-icon-date"
                 }
             ]
         };

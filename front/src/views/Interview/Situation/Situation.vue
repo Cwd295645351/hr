@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-11 22:11:14
+ * @LastEditTime: 2021-04-14 23:40:08
 -->
 <template>
     <div class="situation">
@@ -316,9 +316,14 @@
                                 { refuse: scope.row.statusId == 'refuseOffer' },
                                 { joining: scope.row.statusId == 'joining' },
                                 {
+                                    contacted: scope.row.statusId == 'contacted'
+                                },
+                                
+                                {
                                     hire:
                                         scope.row.statusId == 'breakPromise' ||
-                                        scope.row.statusId == 'noHire'
+                                        scope.row.statusId == 'noHire'||
+                                        scope.row.statusId == 'breachContract'
                                 }
                             ]"
                             v-else
@@ -1396,6 +1401,9 @@ export default {
             &.joining {
                 background: #af4034;
             }
+            &.contacted {
+                background: #a5dff9;
+            }
         }
         .major {
             color: #fff;
@@ -1432,11 +1440,10 @@ export default {
             }
         }
         .phone-interview-situation {
-            height: 100px;
+            height: 86px;
             text-align: left;
         }
         .remark {
-            height: 100px;
             display: flex;
             align-items: center;
             text-align: left;
