@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen
- * @LastEditTime: 2021-02-27 22:07:05
+ * @LastEditors: Chen Weidong
+ * @LastEditTime: 2021-04-15 13:57:06
 -->
 <template>
     <div class="main">
@@ -72,7 +72,8 @@ export default {
         this.heartBeat();
     },
     beforeDestroy() {
-        // sessionStorage.clear();
+        // 清除心跳
+        clearTimeout(window.heartBeatTimer);
     },
     methods: {
         // 心跳监测

@@ -3,8 +3,8 @@
  * @Version: 
  * @Author: 
  * @Date: 2021-02-06 22:28:07
- * @LastEditors: Chen
- * @LastEditTime: 2021-04-12 23:11:15
+ * @LastEditors: Chen Weidong
+ * @LastEditTime: 2021-04-15 14:00:18
 -->
 # hr-manage
 
@@ -107,3 +107,8 @@
 ##### 优化
 1. 修改专业和状态的配色，将状态“不录用，已回复”改为“不录用”
 2. 新增状态“毁约”
+3. 进入系统后默认显示面试日程
+
+
+##### Bug修复
+1. 系统退出登录时清除检测token的定时器

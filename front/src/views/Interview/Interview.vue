@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen
- * @LastEditTime: 2021-04-12 22:12:59
+ * @LastEditors: Chen Weidong
+ * @LastEditTime: 2021-04-15 13:49:53
 -->
 <template>
     <div class="interview">
@@ -72,7 +72,7 @@ export default {
     },
     created() {
         let menu = sessionStorage.getItem("menu");
-        this.activeMenu = menu ? menu : "situation";
+        this.activeMenu = menu ? menu : "schedule";
     },
     watch: {
         activeMenu(newValue) {
