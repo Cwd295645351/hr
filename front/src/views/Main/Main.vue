@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen Weidong
- * @LastEditTime: 2021-04-15 13:57:06
+ * @LastEditors: Chen
+ * @LastEditTime: 2021-04-17 18:17:53
 -->
 <template>
     <div class="main">
@@ -79,11 +79,11 @@ export default {
         // 心跳监测
         heartBeat() {
             const _this = this;
-            const SECONDS_ONE_BEAT = 5; // 心跳频率 s
+            const SECONDS_ONE_BEAT = 10; // 心跳频率 s
             let expiresAt = Number(sessionStorage.getItem("expiresAt"));
             if (!window.heartBeatTimer) {
                 window.heartBeatTimer = setTimeout(() => {
-                    const REFRESH_BEFORE_MS = 10; //提前 10s 进行请求
+                    const REFRESH_BEFORE_MS = 60; //提前 1min 进行请求
                     const nowDateStr = new Date().getTime();
                     const targetStamp = expiresAt - REFRESH_BEFORE_MS * 1000;
                     clearTimeout(window.heartBeatTimer);
