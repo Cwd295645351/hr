@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen
- * @LastEditTime: 2021-04-14 23:40:08
+ * @LastEditors: Chen Weidong
+ * @LastEditTime: 2021-04-21 16:51:57
 -->
 <template>
     <div class="situation">
@@ -488,9 +488,9 @@
                                 popper-class="phone-situation-tooltip"
                                 placement="top"
                             >
-                                <div>
-                                    {{ scope.row.phoneInterviewSituation }}
-                                </div>
+                                <pre>{{
+                                    scope.row.phoneInterviewSituation
+                                }}</pre>
                             </el-tooltip>
                         </div>
                     </template>

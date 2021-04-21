@@ -3,8 +3,8 @@
  * @Version:
  * @Author:
  * @Date: 2020-12-28 23:15:38
- * @LastEditors: Chen
- * @LastEditTime: 2021-02-08 23:45:11
+ * @LastEditors: Chen Weidong
+ * @LastEditTime: 2021-04-21 16:52:34
  */
 // const Koa = require('koa')
 import Koa from "koa";
@@ -78,7 +78,7 @@ app.use(
 		cookie: {
 			path: "/",
 			httpOnly: true,
-			maxAge: 2 * 60 * 60 * 1000 // 过期时间2小时
+			maxAge:  24 * 60 * 60 * 1000 // 过期时间2小时
 		},
 		// 配置 redis
 		store: redisStore({

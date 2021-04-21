@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
- * @LastEditors: Chen
- * @LastEditTime: 2021-01-25 23:52:21
+ * @LastEditors: Chen Weidong
+ * @LastEditTime: 2021-04-21 16:52:24
  */
 import Router from "koa-router";
 import login from "../controller/user";
@@ -12,7 +12,7 @@ import { SuccessModel, ErrorModel } from "../model/resModel";
 import jwt from "jsonwebtoken";
 
 const SECRET_KEY = "admin_jwt_token";
-const EXPIRES_TIME = 2 * 60 * 60;
+const EXPIRES_TIME = 24 * 60 * 60;
 
 const router = Router({
 	prefix: "/api/user"
