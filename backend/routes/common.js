@@ -4,11 +4,18 @@
  * @Author: Chen
  * @Date: 2021-01-10 22:39:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 12:50:08
+ * @LastEditTime: 2021-04-24 12:18:56
  */
 import Router from "koa-router";
-import { getMajorList, getChannelList, getStatusList } from "../controller/common";
+import {
+	getMajorList,
+	getChannelList,
+	getStatusList
+} from "../controller/common";
 import { SuccessModel, ErrorModel } from "../model/resModel";
+import toPdf from "office-to-pdf";
+import path from "path";
+import fs from "fs";
 
 const router = Router({
 	prefix: "/api/common"
@@ -46,9 +53,40 @@ router.get("/getStatusList", async (ctx, next) => {
 
 // 上传文件
 router.post("/uploadFile", async (ctx, next) => {
+	const DOC_ARRAY = ["doc", "docx"];
 	const files = ctx.request.files.file;
-	files.path = files.path.slice(6);
-	ctx.body = JSON.stringify(files);
+	const fileFormat = files.path.split(".");
+
+	if (DOC_ARRAY.includes(fileFormat[1])) {
+		// 文件是word
+		let path1 = path.join(__dirname, "../", files.path);
+		const res = {
+			path: `${fileFormat[0]}.pdf`,
+			name: `${files.name.split(".")[0]}.pdf`
+		};
+		fs.readFile(path1, function (err, result) {
+			if (err) {
+				console.log("读取失败", err);
+			} else {
+				toPdf(result).then(
+					(pdfBuffer) => {
+						fs.writeFileSync(
+							path1.split(".")[0] + ".pdf",
+							pdfBuffer
+						);
+					},
+					(err) => {
+						console.log("写入失败", err);
+					}
+				);
+			}
+		});
+		res.path = res.path.slice(6);
+		ctx.body = res;
+	} else {
+		files.path = files.path.slice(6);
+		ctx.body = JSON.stringify(files);
+	}
 });
 
 export default router;

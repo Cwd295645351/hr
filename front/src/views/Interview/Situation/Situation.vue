@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen Weidong
- * @LastEditTime: 2021-04-21 16:51:57
+ * @LastEditors: Chen
+ * @LastEditTime: 2021-04-24 11:23:40
 -->
 <template>
     <div class="situation">
@@ -318,11 +318,11 @@
                                 {
                                     contacted: scope.row.statusId == 'contacted'
                                 },
-                                
+
                                 {
                                     hire:
                                         scope.row.statusId == 'breakPromise' ||
-                                        scope.row.statusId == 'noHire'||
+                                        scope.row.statusId == 'noHire' ||
                                         scope.row.statusId == 'breachContract'
                                 }
                             ]"
@@ -507,16 +507,9 @@
                                 v-for="item in scope.row.fileList"
                                 :key="item.url"
                             >
-                                <a
-                                    :href="
-                                        'https://view.xdocin.com/xdoc?_xdoc=' +
-                                        HOST +
-                                        item.url +
-                                        '&_pdf=true'
-                                    "
-                                    target="_blank"
-                                    >{{ item.name }}</a
-                                >
+                                <a :href="item.url" target="_blank">{{
+                                    item.name
+                                }}</a>
                             </div>
                         </div>
                     </template>
@@ -1281,10 +1274,19 @@ export default {
             // 整理文件列表
             let fileList = [];
             this.editLine.fileList.forEach((item) => {
+                console.log(item);
                 if (item.status === "success") {
-                    let url = item.url ? item.url : item.response.path;
+                    let url = "",
+                        name = "";
+                    if (item.url) {
+                        url = item.url;
+                        name = item.name;
+                    } else {
+                        url = item.response.path;
+                        name = item.response.name;
+                    }
                     fileList.push({
-                        name: item.name,
+                        name: name,
                         url: url
                     });
                 }
