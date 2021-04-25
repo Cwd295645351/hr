@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-24 11:23:40
+ * @LastEditTime: 2021-04-24 21:38:38
 -->
 <template>
     <div class="situation">
@@ -361,11 +361,38 @@
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column align="center" label="入职部门" width="95">
+                    <template slot-scope="scope">
+                        <div
+                            v-if="
+                                scope.$index == 0 &&
+                                addLineTag == true &&
+                                (scope.row.statusId == 'join' ||
+                                    scope.row.statusId == 'joining')
+                            "
+                        >
+                            <el-input
+                                v-model="newLine.apartment"
+                                size="small"
+                                placeholder="请输入部门"
+                                clearable
+                            ></el-input>
+                        </div>
+                        <div
+                            v-else-if="
+                                scope.row.statusId == 'join' ||
+                                scope.row.statusId == 'joining'
+                            "
+                        >
+                            {{ scope.row.apartment }}
+                        </div>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     align="center"
                     prop="remark"
                     label="备注"
-                    width="150"
+                    width="130"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -471,7 +498,7 @@
                 <el-table-column
                     align="center"
                     label="电话面试情况"
-                    width="278"
+                    width="200"
                 >
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -1207,7 +1234,12 @@ export default {
                     form: "",
                     interviewer: ""
                 },
-                fileList: []
+                fileList: [],
+                NO: "",
+                joinProperty: "",
+                apartment: "",
+                joinRemark: "",
+                hideTag: 0,
             };
             this.tableData.unshift(this.newLine);
         },

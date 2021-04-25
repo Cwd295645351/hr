@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:22:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 14:09:50
+ * @LastEditTime: 2021-04-25 22:26:20
  */
 
 export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:8000";
@@ -30,5 +30,10 @@ export const EDIT_ORIGIN_NUM = `${HOST}/api/statistics/editOriginNums`; // 编�
 export const DELETE_ORIGIN_NUM = `${HOST}/api/statistics/deleteOriginNums`; // 删除初始简历数
 
 export const GET_SCHEDULE = `${HOST}/api/schedule/getSchedule`; // 获取面试日程
+
+export const GET_JOIN_INFO_LIST = `${HOST}/api/joinInfo/getList`; // 获取入职信息列表
+export const ADD_JOIN_INFO = `${HOST}/api/joinInfo/addInfo`; // 添加入职信息
+export const EDIT_JOIN_INFO = `${HOST}/api/joinInfo/editInfo`; // 编辑入职信息
+export const HIDE_JOIN_INFO = `${HOST}/api/joinInfo/hideInfo`; // 隐藏入职信息
 
 export const FILE_UPLOAD = `${HOST}/api/common/uploadFile`; // 文件上传

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-09 19:23:47
+ * @LastEditTime: 2021-04-24 21:40:01
 -->
 <template>
     <div class="form-box">
@@ -121,6 +121,14 @@
                     placeholder="请选择入职时间"
                     clearable
                 ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="入职部门" v-if="editLine.statusId == 'join' || editLine.statusId == 'joining'">
+                <el-input
+                    type="textarea"
+                    autosize
+                    placeholder="请输入部门"
+                    v-model="editLine.apartment"
+                ></el-input>
             </el-form-item>
             <el-form-item label="面试日期" v-show="editLine.statusId != 'pass'">
                 <el-date-picker

@@ -3,8 +3,8 @@
  * @Version: 
  * @Author: 
  * @Date: 2021-02-06 22:28:07
- * @LastEditors: Chen Weidong
- * @LastEditTime: 2021-04-21 16:55:13
+ * @LastEditors: Chen
+ * @LastEditTime: 2021-04-25 23:22:41
 -->
 # hr-manage
 
@@ -110,6 +110,7 @@
 3. 进入系统后默认显示面试日程
 4. 更改心跳频率为1分钟1次，提前10分钟更新token
 5. 优化电话面试情况显示效果
+6. 新增入职信息表
 
 
 ##### Bug修复

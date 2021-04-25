@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-07 22:32:26
+ * @LastEditTime: 2021-04-24 23:00:58
  */
 
 import xss from "xss";
@@ -55,7 +55,7 @@ export const getList = async (params) => {
 	mp.name = new RegExp(params.name, "ig");
 	mp.phoneNum = new RegExp(params.phoneNum, "ig");
 	mp.email = new RegExp(params.email, "ig");
-	if (params.statusId.length > 0) {
+	if (params.statusId && params.statusId.length > 0) {
 		mp.statusId = {
 			$in: params.statusId
 		};
@@ -132,7 +132,8 @@ export const editInterviewee = async (data) => {
 				schedules: data.schedules,
 				phoneInterviewSituation: data.phoneInterviewSituation,
 				fileList: data.fileList,
-				remark: data.remark
+				remark: data.remark,
+				apartment: data.apartment
 			},
 			{ new: true }
 		);

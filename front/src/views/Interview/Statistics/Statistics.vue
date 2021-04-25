@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 20:32:39
+ * @LastEditTime: 2021-04-25 23:20:54
 -->
 <template>
     <div class="statistics">
@@ -103,9 +103,11 @@ export default {
                     axisPointer: {
                         type: "shadow"
                     },
+                    confine:true,
                     textStyle: {
                         align: "left"
                     },
+                    // position:[0,0],
                     formatter: function (params) {
                         let str = params[0].axisValueLabel;
                         params.forEach((item, index) => {
@@ -121,6 +123,7 @@ export default {
                 },
                 legend: {
                     data: [],
+                    selected:{},
                     x: "right",
                     top: "50",
                     orient: "vertical"
@@ -309,6 +312,7 @@ export default {
                 this.options.xAxis[0].data = data.xData;
                 for (let key in yData) {
                     this.options.legend.data.push(key);
+                    this.options.legend.selected[key]=false;
                     if (!key.includes("转化")) {
                         if (key != "总数") {
                             // 获取不同渠道入职比例

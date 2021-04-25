@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-07 21:54:47
+ * @LastEditTime: 2021-04-25 23:16:35
  */
 import Router from "koa-router";
 import {
@@ -27,14 +27,14 @@ router.post("/getList", async (ctx, next) => {
 		ctx.body = new ErrorModel(null, "userId不能为空");
 		return;
 	}
-	if (params.beginDate != "") {
+	if (params.beginDate != "" && params.beginDate != undefined) {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.beginDate) == false) {
 			ctx.body = new ErrorModel(null, "开始时间不规范");
 			return;
 		}
 	}
-	if (params.endDate != "") {
+	if (params.endDate != "" && params.endDate != undefined) {
 		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
 		if (reg.test(params.endDate) == false) {
 			ctx.body = new ErrorModel(null, "结束时间不规范");

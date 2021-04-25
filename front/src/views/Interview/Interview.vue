@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen Weidong
- * @LastEditTime: 2021-04-15 13:49:53
+ * @LastEditors: Chen
+ * @LastEditTime: 2021-04-24 22:53:55
 -->
 <template>
     <div class="interview">
@@ -30,6 +30,7 @@
             <Statistics v-else-if="activeMenu == 'statistics'"></Statistics>
             <OriginNums v-else-if="activeMenu == 'originNums'"></OriginNums>
             <Schedule v-else-if="activeMenu == 'schedule'"></Schedule>
+            <JoinInfo v-else-if="activeMenu == 'joinInfo'"></JoinInfo>
         </div>
     </div>
 </template>
@@ -39,8 +40,9 @@ import Situation from "./Situation/Situation";
 import Statistics from "./Statistics/Statistics";
 import OriginNums from "./OriginNums/OriginNums";
 import Schedule from "./Schedule/Schedule";
+import JoinInfo from "./joinInfo/JoinInfo";
 export default {
-    components: { Situation, Statistics, Schedule, OriginNums },
+    components: { Situation, Statistics, Schedule, OriginNums, JoinInfo },
     data() {
         return {
             // 当前菜单
@@ -65,6 +67,11 @@ export default {
                 {
                     title: "初始简历",
                     route: "originNums",
+                    icon: "el-icon-notebook-2"
+                },
+                {
+                    title: "入职信息",
+                    route: "joinInfo",
                     icon: "el-icon-notebook-2"
                 }
             ]
