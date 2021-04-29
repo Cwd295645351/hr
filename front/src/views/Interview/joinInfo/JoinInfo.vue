@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 22:40:18
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-25 23:14:55
+ * @LastEditTime: 2021-04-29 22:33:07
 -->
 <template>
     <div class="joinInfo">
@@ -26,7 +26,6 @@
         <div class="main">
             <el-table
                 :data="tableData"
-                border
                 class="table-box"
                 max-height="730"
                 :cell-style="rowStyle"
@@ -257,12 +256,12 @@ export default {
         rowStyle({ row, column, rowIndex, columnIndex }) {
             console.log(row, column, rowIndex, columnIndex);
             if (row.statusName == "毁约") {
-                return "background: yellow";
+                return "background: #ff6666";
             } else {
                 if (new Date(row.joinDate) < new Date()) {
-                    return "background: #ffc457";
+                    return "background: #ffcc99";
                 } else {
-                    return "background: #99cc66";
+                    return "background: rgb(180,198,231)";
                 }
             }
         },
@@ -446,7 +445,7 @@ export default {
             width: 140px;
         }
         .table-box {
-            color: #666;
+            color: #333;
             .modify {
                 padding-right: 5px;
                 border-right: 1px solid #c5c5c5;
@@ -462,6 +461,13 @@ export default {
         .page {
             margin-top: 10px;
             text-align: right;
+        }
+        /deep/ .el-table th{
+            background: #ccc !important;
+            color: #666;
+        }
+        /deep/ .el-link.el-link--info {
+            color: #333;
         }
     }
 }
