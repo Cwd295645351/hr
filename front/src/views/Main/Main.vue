@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen Weidong
- * @LastEditTime: 2021-04-21 16:54:38
+ * @LastEditors: Chen
+ * @LastEditTime: 2021-05-05 20:28:05
 -->
 <template>
     <div class="main">
@@ -79,7 +79,7 @@ export default {
         // 心跳监测
         heartBeat() {
             const _this = this;
-            const SECONDS_ONE_BEAT = 60; // 心跳频率 s
+            const SECONDS_ONE_BEAT = 5; // 心跳频率 s
             let expiresAt = Number(sessionStorage.getItem("expiresAt"));
             if (!window.heartBeatTimer) {
                 window.heartBeatTimer = setTimeout(() => {

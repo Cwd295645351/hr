@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 23:28:47
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-25 22:58:45
+ * @LastEditTime: 2021-05-05 20:54:49
  */
 
 import xss from "xss";
@@ -30,6 +30,7 @@ const xssData = (data) => {
 export const getList = async (params) => {
 	const mp = {
 		hideTag: "0",
+		userId: params.userId,
 		statusId: {
 			$in: ["joining", "join"]
 		}

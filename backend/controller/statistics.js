@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-26 23:50:05
+ * @LastEditTime: 2021-05-05 20:51:10
  */
 
 import xss from "xss";
@@ -29,6 +29,7 @@ const xssData = (data) => {
 // 获取面试统计信息
 export const getStatisticsData = async (params) => {
 	let mp = {};
+	mp.userId = params.userId;
 	if (params.beginDate && params.endDate) {
 		mp.date = {
 			$gte: new Date(params.beginDate),
@@ -54,6 +55,7 @@ export const getStatisticsData = async (params) => {
 // 获取不同专业入职比例
 export const getEntryRate = async (params) => {
 	let mp = {};
+	mp.userId = params.userId;
 	if (params.beginDate && params.endDate) {
 		mp.date = {
 			$gte: new Date(params.beginDate),
@@ -79,6 +81,7 @@ export const getOriginNums = async (params) => {
 
 	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
 	const pageSize = parseInt(params.pageSize);
+	mp.userId = params.userId;
 	if (params.beginDate && params.endDate) {
 		mp.date = {
 			$gte: new Date(params.beginDate),

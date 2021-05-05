@@ -4,12 +4,13 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:08:36
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-07 21:56:45
+ * @LastEditTime: 2021-05-05 20:54:26
  */
 
 import Interview from "../db/models/Interviewees";
 const getSchedule = async (params) => {
 	let mp = {
+		userId: params.userId,
 		"schedules.date": {
 			$gte: new Date(params.beginDate),
 			$lte: new Date(params.endDate)
