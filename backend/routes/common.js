@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-10 22:39:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-24 12:18:56
+ * @LastEditTime: 2021-05-05 20:21:10
  */
 import Router from "koa-router";
 import {
@@ -68,17 +68,22 @@ router.post("/uploadFile", async (ctx, next) => {
 			if (err) {
 				console.log("读取失败", err);
 			} else {
-				toPdf(result).then(
-					(pdfBuffer) => {
-						fs.writeFileSync(
-							path1.split(".")[0] + ".pdf",
-							pdfBuffer
-						);
-					},
-					(err) => {
-						console.log("写入失败", err);
-					}
-				);
+				try{
+					toPdf(result).then(
+						(pdfBuffer) => {
+							fs.writeFileSync(
+								path1.split(".")[0] + ".pdf",
+								pdfBuffer
+							);
+						},
+						(err) => {
+							console.log("写入失败", err);
+						}
+					);
+				}catch(e) {
+					console.log("出错了！",e);
+				}
+				
 			}
 		});
 		res.path = res.path.slice(6);

@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2021-02-06 22:28:07
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-25 23:22:41
+ * @LastEditTime: 2021-05-05 20:23:44
 -->
 # hr-manage
 
@@ -115,3 +115,4 @@
 
 ##### Bug修复
 1. 系统退出登录时清除检测token的定时器
+2. 修复PM2线上部署时将word转成pdf不生效的bug

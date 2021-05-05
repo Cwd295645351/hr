@@ -4,6 +4,11 @@
     "name": "hr-manage",
     "script": "server.js",
     "instances": 1,
+    "cwd": "./",
+    "ignore_watch": [
+      "public",
+      "logs"
+    ],
     "autorestart": true,
     "watch": true,
     "max_memory_restart": "500M",
@@ -11,6 +16,7 @@
     "err_file": "logs/err.log",
     "out_file": "logs/out.log",
     "log_date_format": "YYYY-MM-DD HH:mm:ss",
+    "exec_interpreter": "node",
     "env": {
       "NODE_ENV": "production"
     },
