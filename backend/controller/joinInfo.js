@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 23:28:47
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-05 20:54:49
+ * @LastEditTime: 2021-05-05 21:48:18
  */
 
 import xss from "xss";
@@ -55,7 +55,14 @@ export const getList = async (params) => {
 	});
 	const res = InterviewRes.concat(JoinInfoRes);
 
-	const hasData = res
+	// 待入职的信息
+	const joiningData = res.filter((item) => item.statusId === "joining");
+
+	// 已入职的信息
+	const joinData = res.filter((item) => item.statusId === "join");
+
+	// 待入职且已填入职时间的信息，按照入职时间排序
+	const joiningHasData = joiningData
 		.filter((item) => {
 			return item.joinDate;
 		})
@@ -64,11 +71,27 @@ export const getList = async (params) => {
 				new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime()
 			);
 		});
-	const noData = res.filter((item) => {
+	// 筛选出待入职但未填入职时间的信息
+	const joiningNoData = joiningData.filter((item) => {
 		return item.joinDate == "";
 	});
 
-	const total = hasData.concat(noData);
+	// 已入职且已填入职时间的信息，按照入职时间排序
+	const joinHasData = joinData
+		.filter((item) => {
+			return item.joinDate;
+		})
+		.sort((a, b) => {
+			return (
+				new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime()
+			);
+		});
+	// 筛选出已入职但未填入职时间的信息
+	const joinNoData = joinData.filter((item) => {
+		return item.joinDate == "";
+	});
+
+	const total = joiningHasData.concat(joiningNoData, joinHasData, joinNoData);
 
 	return {
 		datas: total.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize),

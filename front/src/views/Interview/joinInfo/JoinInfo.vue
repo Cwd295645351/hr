@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 22:40:18
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-29 22:33:07
+ * @LastEditTime: 2021-05-05 21:49:59
 -->
 <template>
     <div class="joinInfo">
@@ -255,10 +255,10 @@ export default {
     methods: {
         rowStyle({ row, column, rowIndex, columnIndex }) {
             console.log(row, column, rowIndex, columnIndex);
-            if (row.statusName == "毁约") {
+            if (row.statusName === "毁约") {
                 return "background: #ff6666";
             } else {
-                if (new Date(row.joinDate) < new Date()) {
+                if (row.statusName === "已入职") {
                     return "background: #ffcc99";
                 } else {
                     return "background: rgb(180,198,231)";
