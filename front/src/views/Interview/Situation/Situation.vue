@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-24 21:38:38
+ * @LastEditTime: 2021-05-07 21:40:32
 -->
 <template>
     <div class="situation">
@@ -1239,7 +1239,7 @@ export default {
                 joinProperty: "",
                 apartment: "",
                 joinRemark: "",
-                hideTag: 0,
+                hideTag: "0",
             };
             this.tableData.unshift(this.newLine);
         },
