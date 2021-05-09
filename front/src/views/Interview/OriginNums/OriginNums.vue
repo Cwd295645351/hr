@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-26 23:43:20
+ * @LastEditTime: 2021-05-09 16:36:16
 -->
 <template>
     <div class="originNums">
@@ -31,6 +31,8 @@
                     <el-select
                         v-model="searchCondition.majorId"
                         placeholder="请选择专业"
+                        multiple
+                        collapse-tags
                         clearable
                     >
                         <el-option
@@ -38,6 +40,38 @@
                             :key="item + '_' + index"
                             :label="item.majorName"
                             :value="item.majorId"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item size="small" label="招工性质:">
+                    <el-select
+                        v-model="searchCondition.property"
+                        placeholder="请选择性质"
+                        multiple
+                        collapse-tags
+                        clearable
+                    >
+                        <el-option
+                            v-for="(item, index) in propertyOptions"
+                            :key="item + '_' + index"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item size="small" label="渠道:">
+                    <el-select
+                        v-model="searchCondition.channelId"
+                        placeholder="请选择渠道"
+                        multiple
+                        collapse-tags
+                        clearable
+                    >
+                        <el-option
+                            v-for="(item, index) in channelOptions"
+                            :key="item + '_' + index"
+                            :label="item.channelName"
+                            :value="item.channelId"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -61,6 +95,8 @@
                 :data="tableData"
                 border
                 class="table-box"
+                show-summary
+                :summary-method="getSummaries"
                 max-height="730"
                 style="width: 100%"
                 :loading="loading"
@@ -79,26 +115,6 @@
                             ></el-date-picker>
                         </div>
                         <div v-else>{{ scope.row.date }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="渠道">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-select
-                                v-model="newLine.channelId"
-                                size="small"
-                                placeholder="请选择渠道"
-                                clearable
-                            >
-                                <el-option
-                                    v-for="(item, index) in channelOptions"
-                                    :key="item + '_channelOptions_' + index"
-                                    :label="item.channelName"
-                                    :value="item.channelId"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div v-else>{{ scope.row.channelName }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column align="center" label="专业">
@@ -121,17 +137,71 @@
                         <div v-else>{{ scope.row.majorName }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column align="center" label="总数">
+                <el-table-column align="center" label="性质">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.property"
+                                size="small"
+                                placeholder="请选择性质"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item, index) in propertyOptions"
+                                    :key="item + '_propertyOptions_' + index"
+                                    :label="item.label"
+                                    :value="item.value"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>{{ scope.row.property }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="渠道">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.channelId"
+                                size="small"
+                                placeholder="请选择渠道"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item, index) in channelOptions"
+                                    :key="item + '_channelOptions_' + index"
+                                    :label="item.channelName"
+                                    :value="item.channelId"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>{{ scope.row.channelName }}</div>
+                    </template>
+                </el-table-column>
+
+                <el-table-column align="center" label="初始简历数">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
-                                v-model="newLine.num"
+                                v-model="newLine.originNum"
                                 size="small"
-                                placeholder="请输入姓名"
+                                placeholder="请输入个数"
                                 clearable
                             ></el-input>
                         </div>
-                        <div v-else>{{ scope.row.num }}</div>
+                        <div v-else>{{ scope.row.originNum }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="通过初筛数">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-input
+                                v-model="newLine.passNum"
+                                size="small"
+                                placeholder="请输入个数"
+                                clearable
+                            ></el-input>
+                        </div>
+                        <div v-else>{{ scope.row.passNum }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column align="center" label="操作" width="90">
@@ -176,6 +246,7 @@
                     ref="editLine"
                     :editLine="editLine"
                     :channelOptions="channelOptions"
+                    :propertyOptions="propertyOptions"
                     :majorOptions="majorOptions"
                 ></my-form>
                 <div class="demo-drawer__footer">
@@ -222,7 +293,9 @@ export default {
             searchCondition: {
                 beginDate: "", // 开始日期
                 endDate: "", // 结束日期
-                majorId: "" // 专业
+                majorId: [], // 专业id
+                property: [], // 性质
+                channelId: [] // 渠道id
             },
             // 新增标志,true为正在新增，false为已保存
             addLineTag: false,
@@ -255,7 +328,22 @@ export default {
                         return false;
                     }
                 }
-            }
+            },
+            // 性质数组
+            propertyOptions: [
+                {
+                    label: "社招",
+                    value: "社招"
+                },
+                {
+                    label: "校招",
+                    value: "校招"
+                },
+                {
+                    label: "实习",
+                    value: "实习"
+                }
+            ]
         };
     },
     created() {},
@@ -267,6 +355,34 @@ export default {
         this.search(1);
     },
     methods: {
+        getSummaries(param) {
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = "总数";
+                    return;
+                }
+                sums[4] = data.reduce((prev, curr) => {
+                    const originNum = Number(curr.originNum);
+                    if (!isNaN(originNum)) {
+                        return prev + originNum;
+                    } else {
+                        return prev;
+                    }
+                }, 0);
+                sums[5] = data.reduce((prev, curr) => {
+                    const passNum = Number(curr.passNum);
+                    if (!isNaN(passNum)) {
+                        return prev + passNum;
+                    } else {
+                        return prev;
+                    }
+                }, 0);
+            });
+
+            return sums;
+        },
         // 获取专业列表
         async getMajorList() {
             const {
@@ -326,6 +442,8 @@ export default {
                 beginDate: beginDate,
                 endDate: endDate,
                 majorId: this.searchCondition.majorId,
+                channelId: this.searchCondition.channelId,
+                property: this.searchCondition.property,
                 pageIndex: index,
                 pageSize: this.pageSize
             };
@@ -348,7 +466,9 @@ export default {
                 date: "",
                 majorId: "",
                 channelId: "",
-                num: 0
+                property: "",
+                originNum: 0,
+                passNum: 0
             };
             this.tableData.unshift(this.newLine);
         },

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-02-27 22:19:05
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-12 22:39:43
+ * @LastEditTime: 2021-05-09 16:03:39
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -55,7 +55,7 @@ const OriginNumsSchema = mongoose.Schema(
 		},
 		originNum: {
 			// 初始简历数
-			type: String,
+			type: Number,
 			required: true
 		},
 		passNum: {

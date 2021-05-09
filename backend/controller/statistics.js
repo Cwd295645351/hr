@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-05 20:51:10
+ * @LastEditTime: 2021-05-09 16:35:02
  */
 
 import xss from "xss";
@@ -96,7 +96,21 @@ export const getOriginNums = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
-	mp.majorId = new RegExp(params.majorId, "ig");
+	if (params.property && params.property.length > 0) {
+		mp.property = {
+			$in: params.property
+		};
+	}
+	if (params.channelId && params.channelId.length > 0) {
+		mp.channelId = {
+			$in: params.channelId
+		};
+	}
+	if (params.majorId && params.majorId.length > 0) {
+		mp.majorId = {
+			$in: params.majorId
+		};
+	}
 	const res = await OriginNums.find(mp)
 		.sort({ date: -1, _id: 1 })
 		.skip(pageIndex * pageSize)
@@ -148,7 +162,9 @@ export const editOriginNums = async (data) => {
 				majorName: data.majorName,
 				channelId: data.channelId,
 				channelName: data.channelName,
-				num: data.num
+				property: data.property,
+				originNum: data.originNum,
+				passNum: data.passNum
 			},
 			{ new: true }
 		);

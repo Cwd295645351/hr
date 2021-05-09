@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-07 22:31:49
+ * @LastEditTime: 2021-05-09 16:39:25
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -29,8 +29,8 @@ const getChannelOriginNums = async (params) => {
 };
 
 // 获取初始简历数
-router.get("/getOriginNumsList", async (ctx, next) => {
-	const params = ctx.query;
+router.post("/getOriginNumsList", async (ctx, next) => {
+	const params = ctx.request.body;
 	if (!params.userId || params.userId == "") {
 		ctx.body = new ErrorModel(null, "userId不能为空");
 		return;
@@ -103,12 +103,20 @@ router.post("/editOriginNums", async (ctx, next) => {
 		ctx.body = new ErrorModel(null, "专业不能为空");
 		return;
 	}
+	if (!originObj.property || originObj.property == "") {
+		ctx.body = new ErrorModel(null, "招工性质不能为空");
+		return;
+	}
 	if (!originObj.channelId || originObj.channelId == "") {
 		ctx.body = new ErrorModel(null, "渠道不能为空");
 		return;
 	}
-	if (!originObj.num || originObj.num == "") {
+	if (!originObj.originNum || originObj.originNum == "") {
 		ctx.body = new ErrorModel(null, "初始简历数不能为空");
+		return;
+	}
+	if (!originObj.passNum || originObj.passNum == "") {
+		ctx.body = new ErrorModel(null, "通过初筛数不能为空");
 		return;
 	}
 	const res = await editOriginNums(originObj);
