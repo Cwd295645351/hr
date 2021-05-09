@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-07 21:40:32
+ * @LastEditTime: 2021-05-09 16:42:49
 -->
 <template>
     <div class="situation">
@@ -104,7 +104,7 @@
                         @click="addInterviewee"
                         >保存</el-button
                     >
-                    <el-upload
+                    <!-- <el-upload
                         class="upload-demo"
                         action
                         :on-change="handleChange"
@@ -115,7 +115,7 @@
                         :auto-upload="false"
                     >
                         <el-button size="small" type="primary">上传</el-button>
-                    </el-upload>
+                    </el-upload> -->
                 </el-form-item>
             </el-form>
         </div>
