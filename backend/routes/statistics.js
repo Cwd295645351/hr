@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-09 16:39:25
+ * @LastEditTime: 2021-05-10 00:13:02
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -63,6 +63,7 @@ router.post("/addOriginNums", async (ctx, next) => {
 	if (!originObj.userId || originObj.userId == "") {
 		ctx.body = new ErrorModel(null, "userId不能为空");
 	}
+	console.log(originObj);
 	const res = await addOriginNums(originObj);
 	if (res.retCode == 0) {
 		ctx.body = new SuccessModel("", "新增成功");
@@ -73,11 +74,7 @@ router.post("/addOriginNums", async (ctx, next) => {
 		for (let key in errors) {
 			if (errors[key].kind === "required") {
 				let errName = findName(errors[key].path);
-				if (errName != "简历数") {
-					message.push(`${errName}不能为空`);
-				} else {
-					message.push(`${errName}不能为0`);
-				}
+				message.push(`${errName}不能为空`);
 			}
 		}
 		message = [...new Set(message)];
@@ -186,6 +183,9 @@ router.get("/getStatisticsData", async (ctx, next) => {
 	const CONVERSION_PERCENT = "初始转化率";
 	// 返回对象
 	let retData = {};
+
+	// 简历总共存在七个阶段：初始简历、通过筛选、已约面、到面、意向录用、待入职、入职
+
 	// 数量对象
 	const numData = {
 		总数: [0, 0, 0, 0, 0, 0, 0]
@@ -296,18 +296,32 @@ router.get("/getStatisticsData", async (ctx, next) => {
 	// 获取各个渠道初始简历数
 	const originNumResult = await getChannelOriginNums(params);
 	const originNum = originNumResult.datas;
-	console.log(originNum);
+	// 初始简历数
 	const originData = {};
+	// 通过初筛数
+	const passData = {};
 	originNum.forEach((item) => {
 		if (originData[item.channelName]) {
-			originData[item.channelName] += item.num;
+			originData[item.channelName] += item.originNum;
+			passData[item.channelName] += item.passNum;
 		} else {
-			originData[item.channelName] = item.num;
+			originData[item.channelName] = item.originNum;
+			passData[item.channelName] = item.passNum;
 		}
 	});
+	// 重新赋值初始简历数和通过筛选数
 	for (let channelName in originData) {
-		numData[TOTLE_KEY][0] += originData[channelName];
-		numData[channelName][0] = originData[channelName];
+		// 总数和初始简历数需要先减去原来的数值，再加上当前数值
+		numData[TOTLE_KEY][0] =
+			numData[TOTLE_KEY][0] -
+			numData[channelName][0] +
+			Number(originData[channelName]);
+		numData[TOTLE_KEY][1] =
+			numData[TOTLE_KEY][1] -
+			numData[channelName][1] +
+			Number(passData[channelName]);
+		numData[channelName][0] = Number(originData[channelName]);
+		numData[channelName][1] = Number(passData[channelName]);
 	}
 
 	// 获取各个渠道的转化率和初始转化率
@@ -332,6 +346,8 @@ router.get("/getStatisticsData", async (ctx, next) => {
 			numArr[0] > 0 ? "100.00" : "0.00";
 	}
 
+	// 获取不同专业的入职比例
+
 	// 横轴数据
 	const xData = [
 		"初始简历",
@@ -349,7 +365,6 @@ router.get("/getStatisticsData", async (ctx, next) => {
 // 获取不同专业入职比例
 router.get("/getEntryRate", async (ctx, next) => {
 	const params = ctx.query;
-	const retData = {};
 	const returnData = [];
 	if (!params.userId || params.userId == "") {
 		ctx.body = new ErrorModel(null, "userId不能为空");
@@ -371,25 +386,43 @@ router.get("/getEntryRate", async (ctx, next) => {
 	}
 	// 获取专业列表
 	const majorArr = await getMajorList();
+	// 各个专业的总数和入职人数对象{total: 总数, joinNum: 入职人数}
+	const majorData = {};
+
+	// 初始化专业对象
 	majorArr.forEach((item) => {
-		retData[item.majorName] = 0;
+		const obj = {
+			total: 0,
+			joinNum: 0
+		};
+		majorData[item.majorName] = obj;
 	});
 
-	// 获取不同专业入职比例
+	// 获取所有简历，统计不同专业的总数和入职个数
 	const res = await getEntryRate(params);
-	const total = res.length;
-	if (total > 0) {
-		res.forEach((item) => {
-			retData[item.majorName]++;
-		});
-		for (let key in retData) {
-			let obj = {};
-			// 专业名称
-			obj.majorName = key;
-			// 比例
-			obj.proportion = ((retData[key] * 100) / total).toFixed(2);
-			returnData.push(obj);
+	res.forEach((item) => {
+		if (item.majorName != null && item.majorName != "") {
+			majorData[item.majorName].total++;
+			// 统计入职个数
+			if (item.statusId === "join") {
+				majorData[item.majorName].joinNum++;
+			}
 		}
+	});
+	// 遍历专业对象
+	for (let major in majorData) {
+		let obj = {};
+		// 专业名称
+		obj.majorName = major;
+		// 入职比例比例
+		obj.proportion =
+			majorData[major].joinNum != 0
+				? (
+						(majorData[major].joinNum * 100) /
+						majorData[major].total
+				  ).toFixed(2)
+				: "0.00";
+		returnData.push(obj);
 	}
 	// 返回结果按比例降序
 	returnData.sort((first, second) => {
@@ -436,8 +469,11 @@ function findName(str) {
 		case "phoneInterviewSituation":
 			res = "电话面试情况";
 			break;
-		case "num":
-			res = "简历数";
+		case "originNum":
+			res = "初始简历数";
+			break;
+		case "passNum":
+			res = "通过初筛数";
 			break;
 	}
 	return res;

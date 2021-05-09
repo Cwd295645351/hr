@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-09 16:35:02
+ * @LastEditTime: 2021-05-09 23:48:12
  */
 
 import xss from "xss";
@@ -70,8 +70,7 @@ export const getEntryRate = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
-	mp.statusId = "join";
-	const res = await Interview.find(mp, { majorName: 1 });
+	const res = await Interview.find(mp, { majorName: 1, statusId: 1 });
 	return res;
 };
 
@@ -168,7 +167,6 @@ export const editOriginNums = async (data) => {
 			},
 			{ new: true }
 		);
-		console.log(res);
 		if (res) {
 			return {
 				retCode: 0
