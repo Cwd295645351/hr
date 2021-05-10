@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 22:40:18
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-05 21:49:59
+ * @LastEditTime: 2021-05-10 19:26:38
 -->
 <template>
     <div class="joinInfo">
@@ -86,14 +86,21 @@
                 <el-table-column align="center" label="性质">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-input
+                            <el-select
+                                v-model="newLine.property"
                                 size="small"
-                                placeholder="请输入性质"
-                                v-model="newLine.joinProperty"
+                                placeholder="请选择性质"
                                 clearable
-                            ></el-input>
+                            >
+                                <el-option
+                                    v-for="(item, index) in propertyOptions"
+                                    :key="item + '_propertyOptions_' + index"
+                                    :label="item.label"
+                                    :value="item.value"
+                                ></el-option>
+                            </el-select>
                         </div>
-                        <div v-else>{{ scope.row.joinProperty }}</div>
+                        <div v-else>{{ scope.row.property }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column align="center" label="部门">
@@ -101,7 +108,7 @@
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 size="small"
-                                placeholder="请输入性质"
+                                placeholder="请输入部门"
                                 v-model="newLine.apartment"
                                 clearable
                             ></el-input>
@@ -114,7 +121,7 @@
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 size="small"
-                                placeholder="请输入性质"
+                                placeholder="请输入姓名"
                                 v-model="newLine.name"
                                 clearable
                             ></el-input>
@@ -127,7 +134,7 @@
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 size="small"
-                                placeholder="请输入性质"
+                                placeholder="请输入手机号"
                                 v-model="newLine.phoneNum"
                                 clearable
                             ></el-input>
@@ -192,6 +199,7 @@
                     ref="editLine"
                     :editLine="editLine"
                     :statusOptions="statusOptions"
+                    :propertyOptions="propertyOptions"
                 ></my-form>
                 <div class="demo-drawer__footer">
                     <el-button :disable="loading" @click="cancelForm"
@@ -242,7 +250,22 @@ export default {
             // 修改初始简历数侧拉
             operateDialogTag: false,
             // 编辑信息
-            editLine: {}
+            editLine: {},
+            // 性质数组
+            propertyOptions: [
+                {
+                    label: "社招",
+                    value: "社招"
+                },
+                {
+                    label: "校招",
+                    value: "校招"
+                },
+                {
+                    label: "实习",
+                    value: "实习"
+                }
+            ]
         };
     },
     created() {},
@@ -321,7 +344,7 @@ export default {
                 phoneNum: "",
                 joinDate: "",
                 NO: "",
-                joinProperty: "",
+                property: "",
                 statusId: "",
                 apartment: "",
                 joinRemark: "",
@@ -353,7 +376,7 @@ export default {
                 this.loading = false;
             }
         },
-        // 修改面试流程
+        // 修改入职信息
         editInfo(row) {
             this.operateDialogTag = true;
             this.editLine = JSON.parse(JSON.stringify(row));

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 23:28:47
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-05 21:48:18
+ * @LastEditTime: 2021-05-10 19:40:00
  */
 
 import xss from "xss";
@@ -35,10 +35,11 @@ export const getList = async (params) => {
 			$in: ["joining", "join"]
 		}
 	};
+	console.log(mp)
 	const filterData = {
 		NO: 1,
 		joinDate: 1,
-		joinProperty: 1,
+		property: 1,
 		name: 1,
 		apartment: 1,
 		hideTag: 1,
@@ -133,7 +134,7 @@ export const editInfo = async (data, isFromInfo) => {
 				{
 					NO: data.NO,
 					joinDate: data.joinDate,
-					joinProperty: data.joinProperty,
+					property: data.property,
 					statusId: data.statusId,
 					statusName: data.statusName,
 					name: data.name,
@@ -164,7 +165,7 @@ export const editInfo = async (data, isFromInfo) => {
 				{
 					NO: data.NO,
 					joinDate: data.joinDate,
-					joinProperty: data.joinProperty,
+					property: data.property,
 					statusId: data.statusId,
 					statusName: data.statusName,
 					name: data.name,

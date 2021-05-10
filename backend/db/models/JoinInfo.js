@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 21:27:19
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-25 22:45:24
+ * @LastEditTime: 2021-05-10 19:26:28
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -32,8 +32,8 @@ const JoinInfoSchema = mongoose.Schema(
 				}
 			}
 		},
-		joinProperty: {
-			// 入职性质
+		property: {
+			// 性质
 			type: String
 		},
 		name: {

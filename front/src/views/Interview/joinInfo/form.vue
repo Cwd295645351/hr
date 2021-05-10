@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-25 23:08:01
+ * @LastEditTime: 2021-05-10 19:20:14
 -->
 <template>
     <div class="form-box">
@@ -43,12 +43,19 @@
                 ></el-date-picker>
             </el-form-item>
             <el-form-item label="性质">
-                <el-input
-                    v-model="editLine.joinProperty"
+                <el-select
+                    v-model="editLine.property"
+                    placeholder="选择性质"
                     size="small"
-                    placeholder="请输入性质"
                     clearable
-                ></el-input>
+                >
+                    <el-option
+                        v-for="(item, index) in propertyOptions"
+                        :key="item + '_propertyOptions_' + index"
+                        :label="item.label"
+                        :value="item.value"
+                    ></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="部门">
                 <el-input
@@ -92,7 +99,20 @@ export default {
         return {};
     },
     computed: {},
-    props: ["editLine", "statusOptions"],
+    props: {
+        editLine: {
+            type: Object,
+            default: {}
+        },
+        statusOptions: {
+            type: Array,
+            default: () => []
+        },
+        propertyOptions: {
+            type: Array,
+            default: () => []
+        }
+    },
     created() {},
     mounted() {},
     methods: {}

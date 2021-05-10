@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-24 21:32:39
+ * @LastEditTime: 2021-05-10 19:25:58
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -117,10 +117,6 @@ const IntervieweesSchema = mongoose.Schema(
 		},
 		NO: {
 			// 档案编号
-			type: String
-		},
-		joinProperty: {
-			// 入职性质
 			type: String
 		},
 		apartment: {

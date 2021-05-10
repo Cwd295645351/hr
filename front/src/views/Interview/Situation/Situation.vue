@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-09 16:42:49
+ * @LastEditTime: 2021-05-10 19:26:49
 -->
 <template>
     <div class="situation">
@@ -1236,7 +1236,6 @@ export default {
                 },
                 fileList: [],
                 NO: "",
-                joinProperty: "",
                 apartment: "",
                 joinRemark: "",
                 hideTag: "0",
