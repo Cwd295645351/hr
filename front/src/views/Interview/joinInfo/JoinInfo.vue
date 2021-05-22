@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 22:40:18
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 19:26:38
+ * @LastEditTime: 2021-05-22 15:02:41
 -->
 <template>
     <div class="joinInfo">
@@ -294,7 +294,13 @@ export default {
                 data: { data, retCode, message }
             } = await getStatusList();
             if (retCode === 0) {
-                this.statusOptions = data;
+                this.statusOptions = data.filter((item) => {
+                    return (
+                        item.statusId === "joining" ||
+                        item.statusId === "breachContract" ||
+                        item.statusId === "join"
+                    );
+                });
             } else {
                 this.$message.error(message);
             }
@@ -485,7 +491,7 @@ export default {
             margin-top: 10px;
             text-align: right;
         }
-        /deep/ .el-table th{
+        /deep/ .el-table th {
             background: #ccc !important;
             color: #666;
         }

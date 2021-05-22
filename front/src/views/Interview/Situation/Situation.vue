@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 19:26:49
+ * @LastEditTime: 2021-05-22 14:58:44
 -->
 <template>
     <div class="situation">
@@ -192,6 +192,10 @@
                                 {
                                     greenBuilding:
                                         scope.row.majorId == 'greenBuilding'
+                                },
+                                {
+                                    front:
+                                        scope.row.majorId == 'front'
                                 }
                             ]"
                             v-else
@@ -1470,6 +1474,9 @@ export default {
             }
             &.greenBuilding {
                 background: #cc3399;
+            }
+            &.front {
+                background: #009999;
             }
         }
         .phone-interview-situation {

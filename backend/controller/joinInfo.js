@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 23:28:47
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 19:40:00
+ * @LastEditTime: 2021-05-10 19:45:17
  */
 
 import xss from "xss";
@@ -52,7 +52,8 @@ export const getList = async (params) => {
 	const pageSize = params.pageSize;
 	const InterviewRes = await Interview.find(mp, filterData);
 	const JoinInfoRes = await JoinInfo.find({
-		hideTag: "0"
+		hideTag: "0",
+		userId: params.userId
 	});
 	const res = InterviewRes.concat(JoinInfoRes);
 
