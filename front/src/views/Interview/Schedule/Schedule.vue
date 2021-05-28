@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-11 22:30:54
+ * @LastEditTime: 2021-05-28 19:08:44
 -->
 <template>
     <div class="schedule">
@@ -263,7 +263,7 @@ export default {
                 this.datas = data.map((item) => {
                     let interview = item.interview;
                     item.morningInterview = interview.filter((item) => {
-                        return item.time < "12:00";
+                        return item.time < "12:00" || item.time == null;
                     });
                     item.afternoonInterview = interview.filter((item) => {
                         return item.time > "12:00";

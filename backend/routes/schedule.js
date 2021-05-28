@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:17:20
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-05 21:53:16
+ * @LastEditTime: 2021-05-28 19:05:56
  */
 import Router from "koa-router";
 import getSchedule from "../controller/schedule";
@@ -80,8 +80,10 @@ router.get("/getSchedule", async (ctx, next) => {
 			(new Date(item[0]) - new Date(params.beginDate)) / ONE_DAY_STRING;
 		retData[index] = item[1];
 		retData[index].sort((first, second) => {
-			const firstArr = first.time.split(":");
-			const secondArr = second.time.split(":");
+			const firstArr = first.time ? first.time.split(":") : ["00", "00"];
+			const secondArr = second.time
+				? second.time.split(":")
+				: ["00", "00"];
 			if (firstArr[0] < secondArr[0]) {
 				return -1;
 			} else if (firstArr[0] == secondArr[0]) {
