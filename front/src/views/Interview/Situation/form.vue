@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-24 21:40:01
+ * @LastEditTime: 2021-06-11 23:00:47
 -->
 <template>
     <div class="form-box">
@@ -112,7 +112,13 @@
                     v-model="editLine.remark"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="入职时间" v-if="editLine.statusId == 'join' || editLine.statusId == 'joining'">
+            <el-form-item
+                label="入职时间"
+                v-if="
+                    editLine.statusId == 'join' ||
+                    editLine.statusId == 'joining'
+                "
+            >
                 <el-date-picker
                     v-model="editLine.joinDate"
                     type="date"
@@ -122,7 +128,13 @@
                     clearable
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="入职部门" v-if="editLine.statusId == 'join' || editLine.statusId == 'joining'">
+            <el-form-item
+                label="入职部门"
+                v-if="
+                    editLine.statusId == 'join' ||
+                    editLine.statusId == 'joining'
+                "
+            >
                 <el-input
                     type="textarea"
                     autosize
@@ -130,7 +142,13 @@
                     v-model="editLine.apartment"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="面试日期" v-show="editLine.statusId != 'pass'">
+            <el-form-item
+                label="面试日期"
+                v-show="
+                    editLine.statusId != 'pass' &&
+                    editLine.statusId != 'noAnswer'
+                "
+            >
                 <el-date-picker
                     v-model="editLine.schedules.date"
                     type="date"
@@ -140,7 +158,13 @@
                     clearable
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="面试时间" v-show="editLine.statusId != 'pass'">
+            <el-form-item
+                label="面试时间"
+                v-show="
+                    editLine.statusId != 'pass' &&
+                    editLine.statusId != 'noAnswer'
+                "
+            >
                 <el-time-select
                     v-model="editLine.schedules.time"
                     size="small"
@@ -153,7 +177,13 @@
                     clearable
                 ></el-time-select>
             </el-form-item>
-            <el-form-item label="面试形式" v-show="editLine.statusId != 'pass'">
+            <el-form-item
+                label="面试形式"
+                v-show="
+                    editLine.statusId != 'pass' &&
+                    editLine.statusId != 'noAnswer'
+                "
+            >
                 <el-select
                     v-model="editLine.schedules.form"
                     placeholder="选择面试形式"
@@ -168,7 +198,13 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="面试官" v-show="editLine.statusId != 'pass'">
+            <el-form-item
+                label="面试官"
+                v-show="
+                    editLine.statusId != 'pass' &&
+                    editLine.statusId != 'noAnswer'
+                "
+            >
                 <el-input
                     v-model="editLine.schedules.interviewer"
                     size="small"

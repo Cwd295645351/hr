@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-14 21:39:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 00:13:02
+ * @LastEditTime: 2021-06-11 22:57:27
  */
 import Router from "koa-router";
 import { SuccessModel, ErrorModel } from "../model/resModel";
@@ -225,6 +225,8 @@ router.get("/getStatisticsData", async (ctx, next) => {
 			switch (item.statusId) {
 				// 通过初筛
 				case "pass":
+				// 未应约
+				case "noAnswer":
 					numData[TOTLE_KEY][1]++;
 					numData[item.channelName][1]++;
 					break;

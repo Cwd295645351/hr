@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-29 22:34:58
+ * @LastEditTime: 2021-06-11 22:59:46
 -->
 <template>
     <div class="situation">
@@ -194,12 +194,10 @@
                                         scope.row.majorId == 'greenBuilding'
                                 },
                                 {
-                                    front:
-                                        scope.row.majorId == 'front'
+                                    front: scope.row.majorId == 'front'
                                 },
                                 {
-                                    landScape:
-                                        scope.row.majorId == 'landScape'
+                                    landScape: scope.row.majorId == 'landScape'
                                 }
                             ]"
                             v-else
@@ -331,7 +329,9 @@
                                     hire:
                                         scope.row.statusId == 'breakPromise' ||
                                         scope.row.statusId == 'noHire' ||
-                                        scope.row.statusId == 'breachContract'
+                                        scope.row.statusId ==
+                                            'breachContract' ||
+                                        scope.row.statusId == 'noAnswer'
                                 }
                             ]"
                             v-else
@@ -423,7 +423,8 @@
                                 <el-date-picker
                                     v-if="
                                         newLine.statusId &&
-                                        newLine.statusId != 'pass'
+                                        newLine.statusId != 'pass' &&
+                                        newLine.statusId != 'noAnswer'
                                     "
                                     v-model="newLine.schedules.date"
                                     type="date"
@@ -442,7 +443,8 @@
                                 <el-time-select
                                     v-if="
                                         newLine.statusId &&
-                                        newLine.statusId != 'pass'
+                                        newLine.statusId != 'pass' &&
+                                        newLine.statusId != 'noAnswer'
                                     "
                                     v-model="newLine.schedules.time"
                                     size="small"
@@ -465,7 +467,8 @@
                                 <el-select
                                     v-if="
                                         newLine.statusId &&
-                                        newLine.statusId != 'pass'
+                                        newLine.statusId != 'pass' &&
+                                        newLine.statusId != 'noAnswer'
                                     "
                                     v-model="newLine.schedules.form"
                                     placeholder="选择面试形式"
@@ -489,7 +492,8 @@
                                 <el-input
                                     v-if="
                                         newLine.statusId &&
-                                        newLine.statusId != 'pass'
+                                        newLine.statusId != 'pass' &&
+                                        newLine.statusId != 'noAnswer'
                                     "
                                     v-model="newLine.schedules.interviewer"
                                     size="small"
@@ -1246,7 +1250,7 @@ export default {
                 NO: "",
                 apartment: "",
                 joinRemark: "",
-                hideTag: "0",
+                hideTag: "0"
             };
             this.tableData.unshift(this.newLine);
         },
