@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-06-11 22:59:46
+ * @LastEditTime: 2021-06-27 00:56:13
 -->
 <template>
     <div class="situation">
@@ -104,6 +104,7 @@
                         @click="addInterviewee"
                         >保存</el-button
                     >
+                    <el-button @click="exportData">导出</el-button>
                     <!-- <el-upload
                         class="upload-demo"
                         action
@@ -629,6 +630,7 @@ import {
     editInterviewee,
     deleteInterviewee
 } from "../../../../apis/interview/interview";
+const { export_json_to_excel } = require("../../../excel/Export2Excel");
 export default {
     components: {
         "my-form": myForm
@@ -741,6 +743,96 @@ export default {
     },
     created() {},
     methods: {
+        async exportData() {
+            const params = {
+                userId: this.userId,
+                beginDate: "",
+                endDate: "",
+                name: "",
+                majorId: "",
+                channelId: "",
+                phoneNum: "",
+                email: "",
+                statusId: "",
+                pageIndex: 0,
+                pageSize: 99999
+            };
+            const {
+                data: { data, retCode, message }
+            } = await getInterviewList(params);
+            if (retCode === 0) {
+                console.log("查询结果", data);
+                this.getExcel_city(data.datas);
+            } else {
+                this.$message.error(message);
+            }
+        },
+        //导出方法
+        getExcel_city(res) {
+            require.ensure([], () => {
+                const tHeader = [
+                    "登记日期",
+                    "专业",
+                    "档案编号",
+                    "性质",
+                    "招聘渠道",
+                    "姓名",
+                    "联系方式",
+                    "邮箱",
+                    "当前简历状态",
+                    "入职日期",
+                    "入职部门",
+                    "入职备注",
+                    "电话面试情况",
+                    "备注",
+                    "面试日期",
+                    "面试形式",
+                    "面试官",
+                    "面试时间",
+                ];
+                const filterVal = [
+                    "date",
+                    "majorName",
+                    "NO",
+                    "property",
+                    "channelName",
+                    "name",
+                    "phoneNum",
+                    "email",
+                    "statusName",
+                    "joinDate",
+                    "apartment",
+                    "joinRemark",
+                    "phoneInterviewSituation",
+                    "remark",
+                    "schedules.date",
+                    "schedules.form",
+                    "schedules.interviewer",
+                    "schedules.time",
+                ];
+                const list = res;
+                const data = this.formatJson(filterVal, list);
+                var filename =
+                    "学生实习结果-" +
+                    this.$dayjs(new Date()).format("YYYYMMDDHHmmss");
+                export_json_to_excel(tHeader, data, filename);
+            });
+        },
+        //格式化
+        formatJson(filterVal, jsonData) {
+            // return jsonData.map((v) => filterVal.map((j) => v[j]));
+
+            return jsonData.map((v) =>
+                filterVal.map((j) => {
+                    if (j.includes(".")) {
+                        const arr = j.split(".");
+                        return v[arr[0]][arr[1]];
+                    } else {
+                        return v[j];
+                    }
+                })
+            );
+        },
         //导入文件时处理方法
         handleChange(file, fileList) {
             this.fileTemp = file.raw;
