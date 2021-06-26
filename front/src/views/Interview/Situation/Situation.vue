@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-06-27 00:56:13
+ * @LastEditTime: 2021-06-27 01:02:09
 -->
 <template>
     <div class="situation">
@@ -813,7 +813,7 @@ export default {
                 const list = res;
                 const data = this.formatJson(filterVal, list);
                 var filename =
-                    "学生实习结果-" +
+                    "候选人信息-" +
                     this.$dayjs(new Date()).format("YYYYMMDDHHmmss");
                 export_json_to_excel(tHeader, data, filename);
             });
