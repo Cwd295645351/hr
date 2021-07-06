@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:22:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-25 22:26:20
+ * @LastEditTime: 2021-07-06 22:40:22
  */
 
 export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:8000";
@@ -21,6 +21,11 @@ export const ADD_INTERVIEWEE = `${HOST}/api/situation/addInterviewee`; // 新增
 export const IMPORT_INTERVIEWEE = `${HOST}/api/situation/importInterviewee`; // 批量导入面试者
 export const EDIT_INTERVIEWEE = `${HOST}/api/situation/editInterviewee`; // 修改面试者
 export const DELETE_INTERVIEWEE = `${HOST}/api/situation/deleteInterviewee`; // 删除面试者
+
+export const GET_RECRUITMENT_LIST = `${HOST}/api/recruitment/getList`; // 获取需求
+export const ADD_RECRUITMENT = `${HOST}/api/recruitment/addRecruitment`; // 新增需求
+export const EDIT_RECRUITMENT = `${HOST}/api/recruitment/editRecruitment`; // 修改需求
+export const DELETE_RECRUITMENT = `${HOST}/api/recruitment/deleteRecruitment`; // 删除需求
 
 export const GET_INTERVIEW_STATISTICS = `${HOST}/api/statistics/getStatisticsData`; // 获取面试统计信息
 export const GET_ENTRY_RATE = `${HOST}/api/statistics/getEntryRate`; // 获取不同专业入职比例
