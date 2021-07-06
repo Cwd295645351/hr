@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-05 20:28:05
+ * @LastEditTime: 2021-07-06 23:24:47
 -->
 <template>
     <div class="main">
@@ -23,7 +23,7 @@
                     {{ item.title }}
                 </div>
             </div>
-            <div class="log-off">退出</div>
+            <div @click="logout" class="log-off">退出</div>
         </div>
         <router-view v-if="current_module"></router-view>
         <!-- <div class="content" v-else>
@@ -132,6 +132,9 @@ export default {
             sessionStorage.removeItem("menu");
             this.current_module = "";
             this.$router.push("/main");
+        },
+        logout() {
+            this.$router.push("/login");
         }
     }
 };
