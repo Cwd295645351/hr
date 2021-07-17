@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-07-06 23:14:22
+ * @LastEditTime: 2021-07-17 15:06:22
 -->
 <template>
     <div class="originNums">
@@ -602,7 +602,7 @@ export default {
                 text-align: left;
             }
             .remark {
-                height: 100px;
+                // height: 100px;
                 display: flex;
                 align-items: center;
                 text-align: left;

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-06-27 01:02:09
+ * @LastEditTime: 2021-07-17 22:40:03
 -->
 <template>
     <div class="situation">
@@ -199,6 +199,9 @@
                                 },
                                 {
                                     landScape: scope.row.majorId == 'landScape'
+                                },
+                                {
+                                    hr: scope.row.majorId == 'hr'
                                 }
                             ]"
                             v-else
@@ -1580,6 +1583,9 @@ export default {
             }
             &.landScape {
                 background: #66cccc;
+            }
+            &.hr {
+                background: #cc3333;
             }
         }
         .phone-interview-situation {
