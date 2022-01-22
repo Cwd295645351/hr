@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-09 23:49:41
+ * @LastEditTime: 2022-01-22 09:30:28
 -->
 <template>
     <div class="statistics">
@@ -68,7 +68,7 @@
                         class="line-box"
                     >
                         <div class="major">{{ item.channelName }}</div>
-                        <div>{{ item.proportion }}</div>
+                        <div>{{ item.proportion }}%</div>
                     </div>
                 </div>
             </div>
@@ -314,7 +314,7 @@ export default {
                     this.options.legend.data.push(key);
                     this.options.legend.selected[key] = false;
                     if (!key.includes("转化")) {
-                        // 非转化率
+                        // 简历数
                         this.options.series[index++] = {
                             name: key,
                             type: "bar",
@@ -330,13 +330,13 @@ export default {
                             yAxisIndex: 1
                         };
 
-                        // 获取不同渠道入职比例，找到非总数的所有初始转化率
+                        // 统计不同渠道入职比例，找到非总数的所有初始转化率
                         if (
                             key.includes("初始转化率") &&
                             key != "总数初始转化率"
                         ) {
                             console.log(key, yData[key]);
-                            const proportion = yData[key][6];
+                            const proportion = yData[key][6]; // 入职阶段的初始转化率
                             let obj = {
                                 channelName: key.slice(0,-5),
                                 proportion: proportion
@@ -346,8 +346,8 @@ export default {
                     }
                 }
 
-                // 不同渠道入职比例
-                regionData.sort((first, second) => {
+                // 不同渠道入职比例进行排序
+                this.regionData = regionData.sort((first, second) => {
                     if (
                         parseFloat(first.proportion) >
                         parseFloat(second.proportion)
@@ -356,10 +356,6 @@ export default {
                     } else {
                         return 1;
                     }
-                });
-                this.regionData = regionData.map((item) => {
-                    item.proportion += "%";
-                    return item;
                 });
             } else {
                 this.$message.error(message);
