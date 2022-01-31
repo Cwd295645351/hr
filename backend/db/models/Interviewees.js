@@ -4,18 +4,15 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 19:25:58
+ * @LastEditTime: 2022-01-31 10:41:15
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
 
 const IntervieweesSchema = mongoose.Schema(
 	{
-		userId: {
-			// 用户id
-			type: String,
-			required: true
-		},
+		// 用户id
+		userId: { type: String, required: true },
 		date: {
 			// 登记日期
 			type: Date,
@@ -27,46 +24,26 @@ const IntervieweesSchema = mongoose.Schema(
 				}
 			}
 		},
-		majorId: {
-			// 专业id
-			type: String
-		},
-		majorName: {
-			// 专业名称
-			type: String
-		},
-		name: {
-			// 姓名
-			type: String
-		},
-		property: {
-			// 招工性质
-			type: String
-		},
-		phoneNum: {
-			// 电话号码
-			type: String
-		},
-		email: {
-			// 邮箱
-			type: String
-		},
-		channelId: {
-			// 渠道id
-			type: String
-		},
-		channelName: {
-			// 渠道名称
-			type: String
-		},
-		statusId: {
-			// 状态
-			type: String
-		},
-		statusName: {
-			// 状态
-			type: String
-		},
+		// 专业id
+		majorId: { type: String },
+		// 专业名称
+		majorName: { type: String },
+		// 姓名
+		name: { type: String },
+		// 招工性质
+		property: { type: String },
+		// 电话号码
+		phoneNum: { type: String },
+		// 邮箱
+		email: { type: String },
+		// 渠道id
+		channelId: { type: String },
+		// 渠道名称
+		channelName: { type: String },
+		// 状态
+		statusId: { type: String },
+		// 状态
+		statusName: { type: String },
 		joinDate: {
 			// 入职时间
 			type: Date,
@@ -93,44 +70,26 @@ const IntervieweesSchema = mongoose.Schema(
 					return v;
 				}
 			},
-			time: {
-				type: String
-			},
-			interviewer: {
-				type: String
-			},
-			form: {
-				type: String
-			}
+			time: { type: String },
+			interviewer: { type: String },
+			form: { type: String }
 		},
-		phoneInterviewSituation: {
-			// 电话面试情况
-			type: String
-		},
-		fileList: {
-			// 相关材料
-			type: Array
-		},
-		remark: {
-			// 备注
-			type: String
-		},
-		NO: {
-			// 档案编号
-			type: String
-		},
-		apartment: {
-			// 部门
-			type: String
-		},
-		joinRemark: {
-			// 入职备注
-			type: String
-		},
-		hideTag: {
-			// 隐藏标志
-			type: String
-		}
+		// 电话面试情况
+		phoneInterviewSituation: { type: String },
+		// 相关材料
+		fileList: { type: Array },
+		// 备注
+		remark: { type: String },
+		// 档案编号
+		NO: { type: String },
+		// 部门
+		apartment: { type: String },
+		// 入职备注
+		joinRemark: { type: String },
+		// 隐藏标志(隐藏入职信息)
+		hideTag: { type: String },
+		// 是否删除
+		isDelete: { type: Boolean }
 	},
 	{ timestamps: true }
 );

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 19:41:51
+ * @LastEditTime: 2022-01-31 10:52:18
  */
 
 import xss from "xss";
@@ -55,6 +55,7 @@ export const getList = async (params) => {
 	mp.name = new RegExp(params.name, "ig");
 	mp.phoneNum = new RegExp(params.phoneNum, "ig");
 	mp.email = new RegExp(params.email, "ig");
+	mp.isDelete = false;
 	if (params.statusId && params.statusId.length > 0) {
 		mp.statusId = {
 			$in: params.statusId
@@ -160,6 +161,13 @@ export const deleteInterviewee = async (data) => {
 		_id: mongoose.Types.ObjectId(data.id),
 		userId: data.userId
 	};
-	const res = await Interview.findOneAndDelete(mp);
-	return res;
+	const res = await Interview.findOneAndUpdate(
+		mp,
+		{
+			isDelete: true
+		},
+		{ new: true }
+	);
+	if (res) return true;
+	else return false;
 };
