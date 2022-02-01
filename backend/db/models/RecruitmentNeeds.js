@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-07-06 21:45:27
  * @LastEditors: Chen
- * @LastEditTime: 2021-07-06 23:10:25
+ * @LastEditTime: 2022-02-01 11:59:47
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -44,7 +44,7 @@ const RecruitmentNeedsSchema = mongoose.Schema({
     },
     num: {
         // 人数
-        type: String
+        type: Number
     },
     demand: {
         // 具体要求

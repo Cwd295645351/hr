@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 23:28:47
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 19:45:17
+ * @LastEditTime: 2022-02-01 12:11:15
  */
 
 import xss from "xss";
@@ -35,7 +35,6 @@ export const getList = async (params) => {
 			$in: ["joining", "join"]
 		}
 	};
-	console.log(mp)
 	const filterData = {
 		NO: 1,
 		joinDate: 1,
@@ -50,6 +49,7 @@ export const getList = async (params) => {
 	};
 	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
 	const pageSize = params.pageSize;
+	mp.isDelete = false;
 	const InterviewRes = await Interview.find(mp, filterData);
 	const JoinInfoRes = await JoinInfo.find({
 		hideTag: "0",
@@ -161,7 +161,8 @@ export const editInfo = async (data, isFromInfo) => {
 			const res = await Interview.findOneAndUpdate(
 				{
 					_id: mongoose.Types.ObjectId(data.id),
-					userId: data.userId
+					userId: data.userId,
+					isDelete: false
 				},
 				{
 					NO: data.NO,
@@ -198,7 +199,8 @@ export const editInfo = async (data, isFromInfo) => {
 export const hideInfo = async (data) => {
 	const mp = {
 		_id: mongoose.Types.ObjectId(data.id),
-		userId: data.userId
+		userId: data.userId,
+		isDelete: false
 	};
 	let res = null;
 	if (data.isFromInfo) {

@@ -1,18 +1,16 @@
 /*
  * @Description: 需求登记相关数据库操作
- * @Version: 
- * @Author: 
+ * @Version:
+ * @Author:
  * @Date: 2021-07-06 21:57:14
  * @LastEditors: Chen
- * @LastEditTime: 2021-07-06 23:10:13
+ * @LastEditTime: 2022-02-01 12:15:15
  */
 import xss from "xss";
 import mongoose from "../db/db";
 
 import RecruitmentNeeds from "../db/models/RecruitmentNeeds";
-import {
-	getMajorNameById,
-} from "./common";
+import { getMajorNameById } from "./common";
 
 // 遍历对象，将对象属性进行xss防御
 const xssData = (data) => {
@@ -26,15 +24,27 @@ const xssData = (data) => {
 	}
 };
 
-
 // 获取招聘需求列表
 export const getList = async (params) => {
 	let mp = {};
 	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
 	const pageSize = params.pageSize;
 	mp.userId = params.userId;
+	const filterData = {
+		date: 1,
+		majorId: 1,
+		majorName: 1,
+		apartment: 1,
+		property: 1,
+		num: 1,
+		demand: 1,
+		hopeArrivalTime: 1,
+		actualArrivalTime: 1,
+		schedule: 1,
+		remark: 1
+	};
 
-	const res = await RecruitmentNeeds.find(mp)
+	const res = await RecruitmentNeeds.find(mp, filterData)
 		.sort({ date: -1, _id: 1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
@@ -85,7 +95,7 @@ export const editRecruitment = async (data) => {
 				hopeArrivalTime: data.hopeArrivalTime,
 				actualArrivalTime: data.actualArrivalTime,
 				schedule: data.schedule,
-				remark: data.remark,
+				remark: data.remark
 			},
 			{ new: true }
 		);

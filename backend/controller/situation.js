@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-01-31 10:52:18
+ * @LastEditTime: 2022-02-01 12:13:18
  */
 
 import xss from "xss";
@@ -62,11 +62,31 @@ export const getList = async (params) => {
 		};
 	}
 
-	const res = await Interview.find(mp)
+	const filterData = {
+		date: 1,
+		majorId: 1,
+		majorName: 1,
+		property: 1,
+		channelId: 1,
+		channelName: 1,
+		name: 1,
+		phoneNum: 1,
+		email: 1,
+		statusId: 1,
+		statusName: 1,
+		joinDate: 1,
+		apartment: 1,
+		remark: 1,
+		schedules: 1,
+		phoneInterviewSituation: 1,
+		fileList: 1
+	}
+
+	const res = await Interview.find(mp, filterData)
 		.sort({ date: -1, "schedules.date": -1, _id: 1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
-	const length = await Interview.find(mp).count();
+	const length = await Interview.find(mp, {}).count();
 	return {
 		datas: res,
 		total: length
@@ -115,7 +135,8 @@ export const editInterviewee = async (data) => {
 		const res = await Interview.findOneAndUpdate(
 			{
 				_id: mongoose.Types.ObjectId(data.id),
-				userId: data.userId
+				userId: data.userId,
+				isDelete: false
 			},
 			{
 				date: data.date,
@@ -159,7 +180,8 @@ export const editInterviewee = async (data) => {
 export const deleteInterviewee = async (data) => {
 	const mp = {
 		_id: mongoose.Types.ObjectId(data.id),
-		userId: data.userId
+		userId: data.userId,
+		isDelete: false
 	};
 	const res = await Interview.findOneAndUpdate(
 		mp,

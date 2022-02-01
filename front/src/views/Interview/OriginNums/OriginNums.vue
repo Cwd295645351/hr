@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 00:09:47
+ * @LastEditTime: 2022-02-01 11:50:15
 -->
 <template>
     <div class="originNums">
@@ -363,22 +363,8 @@ export default {
                     sums[index] = "总数";
                     return;
                 }
-                sums[4] = data.reduce((prev, curr) => {
-                    const originNum = Number(curr.originNum);
-                    if (!isNaN(originNum)) {
-                        return prev + originNum;
-                    } else {
-                        return prev;
-                    }
-                }, 0);
-                sums[5] = data.reduce((prev, curr) => {
-                    const passNum = Number(curr.passNum);
-                    if (!isNaN(passNum)) {
-                        return prev + passNum;
-                    } else {
-                        return prev;
-                    }
-                }, 0);
+                sums[4] = data.reduce((prev, curr) => prev + curr.originNum, 0);
+                sums[5] = data.reduce((prev, curr) => prev + curr.passNum, 0);
             });
 
             return sums;
@@ -508,9 +494,22 @@ export default {
         },
         // 保存新增
         async addOriginNums() {
-            this.loading = true;
             const params = JSON.parse(JSON.stringify(this.newLine));
             params.userId = this.userId;
+            const originNum = Number(params.originNum);
+            if (params.originNum == "" || isNaN(originNum)) {
+                this.$message.error("初始简历数必须是数字");
+                return;
+            }
+            const passNum = Number(params.passNum);
+            if (params.passNum == "" || isNaN(passNum)) {
+                this.$message.error("通过初筛数必须是数字");
+                return;
+            }
+            params.originNum = originNum
+            params.passNum = passNum;
+            this.loading = true;
+
             try {
                 const {
                     data: { data, retCode, message }
@@ -527,7 +526,6 @@ export default {
                 console.error(err);
                 this.loading = false;
             }
-            // console.log("新增数据", this.newLine);
         },
         // 关闭抽屉
         handleClose(done) {
@@ -544,6 +542,18 @@ export default {
         async submitEdit() {
             const params = JSON.parse(JSON.stringify(this.editLine));
             params.userId = this.userId;
+             const originNum = Number(params.originNum);
+            if (params.originNum == "" || isNaN(originNum)) {
+                this.$message.error("初始简历数必须是数字");
+                return;
+            }
+            const passNum = Number(params.passNum);
+            if (params.passNum == "" || isNaN(passNum)) {
+                this.$message.error("通过初筛数必须是数字");
+                return;
+            }
+            params.originNum = originNum
+            params.passNum = passNum;
             try {
                 const {
                     data: { data, retCode, message }

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:08:36
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-05 20:54:26
+ * @LastEditTime: 2022-02-01 12:12:07
  */
 
 import Interview from "../db/models/Interviewees";
@@ -14,7 +14,8 @@ const getSchedule = async (params) => {
 		"schedules.date": {
 			$gte: new Date(params.beginDate),
 			$lte: new Date(params.endDate)
-		}
+		},
+		isDelete: false
 	};
 	const res = await Interview.find(mp, {
 		name: 1,

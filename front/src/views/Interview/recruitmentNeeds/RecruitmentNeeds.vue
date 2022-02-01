@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-07-17 15:06:22
+ * @LastEditTime: 2022-02-01 12:00:46
 -->
 <template>
     <div class="originNums">
@@ -462,9 +462,15 @@ export default {
         },
         // 保存新增
         async addCruitment() {
-            this.loading = true;
             const params = JSON.parse(JSON.stringify(this.newLine));
             params.userId = this.userId;
+            const num = Number(params.num);
+            if (params.num == "" || isNaN(num)) {
+                this.$message.error("人数必须是数字");
+                return;
+            }
+            params.num = num;
+            this.loading = true;
             try {
                 const {
                     data: { data, retCode, message }
@@ -498,6 +504,12 @@ export default {
         async submitEdit() {
             const params = JSON.parse(JSON.stringify(this.editLine));
             params.userId = this.userId;
+            const num = Number(params.num);
+            if (params.num == "" || isNaN(num)) {
+                this.$message.error("人数必须是数字");
+                return;
+            }
+            params.num = num;
             try {
                 const {
                     data: { data, retCode, message }

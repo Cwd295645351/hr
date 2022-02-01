@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-09 23:48:12
+ * @LastEditTime: 2022-02-01 12:14:04
  */
 
 import xss from "xss";
@@ -45,6 +45,7 @@ export const getStatisticsData = async (params) => {
 		};
 	}
 	mp.majorId = new RegExp(params.majorId, "ig");
+	mp.isDelete = false;
 	const res = await Interview.find(mp, {
 		channelName: 1,
 		statusId: 1
@@ -70,6 +71,7 @@ export const getEntryRate = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
+	mp.isDelete = false;
 	const res = await Interview.find(mp, { majorName: 1, statusId: 1 });
 	return res;
 };
@@ -110,7 +112,17 @@ export const getOriginNums = async (params) => {
 			$in: params.majorId
 		};
 	}
-	const res = await OriginNums.find(mp)
+	const filterData = {
+		date: 1,
+		majorId: 1,
+		majorName: 1,
+		property: 1,
+		channelId: 1,
+		channelName: 1,
+		originNum: 1,
+		passNum: 1
+	};
+	const res = await OriginNums.find(mp, filterData)
 		.sort({ date: -1, _id: 1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
