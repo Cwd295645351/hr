@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-07-06 21:57:14
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:15:15
+ * @LastEditTime: 2022-02-01 12:33:34
  */
 import xss from "xss";
 import mongoose from "../db/db";
@@ -30,6 +30,7 @@ export const getList = async (params) => {
 	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
 	const pageSize = params.pageSize;
 	mp.userId = params.userId;
+	mp.isDelete = false;
 	const filterData = {
 		date: 1,
 		majorId: 1,
@@ -120,8 +121,16 @@ export const editRecruitment = async (data) => {
 export const deleteRecruitment = async (data) => {
 	const mp = {
 		_id: mongoose.Types.ObjectId(data.id),
-		userId: data.userId
+		userId: data.userId,
+		isDelete: false
 	};
-	const res = await RecruitmentNeeds.findOneAndDelete(mp);
-	return res;
+	const res = await RecruitmentNeeds.findOneAndUpdate(
+		mp,
+		{
+			isDelete: true
+		},
+		{ new: true }
+	);
+	if (res) return true;
+	else return false;
 };

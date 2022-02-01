@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 11:50:15
+ * @LastEditTime: 2022-02-01 12:37:21
 -->
 <template>
     <div class="originNums">
@@ -454,7 +454,8 @@ export default {
                 channelId: "",
                 property: "",
                 originNum: "",
-                passNum: ""
+                passNum: "",
+                isDelete: false
             };
             this.tableData.unshift(this.newLine);
         },

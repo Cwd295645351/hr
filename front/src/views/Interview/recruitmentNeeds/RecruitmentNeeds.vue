@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:00:46
+ * @LastEditTime: 2022-02-01 12:32:04
 -->
 <template>
     <div class="originNums">
@@ -422,7 +422,8 @@ export default {
                 actualArrivalTime: "",
                 recruitmentTime: "",
                 schedule: "",
-                remark: ""
+                remark: "",
+                isDelete: false
             };
             this.tableData.unshift(this.newLine);
         },

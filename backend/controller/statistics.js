@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:14:04
+ * @LastEditTime: 2022-02-01 12:36:55
  */
 
 import xss from "xss";
@@ -112,6 +112,7 @@ export const getOriginNums = async (params) => {
 			$in: params.majorId
 		};
 	}
+	mp.isDelete = false;
 	const filterData = {
 		date: 1,
 		majorId: 1,
@@ -200,8 +201,16 @@ export const editOriginNums = async (data) => {
 export const deleteOriginNums = async (data) => {
 	const mp = {
 		_id: mongoose.Types.ObjectId(data.id),
-		userId: data.userId
+		userId: data.userId,
+		isDelete: false
 	};
-	const res = await OriginNums.findOneAndDelete(mp);
-	return res;
+	const res = await OriginNums.findOneAndUpdate(
+		mp,
+		{
+			isDelete: true
+		},
+		{ new: true }
+	);
+	if (res) return true;
+	else return false;
 };
