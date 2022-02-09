@@ -4,10 +4,10 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:22:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-07-06 22:40:22
+ * @LastEditTime: 2022-02-09 22:16:57
  */
 
-export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:8000";
+export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:80";
 
 export const LOGIN = `${HOST}/api/user/login`; // 登录
 export const REFRESH_TOKEN = `${HOST}/api/user/refreshToken`; // 刷新token

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-07-06 23:24:47
+ * @LastEditTime: 2022-02-09 22:14:09
 -->
 <template>
     <div class="main">
@@ -47,15 +47,15 @@ export default {
             current_module: "面试",
             modules: [
                 {
-                    title: "面试",
+                    title: "招聘",
                     route: "/main/interview"
                 },
                 {
-                    title: "人员",
+                    title: "HR",
                     route: "/main/user"
                 },
                 {
-                    title: "薪酬",
+                    title: "HR",
                     route: "/main/salary"
                 }
             ]
