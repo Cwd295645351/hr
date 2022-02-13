@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 23:28:47
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:11:15
+ * @LastEditTime: 2022-02-13 18:07:53
  */
 
 import xss from "xss";
@@ -199,11 +199,10 @@ export const editInfo = async (data, isFromInfo) => {
 export const hideInfo = async (data) => {
 	const mp = {
 		_id: mongoose.Types.ObjectId(data.id),
-		userId: data.userId,
-		isDelete: false
+		userId: data.userId
 	};
 	let res = null;
-	if (data.isFromInfo) {
+	if (!data.isFromInfo) {
 		res = await JoinInfo.findOneAndUpdate(
 			mp,
 			{

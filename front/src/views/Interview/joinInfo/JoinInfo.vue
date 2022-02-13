@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 22:40:18
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-22 15:02:41
+ * @LastEditTime: 2022-02-13 18:09:04
 -->
 <template>
     <div class="joinInfo">
@@ -400,8 +400,8 @@ export default {
                         id: row.id,
                         isFromInfo: false
                     };
-                    if (row.updatedAt) {
-                        // 数据存在面试表
+                    if (!row.updatedAt) {
+                        // 数据存在面试表(只有从入职信息表中获取的数据才有updatedAt字段)
                         params.isFromInfo = true;
                     }
                     const {
