@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-02-27 22:19:05
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:36:00
+ * @LastEditTime: 2022-02-13 18:18:23
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -18,11 +18,7 @@ const OriginNumsSchema = mongoose.Schema(
 			type: Date,
 			required: true,
 			get: (v) => {
-				if (v) {
-					return dayjs(v).format("YYYY-MM-DD");
-				} else {
-					return "";
-				}
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
 		// 专业id

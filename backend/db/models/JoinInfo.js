@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 21:27:19
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-10 19:26:28
+ * @LastEditTime: 2022-02-13 18:17:37
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -12,58 +12,33 @@ import dayjs from "dayjs";
 // 用 Schema 定义数据规范
 const JoinInfoSchema = mongoose.Schema(
 	{
-		userId: {
-			// 用户id
-			type: String,
-			required: true
-		},
-		NO: {
-			// 档案编号
-			type: String
-		},
+		// 用户id
+		userId: { type: String, required: true },
+		// 档案编号
+		NO: { type: String },
+		// 入职时间
 		joinDate: {
-			// 入职时间
 			type: Date,
 			get: (v) => {
-				if (v) {
-					return dayjs(v).format("YYYY-MM-DD");
-				} else {
-					return "";
-				}
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
-		property: {
-			// 性质
-			type: String
-		},
-		name: {
-			// 姓名
-			type: String
-		},
-		apartment: {
-			// 部门
-			type: String
-		},
-		phoneNum: {
-			// 电话号码
-			type: String
-		},
-		joinRemark: {
-			// 入职备注
-			type: String
-		},
-		statusId: {
-			// 状态id
-			type: String
-		},
-		statusName: {
-			// 状态名称
-			type: String
-		},
-		hideTag: {
-			// 隐藏标志
-			type: String
-		}
+		// 性质
+		property: { type: String },
+		// 姓名
+		name: { type: String },
+		// 部门
+		apartment: { type: String },
+		// 电话号码
+		phoneNum: { type: String },
+		// 入职备注
+		joinRemark: { type: String },
+		// 状态id
+		statusId: { type: String },
+		// 状态名称
+		statusName: { type: String },
+		// 隐藏标志
+		hideTag: { type: String }
 	},
 	{ timestamps: true }
 );

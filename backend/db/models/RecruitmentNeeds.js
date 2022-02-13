@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-07-06 21:45:27
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:26:01
+ * @LastEditTime: 2022-02-13 18:18:31
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -17,11 +17,7 @@ const RecruitmentNeedsSchema = mongoose.Schema(
 		date: {
 			type: Date,
 			get: (v) => {
-				if (v) {
-					return dayjs(v).format("YYYY-MM-DD");
-				} else {
-					return "";
-				}
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
 		// 专业id
