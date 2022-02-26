@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2022-02-13 17:03:50
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 17:15:26
+ * @LastEditTime: 2022-02-13 22:34:32
  */
 
 import mongoose from "../db";
@@ -13,13 +13,13 @@ import mongoose from "../db";
 const InterviewerSchema = mongoose.Schema(
 	{
 		// id
-		id: { type: String, required: true, unique: true },
+		id: { type: Number, required: true, unique: true },
 		// 名称
 		name: { type: String, required: true },
 		// 排序
-		sort: { type: String, required: true },
+		sort: { type: String, required: true, unique: true },
 		// 是否在职
-		onWork: { type: String, required: true }
+		onWork: { type: Boolean, required: true }
 	},
 	{ timestamps: true }
 );

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-24 22:59:19
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 16:48:34
+ * @LastEditTime: 2022-02-13 22:34:42
  */
 
 import mongoose from "../db";
@@ -16,7 +16,7 @@ const ChannelSchema = mongoose.Schema(
 		// 名称
 		name: { type: String, required: true },
 		// 排序
-		sort: { type: String, required: true }
+		sort: { type: String, required: true, unique: true }
 	},
 	{ timestamps: true }
 );

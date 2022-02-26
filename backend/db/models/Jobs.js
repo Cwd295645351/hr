@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-24 22:55:45
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 17:15:32
+ * @LastEditTime: 2022-02-13 22:34:58
  */
 
 import mongoose from "../db";
@@ -13,11 +13,11 @@ import mongoose from "../db";
 const JobSchema = mongoose.Schema(
 	{
 		// 部门id
-		apartmentId: { type: String, required: true, unique: true },
+		apartmentId: { type: Number, required: true, unique: true },
 		// 部门名称
 		apartmentName: { type: String, required: true },
 		// 排序
-		sort: { type: String, required: true },
+		sort: { type: String, required: true, unique: true },
 		// 职位
 		jobs: { type: Array, required: true }
 	},

@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 18:11:44
+ * @LastEditTime: 2022-02-24 23:38:37
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -90,7 +90,7 @@ const IntervieweesSchema = mongoose.Schema(
 		NO: { type: String },
 		// 入职备注
 		joinRemark: { type: String },
-		// 隐藏标志(隐藏入职信息)
+		// 隐藏标志(隐藏入职信息):"1"=隐藏，"0"=显示
 		hideTag: { type: String },
 		// 是否删除
 		isDelete: { type: Boolean }
