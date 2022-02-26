@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-24 23:38:37
+ * @LastEditTime: 2022-02-26 23:29:51
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -29,11 +29,11 @@ const IntervieweesSchema = mongoose.Schema(
 		// 应聘职位名称
 		jobName: { type: String },
 		// 类别id
-		propertyId: { type: Number },
+		typeId: { type: Number },
 		// 类别名称
-		propertyName: { type: String },
+		typeName: { type: String },
 		// 招聘渠道id
-		channelId: { type: Number },
+		channelId: { type: String },
 		// 招聘渠道名称
 		channelName: { type: String },
 		// 姓名
@@ -67,8 +67,10 @@ const IntervieweesSchema = mongoose.Schema(
 		},
 		// 是否在职（0=否，1=是）
 		isWork: { type: Number },
+		// 阶段id
+		stageId: { type: Number },
 		// 状态id
-		statusId: { type: Number },
+		statusId: { type: String },
 		// 状态名称
 		statusName: { type: String },
 		// 入职时间

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:13:18
+ * @LastEditTime: 2022-02-26 23:50:56
  */
 
 import xss from "xss";
@@ -14,15 +14,18 @@ import Interview from "../db/models/Interviewees";
 import {
 	getMajorNameById,
 	getChannelNameById,
-	getStatusNameById
+	getStatusNameById,
+	getJobName,
+	getConfig
 } from "./common";
 
 // 遍历对象，将对象属性进行xss防御
 const xssData = (data) => {
 	if (typeof data == "string" || typeof data == "number") {
-		return xss(data);
+		return data !== 0 ? xss(data) : 0;
 	} else {
 		for (let key in data) {
+			
 			data[key] = xssData(data[key]);
 		}
 		return data;
@@ -31,7 +34,13 @@ const xssData = (data) => {
 
 // 获取面试情况列表
 export const getList = async (params) => {
-	let mp = {};
+	let mp = {
+		userId: params.userId,
+		stageId: params.stageId,
+		statusId: params.statusId,
+		name: new RegExp(params.name, "ig"),
+		isDelete: false
+	};
 	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
 	const pageSize = params.pageSize;
 
@@ -49,38 +58,39 @@ export const getList = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
-	mp.userId = params.userId;
-	mp.majorId = new RegExp(params.majorId, "ig");
-	mp.channelId = new RegExp(params.channelId, "ig");
-	mp.name = new RegExp(params.name, "ig");
-	mp.phoneNum = new RegExp(params.phoneNum, "ig");
-	mp.email = new RegExp(params.email, "ig");
-	mp.isDelete = false;
-	if (params.statusId && params.statusId.length > 0) {
-		mp.statusId = {
-			$in: params.statusId
-		};
-	}
 
 	const filterData = {
 		date: 1,
-		majorId: 1,
-		majorName: 1,
-		property: 1,
+		apartmentId: 1,
+		apartmentName: 1,
+		jobId: 1,
+		jobName:1,
+		typeId: 1,
+		typeName: 1,
 		channelId: 1,
 		channelName: 1,
 		name: 1,
+		sex: 1,
 		phoneNum: 1,
 		email: 1,
+		city: 1,
+		school: 1,
+		schoolPropertyId: 1,
+		schoolPropertyName: 1,
+		degreeId: 1,
+		degreeName: 1,
+		isFullTime: 1,
+		graduationDate: 1,
+		isWork: 1,
 		statusId: 1,
 		statusName: 1,
 		joinDate: 1,
-		apartment: 1,
-		remark: 1,
 		schedules: 1,
-		phoneInterviewSituation: 1,
-		fileList: 1
-	}
+		isArrivalInterview: 1,
+		fileList: 1,
+		remark: 1,
+		schedules: 1
+	};
 
 	const res = await Interview.find(mp, filterData)
 		.sort({ date: -1, "schedules.date": -1, _id: 1 })
@@ -95,19 +105,29 @@ export const getList = async (params) => {
 
 // 添加面试者
 export const addInterviewee = async (data) => {
-	xssData(data);
+		xssData(data);
 	try {
-		const majorName = await getMajorNameById(data.majorId);
-		data.majorName = majorName;
-		const channelName = await getChannelNameById(data.channelId);
-		data.channelName = channelName;
-		const statusName = await getStatusNameById(data.statusId);
-		data.statusName = statusName;
+		const apartment = await getJobName(data.apartmentId, data.jobId);
+		data.apartmentName = apartment.apartmentName;
+		data.jobName = apartment.jobName;
+
+		const config = await getConfig();
+		data.schoolPropertyName = config.schoolProperty.find(
+			(item) => item.id == data.schoolPropertyId
+		).name;
+		data.degreeName = config.degree.find(
+			(item) => item.id == data.degreeId
+		).name;
+		data.typeName = config.type.find((item) => item.id == data.typeId).name;
+		data.channelName = await getChannelNameById(data.channelId);
+		data.statusName = await getStatusNameById(data.stageId, data.statusId);
+		console.log(data);
 		const res = await Interview.create(data);
 		return {
-			retCode: 0
+			retCode: res ? 0 : 1
 		};
 	} catch (e) {
+		console.log(e);
 		return {
 			retCode: 1,
 			err: e

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-10 22:39:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 22:14:50
+ * @LastEditTime: 2022-02-26 22:12:11
  */
 import Router from "koa-router";
 import {
@@ -56,7 +56,7 @@ router.get("/getStatusList", async (ctx, next) => {
 // 获取配置
 router.get("/getConfig", async (ctx, next) => {
 	const res = await getConfig();
-	if (res.length >= 0) {
+	if (res) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
 		ctx.body = new ErrorModel("", "获取失败");

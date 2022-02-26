@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2020-12-24 22:55:45
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 17:02:52
+ * @LastEditTime: 2022-02-26 22:51:55
  */
 
 import mongoose from "../db";
@@ -13,9 +13,9 @@ import mongoose from "../db";
 const StatusSchema = mongoose.Schema(
 	{
 		// id
-		id: { type: String, required: true, unique: true },
+		stageId: { type: Number, required: true, unique: true },
 		// 名称
-		name: { type: String, required: true }
+		status: { type: Array }
 	},
 	{ timestamps: true }
 );

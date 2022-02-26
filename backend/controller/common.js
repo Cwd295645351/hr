@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-10 17:33:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-21 23:37:44
+ * @LastEditTime: 2022-02-26 22:56:33
  */
 
 // 招聘渠道
@@ -35,20 +35,24 @@ export const getChannelNameById = async (id) => {
 // 获取所有配置
 export const getConfig = async () => {
 	const res = await Config.find({}, { _id: 0 });
-	const config = res[0];
-	config.degree.sort((a, b) => {
-		return a.sort - b.sort;
-	});
-	config.mode.sort((a, b) => {
-		return a.sort - b.sort;
-	});
-	config.schoolProperty.sort((a, b) => {
-		return a.sort - b.sort;
-	});
-	config.type.sort((a, b) => {
-		return a.sort - b.sort;
-	});
-	return res;
+	if (res) {
+		const config = res[0];
+		config.degree.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+		config.mode.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+		config.schoolProperty.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+		config.type.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+		return config;
+	} else {
+		return null;
+	}
 };
 
 // 获取所有状态
@@ -60,9 +64,13 @@ export const getStatusList = async () => {
 };
 
 // 根据状态Id获取状态Name
-export const getStatusNameById = async (id) => {
-	const res = await Status.findOne({ id: id }, { _id: 0, name: 1 });
-	return (res && res.name) || null;
+export const getStatusNameById = async (stageId, statusId) => {
+	const res = await Status.findOne({ stageId: stageId }, { _id: 0, status: 1 });
+	if (res) {
+		return res.status.find(item => item.id == statusId).name;
+	} else {
+		return null;
+	}
 };
 
 // 获取职位列表
@@ -89,7 +97,7 @@ export const getJobName = async (apartmentId, jobId) => {
 		{ _id: 0, apartmentName: 1, jobs: 1 }
 	);
 	if (apartment) {
-		const jobName = apartment.jobs.find((item) => item.id === jobId);
+		const jobName = apartment.jobs.find((item) => item.id == jobId).name;
 		if (jobName) {
 			return {
 				apartmentName: apartment.apartmentName,

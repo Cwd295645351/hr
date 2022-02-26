@@ -4,18 +4,18 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 11:02:45
+ * @LastEditTime: 2022-02-26 23:59:11
 -->
 !<template>
     <div class="">
         <el-table
-            :data="tableData"
+            :data="tableDatas"
             style="width: 100%"
             border
             class="table-box"
             max-height="730"
         >
-            <el-table-column align="center" label="日期" width="95">
+            <el-table-column align="center" label="简历推送日期" width="130">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-date-picker
@@ -30,57 +30,85 @@
                     <div v-else>{{ scope.row.date }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="专业" width="80">
+            <el-table-column align="center" label="应聘部门" width="100">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
-                            v-model="newLine.majorId"
-                            placeholder="请选择专业"
+                            v-model="newLine.apartmentId"
+                            placeholder="请选择部门"
                             size="small"
                             clearable
                         >
                             <el-option
-                                v-for="(item, index) in majorOptions"
-                                :key="item + '_newLine_' + index"
-                                :label="item.majorName"
-                                :value="item.majorId"
+                                v-for="(item, index) in jobOptions"
+                                :key="item + '_apartment_' + index"
+                                :label="item.apartmentName"
+                                :value="item.apartmentId"
                             ></el-option>
                         </el-select>
                     </div>
                     <div
                         class="major"
                         :style="{
-                            'background-color': majorsColor[scope.row.majorId]
+                            'background-color': majorsColor[scope.row.jobId]
                         }"
                         v-else
                     >
-                        {{ scope.row.majorName }}
+                        {{ scope.row.apartmentName }}
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column width="60" align="center" label="性质">
+            <el-table-column width="100" align="center" label="应聘职位">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
-                            v-model="newLine.property"
-                            placeholder="选择性质"
+                            v-model="newLine.jobId"
+                            placeholder="请选择职位"
                             size="small"
                             clearable
                         >
                             <el-option
-                                v-for="(item, index) in propertyOptions"
-                                :key="item + '_propertyOptions_' + index"
-                                :label="item.label"
-                                :value="item.value"
+                                v-for="(item, index) in jobs"
+                                :key="item + '_jobOptions_' + index"
+                                :label="item.name"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select>
+                    </div>
+                    <div
+                        class="major"
+                        :style="{
+                            'background-color': majorsColor[scope.row.jobId]
+                        }"
+                        v-else
+                    >
+                        {{ scope.row.jobName }}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column width="60" align="center" label="类别">
+                <template slot-scope="scope">
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
+                        <el-select
+                            v-model="newLine.typeId"
+                            placeholder="请选择类别"
+                            size="small"
+                            clearable
+                        >
+                            <el-option
+                                v-for="(item, index) in types"
+                                :key="item + '_typesOptions_' + index"
+                                :label="item.name"
+                                :value="item.id"
                             ></el-option>
                         </el-select>
                     </div>
                     <div v-else>
-                        {{ scope.row.property }}
+                        {{ scope.row.typeName }}
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="渠道" width="130">
+            <el-table-column align="center" label="招聘渠道" width="100">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -92,8 +120,8 @@
                             <el-option
                                 v-for="(item, index) in channelOptions"
                                 :key="item + '_channelOptions_' + index"
-                                :label="item.channelName"
-                                :value="item.channelId"
+                                :label="item.name"
+                                :value="item.id"
                             ></el-option>
                         </el-select>
                     </div>
@@ -113,13 +141,41 @@
                     <div v-else>{{ scope.row.name }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="手机号" width="110">
+            <el-table-column align="center" label="性别" width="80">
+                <template slot-scope="scope">
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
+                        <el-select
+                            v-model="newLine.sex"
+                            size="small"
+                            placeholder="请选择性别"
+                            clearable
+                        >
+                            <el-option
+                                v-for="(item, index) in sexOptions"
+                                :key="item + '_sex_' + index"
+                                :label="item.name"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select>
+                    </div>
+                    <div v-else>
+                        {{
+                            scope.row.sex !== ""
+                                ? scope.row.sex
+                                    ? "男"
+                                    : "女"
+                                : ""
+                        }}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="电话" width="110">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-input
                             v-model="newLine.phoneNum"
                             size="small"
-                            placeholder="请输入手机号"
+                            placeholder="请输入电话"
                             clearable
                         ></el-input>
                     </div>
@@ -139,46 +195,105 @@
                     <div v-else>{{ scope.row.email }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="当前简历状态" width="100">
+            <el-table-column align="center" label="所在城市" width="160">
+                <template slot-scope="scope">
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
+                        <el-input
+                            v-model="newLine.city"
+                            size="small"
+                            placeholder="请输入所在城市"
+                            clearable
+                        ></el-input>
+                    </div>
+                    <div v-else>{{ scope.row.city }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="毕业学校" width="160">
+                <template slot-scope="scope">
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
+                        <el-input
+                            v-model="newLine.school"
+                            size="small"
+                            placeholder="请输入毕业学校"
+                            clearable
+                        ></el-input>
+                    </div>
+                    <div v-else>{{ scope.row.school }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="学校性质" width="130">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
-                            v-model="newLine.statusId"
+                            v-model="newLine.schoolPropertyId"
                             size="small"
-                            placeholder="请选择简历状态"
+                            placeholder="请选择学校性质"
                             clearable
                         >
                             <el-option
-                                v-for="(item, index) in statusOptions"
-                                :key="item + '_statusOptions_' + index"
-                                :label="item.statusName"
-                                :value="item.statusId"
+                                v-for="(item, index) in schoolProperty"
+                                :key="item + '_schoolProperty_' + index"
+                                :label="item.name"
+                                :value="item.id"
                             ></el-option>
                         </el-select>
                     </div>
-                    <div
-                        class="status"
-                        v-else
-                        :style="{
-                            'background-color': statusColor[scope.row.statusId]
-                        }"
-                    >
-                        {{ scope.row.statusName }}
+                    <div v-else>{{ scope.row.schoolPropertyName }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="学历" width="130">
+                <template slot-scope="scope">
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
+                        <el-select
+                            v-model="newLine.degreeId"
+                            size="small"
+                            placeholder="请选择学历"
+                            clearable
+                        >
+                            <el-option
+                                v-for="(item, index) in degrees"
+                                :key="item + '_degrees_' + index"
+                                :label="item.name"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select>
+                    </div>
+                    <div v-else>{{ scope.row.degreeName }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="是否全日制" width="130">
+                <template slot-scope="scope">
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
+                        <el-select
+                            v-model="newLine.isFullTime"
+                            size="small"
+                            placeholder="请选择学历"
+                            clearable
+                        >
+                            <el-option
+                                v-for="(item, index) in fullTimeOptions"
+                                :key="item + '_fullTime_' + index"
+                                :label="item.name"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select>
+                    </div>
+                    <div v-else>
+                        {{
+                            scope.row.isFullTime !== ""
+                                ? scope.row.isFullTime
+                                    ? "是"
+                                    : "否"
+                                : ""
+                        }}
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="入职时间" width="95">
+            <el-table-column align="center" label="毕业时间" width="95">
                 <template slot-scope="scope">
-                    <div
-                        v-if="
-                            scope.$index == 0 &&
-                            tableStatus == 'add' &&
-                            (scope.row.statusId == 'join' ||
-                                scope.row.statusId == 'joining')
-                        "
-                    >
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-date-picker
-                            v-model="newLine.joinDate"
+                            v-model="newLine.graduationDate"
                             type="date"
                             size="small"
                             value-format="yyyy-MM-dd"
@@ -186,49 +301,101 @@
                             clearable
                         ></el-date-picker>
                     </div>
-                    <div
-                        v-else-if="
-                            scope.row.statusId == 'join' ||
-                            scope.row.statusId == 'joining'
-                        "
-                    >
-                        {{ scope.row.joinDate }}
-                    </div>
+                    <div v-else>{{ scope.row.graduationDate }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="入职部门" width="95">
+            <el-table-column align="center" label="是否在职" width="130">
                 <template slot-scope="scope">
-                    <div
-                        v-if="
-                            scope.$index == 0 &&
-                            tableStatus == 'add' &&
-                            (scope.row.statusId == 'join' ||
-                                scope.row.statusId == 'joining')
-                        "
-                    >
-                        <el-input
-                            v-model="newLine.apartment"
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
+                        <el-select
+                            v-model="newLine.isWork"
                             size="small"
-                            placeholder="请输入部门"
+                            placeholder="请选择是否在职"
                             clearable
-                        ></el-input>
+                        >
+                            <el-option
+                                v-for="(item, index) in isWorkOptions"
+                                :key="item + '_isWork_' + index"
+                                :label="item.name"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select>
                     </div>
-                    <div
-                        v-else-if="
-                            scope.row.statusId == 'join' ||
-                            scope.row.statusId == 'joining'
-                        "
-                    >
-                        {{ scope.row.apartment }}
+                    <div v-else>
+                        {{
+                            scope.row.isWork !== ""
+                                ? scope.row.isWork
+                                    ? "是"
+                                    : "否"
+                                : ""
+                        }}
                     </div>
                 </template>
             </el-table-column>
+            <!-- 面试信息 -->
+            <template v-if="schedulesLabels.length > 0">
+                <el-table-column
+                    v-for="(item, index) in schedulesLabels"
+                    :key="'schedules_' + item"
+                    align="center"
+                    :label="schedulesLabels[index]"
+                >
+                    <el-table-column width="95" align="center" label="通知日期">
+                        <template slot-scope="scope">
+                            <div>
+                                {{ scope.row.schedules[index].noticeTime }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="95" align="center" label="面试形式">
+                        <template slot-scope="scope">
+                            <div>
+                                {{ scope.row.schedules[index].modeName }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="95" align="center" label="面试日期">
+                        <template slot-scope="scope">
+                            <div>
+                                {{ scope.row.schedules[index].interviewDate }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="95" align="center" label="面试时间">
+                        <template slot-scope="scope">
+                            <div>
+                                {{ scope.row.schedules[index].interviewTime }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="95" align="center" label="面试官">
+                        <template slot-scope="scope">
+                            <div>
+                                {{ scope.row.schedules[index].interviewerName }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table-column>
+            </template>
             <el-table-column
+                v-if="statusId !== 'pass' && statusId !== 'attendInterview'"
                 align="center"
-                prop="remark"
-                label="备注"
+                label="是否到面"
                 width="130"
             >
+                <template slot-scope="scope">
+                    <div>
+                        {{
+                            scope.row.isArrivalInterview !== ""
+                                ? scope.row.isArrivalInterview
+                                    ? "是"
+                                    : "否"
+                                : ""
+                        }}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="备注" width="130">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-input
@@ -238,128 +405,28 @@
                             v-model="newLine.remark"
                         ></el-input>
                     </div>
-                    <div class="remark" v-else>
-                        {{ scope.row.remark }}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column align="center" label="面试信息">
-                <el-table-column width="95" align="center" label="日期">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                            <el-date-picker
-                                v-if="
-                                    newLine.statusId &&
-                                    newLine.statusId != 'pass' &&
-                                    newLine.statusId != 'noAnswer'
-                                "
-                                v-model="newLine.schedules.date"
-                                type="date"
-                                size="small"
-                                value-format="yyyy-MM-dd"
-                                placeholder="选择日期"
-                                clearable
-                            ></el-date-picker>
-                        </div>
-                        <div v-else>{{ scope.row.schedules.date }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column width="60" align="center" label="时间">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                            <el-time-select
-                                v-if="
-                                    newLine.statusId &&
-                                    newLine.statusId != 'pass' &&
-                                    newLine.statusId != 'noAnswer'
-                                "
-                                v-model="newLine.schedules.time"
-                                size="small"
-                                placeholder="选择时间"
-                                :picker-options="{
-                                    start: '08:00',
-                                    step: '00:15',
-                                    end: '20:00'
-                                }"
-                                clearable
-                            ></el-time-select>
-                        </div>
-                        <div v-else>{{ scope.row.schedules.time }}</div>
-                    </template>
-                </el-table-column>
-
-                <el-table-column width="60" align="center" label="面试形式">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                            <el-select
-                                v-if="
-                                    newLine.statusId &&
-                                    newLine.statusId != 'pass' &&
-                                    newLine.statusId != 'noAnswer'
-                                "
-                                v-model="newLine.schedules.form"
-                                placeholder="选择面试形式"
-                                size="small"
-                                clearable
-                            >
-                                <el-option
-                                    v-for="(item, index) in formOptions"
-                                    :key="item + '_formOptions_' + index"
-                                    :label="item.label"
-                                    :value="item.value"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div v-else>{{ scope.row.schedules.form }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column width="80" align="center" label="面试官">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                            <el-input
-                                v-if="
-                                    newLine.statusId &&
-                                    newLine.statusId != 'pass' &&
-                                    newLine.statusId != 'noAnswer'
-                                "
-                                v-model="newLine.schedules.interviewer"
-                                size="small"
-                                placeholder="请输入面试官"
-                                clearable
-                            ></el-input>
-                        </div>
-                        <div v-else>
-                            {{ scope.row.schedules.interviewer }}
-                        </div>
-                    </template>
-                </el-table-column>
-            </el-table-column>
-            <el-table-column align="center" label="电话面试情况" width="200">
-                <template slot-scope="scope">
-                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                        <el-input
-                            type="textarea"
-                            autosize
-                            placeholder="请输入电话面试情况"
-                            v-model="newLine.phoneInterviewSituation"
-                        ></el-input>
-                    </div>
-                    <div class="phone-interview-situation" v-else>
+                    <div class="remark-situation" v-else>
                         <el-tooltip
-                            :content="scope.row.phoneInterviewSituation"
-                            popper-class="phone-situation-tooltip"
+                            :content="scope.row.remark"
+                            popper-class="remark-tooltip"
                             placement="top"
                         >
-                            <pre>{{ scope.row.phoneInterviewSituation }}</pre>
+                            <pre>{{ scope.row.remark }}</pre>
                         </el-tooltip>
                     </div>
                 </template>
             </el-table-column>
-
+            <el-table-column
+                v-if="joinDateShow"
+                align="center"
+                label="入职时间"
+                prop="joinDate"
+                width="95"
+            >
+            </el-table-column>
             <el-table-column align="center" label="相关材料" width="100">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'"></div>
-                    <!-- <div v-else>{{ scope.row.relatedMaterials }}</div> -->
                     <div v-else>
                         <div v-for="item in scope.row.fileList" :key="item.url">
                             <a :href="item.url" target="_blank">{{
@@ -369,7 +436,12 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="操作" width="90">
+            <el-table-column
+                v-if="stageId !== 6"
+                align="center"
+                label="操作"
+                width="90"
+            >
                 <template slot-scope="scope">
                     <div v-if="tableStatus == 'view' || scope.$index > 0">
                         <el-link
@@ -391,20 +463,30 @@
 <script>
 export default {
     props: {
+        // 面试阶段：1=初筛，2=面试，3=录用，4=待入职，5=到岗，6=人才库
+        stageId: { type: Number, default: 1 },
+        // 当前简历列表对应状态
+        statusId: { type: String, default: "" },
         // 表格状态：view=查看，add=新增
         tableStatus: { type: String, default: "view" },
         // 新增数据
         newLine: { type: Object, default: () => {} },
         // 表格数据
-        tableData: { type: Array, default: () => [] },
-        // 渠道数组
+        tableDatas: { type: Array, default: () => [] },
+        // 招聘渠道数组
         channelOptions: { type: Array, default: () => [] },
-        // 当前简历状态数组
-        statusOptions: { type: Array, default: () => [] },
-        // 专业数组
-        majorOptions: { type: Array, default: () => [] },
-        // 性质数组
-        propertyOptions: { type: Array, default: () => [] }
+        // 部门职位数组
+        jobOptions: { type: Array, default: () => [] },
+        // 面试官数组
+        interviewerOptions: { type: Array, default: () => [] },
+        // 学校性质数组
+        schoolProperty: { type: Array, default: () => [] },
+        // 学历数组
+        degrees: { type: Array, default: () => [] },
+        // 面试形式数组
+        modes: { type: Array, default: () => [] },
+        // 类别数组
+        types: { type: Array, default: () => [] }
     },
     data() {
         return {
@@ -438,11 +520,72 @@ export default {
                 front: "#009999",
                 landScape: "#66cccc",
                 hr: "#cc3333"
-            }
+            },
+            // 是否全日制
+            fullTimeOptions: [
+                { id: 1, name: "是" },
+                { id: 0, name: "否" }
+            ],
+            // 性别
+            sexOptions: [
+                { id: 0, name: "男" },
+                { id: 1, name: "女" }
+            ],
+            // 是否在职
+            isWorkOptions: [
+                { id: 1, name: "是" },
+                { id: 0, name: "否" }
+            ]
         };
     },
 
     created() {},
+    watch: {},
+    computed: {
+        jobs() {
+            const apartmentId = this.newLine.apartmentId;
+            return apartmentId
+                ? this.jobOptions[this.newLine.apartmentId].jobs
+                : [];
+        },
+        // 入职时间是否显示
+        joinDateShow() {
+            const statusId = this.statusId;
+            if (this.stageId == 6) {
+                return true;
+            } else if (
+                statusId == "offerApproval" ||
+                statusId == "offerConfirm" ||
+                statusId == "joining" ||
+                statusId == "join"
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        // 面试信息
+        schedulesLabels() {
+            let labels = [];
+            if (this.stageId != 6) {
+                switch (this.statusId) {
+                    case "pass":
+                    case "attendInterview":
+                        labels = [];
+                        break;
+                    case "firstInterview":
+                        labels = ["一面信息"];
+                        break;
+                    case "secondInterview":
+                        labels = ["一面信息", "二面信息"];
+                        break;
+                    default:
+                        labels = ["一面信息", "二面信息", "三面信息"];
+                }
+            }
+            return labels;
+        }
+    },
 
     mounted() {},
 
@@ -469,14 +612,17 @@ export default {
         color: #fff;
         border-radius: 4px;
     }
-    .phone-interview-situation {
+    .remark-situation {
         height: 86px;
         text-align: left;
     }
-    .remark {
-        display: flex;
-        align-items: center;
-        text-align: left;
-    }
+}
+</style>
+<style lang="less">
+.remark-tooltip {
+    width: 278px;
+    line-height: 1.5;
+    font-size: 14px;
+    background: #828181 !important;
 }
 </style>
