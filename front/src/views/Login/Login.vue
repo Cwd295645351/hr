@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen Weidong
- * @LastEditTime: 2021-03-28 19:28:34
+ * @LastEditors: Chen
+ * @LastEditTime: 2022-03-01 11:53:24
 -->
 <template>
     <div class="login">
@@ -144,10 +144,12 @@ export default {
             border-radius: 20px;
             left: 50vw;
             top: 50vh;
+            text-align: center;
             transform: translate(-50%, -50%);
             .title {
                 font-weight: bold;
                 font-size: 35px;
+                text-align: center;;
                 height: 60px;
                 margin: 20px;
             }

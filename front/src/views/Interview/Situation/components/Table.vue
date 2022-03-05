@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-26 23:59:11
+ * @LastEditTime: 2022-03-01 23:38:39
 -->
 !<template>
     <div class="">
@@ -437,13 +437,109 @@
                 </template>
             </el-table-column>
             <el-table-column
+                v-if="stageId==6"
+                align="center"
+                label="淘汰状态"
+                prop="statusName"
+                width="95"
+            >
+            </el-table-column>
+            <el-table-column
                 v-if="stageId !== 6"
+                fixed="right"
                 align="center"
                 label="操作"
                 width="90"
             >
                 <template slot-scope="scope">
                     <div v-if="tableStatus == 'view' || scope.$index > 0">
+                        <el-link
+                            v-if="statusId == 'pass'"
+                            @click="handleData(scope.row, 0)"
+                            type="info"
+                            class="modify"
+                            >去约面</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'attendInterview'"
+                            @click="handleData(scope.row, 1)"
+                            type="info"
+                            class="modify"
+                            >去一面</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'attendInterview'"
+                            @click="handleData(scope.row, 11)"
+                            type="info"
+                            class="modify"
+                            >设置提醒</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'firstInterview'"
+                            @click="handleData(scope.row, 2)"
+                            type="info"
+                            class="modify"
+                            >去二面</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'secondInterview'"
+                            @click="handleData(scope.row, 3)"
+                            type="info"
+                            class="modify"
+                            >去三面</el-link
+                        >
+                        <el-link
+                            v-if="
+                                statusId == 'firstInterview' ||
+                                statusId == 'secondInterview' ||
+                                statusId == 'thirdInterview'
+                            "
+                            @click="handleData(scope.row, 4)"
+                            type="info"
+                            class="modify"
+                            >录用</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'employ'"
+                            @click="handleData(scope.row, 5)"
+                            type="info"
+                            class="modify"
+                            >已联系</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'contacted'"
+                            @click="handleData(scope.row, 6)"
+                            type="info"
+                            class="modify"
+                            >发offer</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'offerApproval'"
+                            @click="handleData(scope.row, 7)"
+                            type="info"
+                            class="modify"
+                            >通过</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'offerConfirm'"
+                            @click="handleData(scope.row, 8)"
+                            type="info"
+                            class="modify"
+                            >接受</el-link
+                        >
+                        <el-link
+                            v-if="statusId == 'joining'"
+                            @click="handleData(scope.row, 9)"
+                            type="info"
+                            class="modify"
+                            >到岗</el-link
+                        >
+                        <el-link
+                            @click="handleData(scope.row, 10)"
+                            type="info"
+                            class="modify"
+                            >去人才库</el-link
+                        >
                         <el-link
                             @click="editData(scope.row)"
                             type="info"
@@ -593,6 +689,18 @@ export default {
         // 编辑表格
         editData(row) {
             this.$emit("editData", row);
+        },
+        /*
+         表格操作
+         type: 操作类型： 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已联系，
+                         6=发offer，7=通过，8=接受，9=到岗，10=去人才库, 11=设置提醒
+         */
+        handleData(row, type) {
+            const operateInfo = {
+                type: type,
+                data: row
+            };
+            this.$emit("operate", operateInfo);
         },
         // 删除表格
         deleteData(row) {

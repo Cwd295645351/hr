@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-27 00:14:06
+ * @LastEditTime: 2022-03-05 18:42:51
 -->
 <template>
     <div class="tab-content">
@@ -138,6 +138,7 @@
                 :degrees="degrees"
                 :modes="modes"
                 :types="types"
+                @operate="handleData"
             ></my-table>
             <div class="page-container">
                 <el-pagination
@@ -153,12 +154,157 @@
                 </el-pagination>
             </div>
         </div>
+        <el-dialog title="面试日程" :visible.sync="showDialog" width="280px">
+            <el-form
+                :model="operateInfo"
+                label-position="right"
+                label-width="70px"
+            >
+                <el-form-item label="通知日期">
+                    <el-date-picker
+                        v-model="operateInfo.noticeTime"
+                        type="date"
+                        size="small"
+                        value-format="yyyy-MM-dd"
+                        placeholder="选择日期"
+                        clearable
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item label="面试形式">
+                    <el-select
+                        v-model="operateInfo.modeId"
+                        size="small"
+                        placeholder="请选择面试形式"
+                    >
+                        <el-option
+                            v-for="(item, index) in modes"
+                            :key="item.name + '_' + index"
+                            :label="item.name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="面试日期">
+                    <el-date-picker
+                        v-model="operateInfo.interviewDate"
+                        type="date"
+                        size="small"
+                        placeholder="选择日期"
+                        clearable
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item label="面试时间">
+                    <el-time-select
+                        v-model="operateInfo.interviewTime"
+                        size="small"
+                        placeholder="选择时间"
+                        :picker-options="{
+                            start: '08:00',
+                            step: '00:15',
+                            end: '20:00'
+                        }"
+                        clearable
+                    ></el-time-select>
+                </el-form-item>
+                <el-form-item label="面试官">
+                    <el-select
+                        v-model="operateInfo.interviewerId"
+                        placeholder="请选择面试官"
+                        size="small"
+                    >
+                        <el-option
+                            v-for="(item, index) in interviewerOptions"
+                            :key="item.name + '_' + index"
+                            :label="item.name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="showDialog = false"
+                    >取消</el-button
+                >
+                <el-button type="primary" size="small" @click="submitInterview"
+                    >确定</el-button
+                >
+            </div>
+        </el-dialog>
+        <el-dialog
+            title="提醒信息"
+            :visible.sync="showNoticeDialog"
+            width="280px"
+        >
+            <el-form
+                :model="operateInfo"
+                label-position="right"
+                label-width="70px"
+            >
+                <el-form-item label="提醒日期">
+                    <el-date-picker
+                        v-model="noticeInfo.noticeDate"
+                        type="date"
+                        size="small"
+                        value-format="yyyy-MM-dd"
+                        placeholder="选择日期"
+                        clearable
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item label="提醒内容">
+                    <el-input
+                        type="textarea"
+                        autosize
+                        placeholder="请输入备注"
+                        v-model="noticeInfo.noticeStr"
+                    ></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="showNoticeDialog = false"
+                    >取消</el-button
+                >
+                <el-button type="primary" size="small" @click="submitNotice"
+                    >确定</el-button
+                >
+            </div>
+        </el-dialog>
+        <el-dialog
+            title="入职信息"
+            :visible.sync="showJoinDialog"
+            width="280px"
+        >
+            <el-form
+                :model="operateInfo"
+                label-position="right"
+                label-width="70px"
+            >
+                <el-form-item label="入职时间">
+                    <el-date-picker
+                        v-model="joinInfo.joinDate"
+                        type="date"
+                        size="small"
+                        value-format="yyyy-MM-dd"
+                        placeholder="选择日期"
+                        clearable
+                    ></el-date-picker>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="showJoinDialog = false"
+                    >取消</el-button
+                >
+                <el-button type="primary" size="small" @click="submitJoin"
+                    >确定</el-button
+                >
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import {
     addInterviewee,
+    changeSchedule,
     getInterviewList
 } from "../../../../../apis/interview/interview";
 import MyTable from "./Table.vue";
@@ -195,7 +341,7 @@ export default {
             // 简历推送开始日期限制条件
             beginDateOptions: {
                 disabledDate(time) {
-                    if (_this.searchInfo.endDate != "") {
+                    if (_this.searchInfo.endDate) {
                         return time.getTime() > _this.searchInfo.endDate;
                     } else {
                         return false;
@@ -205,7 +351,7 @@ export default {
             // 简历推送结束日期限制条件
             endDateOptions: {
                 disabledDate(time) {
-                    if (_this.searchInfo.beginDate != "") {
+                    if (_this.searchInfo.beginDate) {
                         return time.getTime() < _this.searchInfo.beginDate;
                     } else {
                         return false;
@@ -215,7 +361,7 @@ export default {
             // 面试开始日期限制条件
             interviewBeginDateOptions: {
                 disabledDate(time) {
-                    if (_this.searchInfo.interviewEndDate != "") {
+                    if (_this.searchInfo.interviewEndDate) {
                         return (
                             time.getTime() > _this.searchInfo.interviewEndDate
                         );
@@ -227,7 +373,7 @@ export default {
             // 面试结束日期限制条件
             interviewEndDateOptions: {
                 disabledDate(time) {
-                    if (_this.searchInfo.interviewBeginDate != "") {
+                    if (_this.searchInfo.interviewBeginDate) {
                         return (
                             time.getTime() < _this.searchInfo.interviewBeginDate
                         );
@@ -250,11 +396,18 @@ export default {
             totalJobs: [], // 所有职位列表
             newLine: {}, // 新增数据
             tableDatas: [], // 简历表格数据
-            tableLoading: false,
-            pageIndex: 0,
-            pageSize: 10,
-            total: 0,
-            tableStatus: "view" // 表格状态：view=查看，add=新增
+            tableLoading: false, // 表格loading
+            pageIndex: 0, // 页码
+            pageSize: 10, // 每页数量
+            total: 0, // 总数
+            tableStatus: "view", // 表格状态：view=查看，add=新增
+            operateInfo: {}, // 正在操作的对象
+            showDialog: false, // 弹窗显示
+            noticeInfo: {}, // 强提醒内容
+            showNoticeDialog: false, // 强提醒弹窗显示
+            joinInfo: "", // 入职时间内容,
+            showJoinDialog: false, // 入职时间弹窗显示
+            noticeList: [] // 强提醒队列
         };
     },
 
@@ -262,8 +415,27 @@ export default {
     watch: {
         stageId: {
             handler(id) {
-                const statusObj = this.statusOptions.find(
-                    (item) => item.stageId == id
+                if (id != 6) {
+                    const statusObj = this.statusOptions.find(
+                        (item) => item.stageId == id
+                    );
+                    if (statusObj) {
+                        this.statusId = statusObj.status[0].id;
+                        this.statusArr = statusObj.status;
+                        this.search(1);
+                    } else {
+                        this.statusArr = [];
+                    }
+                } else {
+                    this.search(1);
+                }
+            },
+            immediate: true
+        },
+        statusOptions(option) {
+            if (this.stageId != 6) {
+                const statusObj = option.find(
+                    (item) => item.stageId == this.stageId
                 );
                 if (statusObj) {
                     this.statusId = statusObj.status[0].id;
@@ -272,19 +444,8 @@ export default {
                 } else {
                     this.statusArr = [];
                 }
-            },
-            immediate: true
-        },
-        statusOptions(option) {
-            const statusObj = option.find(
-                (item) => item.stageId == this.stageId
-            );
-            if (statusObj) {
-                this.statusId = statusObj.status[0].id;
-                this.statusArr = statusObj.status;
-                this.search(1);
             } else {
-                this.statusArr = [];
+                this.search(1);
             }
         },
         statusId(statusId) {
@@ -295,9 +456,16 @@ export default {
         },
         jobOptions: {
             handler(options) {
-                this.totalJobs = options.reduce((prev, curr) => {
-                    return prev.concat(curr.jobs);
-                }, []);
+                this.totalJobs = [];
+                options.forEach((item) => {
+                    item.jobs.forEach((ite) => {
+                        const obj = {
+                            ...ite,
+                            id: item.apartmentId + "-" + ite.id
+                        };
+                        this.totalJobs.push(obj);
+                    });
+                });
             },
             immediate: true
         }
@@ -305,6 +473,12 @@ export default {
     computed: {},
 
     mounted() {},
+    beforeDestroy() {
+        this.noticeList.forEach((item) => {
+            item.close();
+        });
+        this.noticeList = [];
+    },
 
     methods: {
         // 查询
@@ -326,13 +500,24 @@ export default {
                     "YYYY-MM-DD"
                 );
             }
+            let interviewBeginDate = "",
+                interviewEndDate = "";
+            if (this.searchInfo.interviewBeginDate) {
+                interviewBeginDate = this.searchInfo.interviewBeginDate.toISOString();
+            }
+            if (this.searchInfo.interviewEndDate) {
+                interviewEndDate = this.searchInfo.interviewEndDate.toISOString();
+            }
             this.tableLoading = true;
             const params = {
                 userId: this.userId,
-                beginDate: beginDate,
                 statusId: this.statusId,
                 stageId: this.stageId,
+                beginDate: beginDate,
                 endDate: endDate,
+                interviewBeginDate: interviewBeginDate,
+                interviewEndDate: interviewEndDate,
+                jobId: this.searchInfo.jobId,
                 name: this.searchInfo.name,
                 pageIndex: index,
                 pageSize: this.pageSize
@@ -342,9 +527,38 @@ export default {
             } = await getInterviewList(params);
 
             this.tableLoading = false;
+            this.noticeList.forEach((item) => {
+                item.close();
+            });
+            this.noticeList = [];
             if (retCode === 0) {
                 // console.log("查询结果", data);
-                this.tableDatas = data.datas;
+                this.tableDatas = data.datas.map(item => {
+                    item.schedules.forEach(ite => {
+                        ite.interviewDate = this.$dayjs(new Date(ite.interviewDate)).format("YYYY-MM-DD")
+                    })
+                    return item;
+                });
+                const nowDate = new Date();
+                if (this.statusId == "attendInterview") {
+                    if (nowDate.getHours() >= 17 && nowDate.getHours() < 24) {
+                        // 17点到19点之间才提醒
+                        const arr = this.tableDatas.filter(
+                            (item) =>
+                                this.$dayjs(item.noticeDate).format("MM-DD") ==
+                                this.$dayjs(nowDate).format("MM-DD")
+                        );
+                        arr.forEach((item) => {
+                            const notifyObj = this.$notify({
+                                title: "强提醒",
+                                duration: 0,
+                                message: item.noticeStr,
+                                position: "bottom-right"
+                            });
+                            this.noticeList.push(notifyObj);
+                        });
+                    }
+                }
                 this.total = data.total;
             } else {
                 this.$message.error(message);
@@ -388,6 +602,8 @@ export default {
                 isArrivalInterview: "",
                 fileList: [],
                 remark: "",
+                noticeStr: "",
+                noticeDate: "",
                 joinRemark: "",
                 hideTag: "0",
                 isDelete: false
@@ -412,6 +628,197 @@ export default {
                 }
             } catch (err) {
                 console.error(err);
+            }
+            changeSchedule();
+        },
+        // 面试日程提交
+        async submitInterview() {
+            const operateInfo = this.operateInfo;
+            const params = {
+                id: operateInfo.id,
+                userId: this.userId,
+                statusId: operateInfo.statusId,
+                stageId: 2,
+                type: operateInfo.type,
+                schedulesInfo: {
+                    noticeTime: this.$dayjs(operateInfo.noticeTime).format(
+                        "YYYY-MM-DD"
+                    ),
+                    modeId: operateInfo.modeId,
+                    // interviewDate: this.$dayjs(
+                    //     operateInfo.interviewDate
+                    // ).format("YYYY-MM-DD"),
+                    interviewDate: operateInfo.interviewDate.toISOString(),
+                    interviewTime: operateInfo.interviewTime,
+                    interviewerId: operateInfo.interviewerId
+                }
+            };
+            const {
+                data: { retCode, message }
+            } = await changeSchedule(params);
+
+            if (retCode === 0) {
+                this.showDialog = false;
+                this.$message.success("执行成功");
+                this.search(this.pageIndex);
+            } else {
+                this.$message.error(message);
+            }
+        },
+        // 设置强提醒
+        async submitNotice() {
+            const params = {
+                userId: this.userId,
+                ...this.noticeInfo
+            };
+            const {
+                data: { retCode, message }
+            } = await changeSchedule(params);
+
+            if (retCode === 0) {
+                this.showNoticeDialog = false;
+                this.$message.success("执行成功");
+                this.search(this.pageIndex);
+            } else {
+                this.$message.error(message);
+            }
+        },
+        // 入职时间提交
+        async submitJoin() {
+            const joinInfo = this.joinInfo;
+            const params = {
+                userId: this.userId,
+                id: joinInfo.id,
+                statusId: joinInfo.statusId,
+                stageId: 3,
+                type: joinInfo.type,
+                joinDate: this.$dayjs(joinInfo.joinDate).format("YYYY-MM-DD")
+            };
+            try {
+                const {
+                    data: { retCode, message }
+                } = await changeSchedule(params);
+
+                if (retCode === 0) {
+                    this.showJoinDialog = false;
+                    this.$message.success("执行成功");
+                    this.search(this.pageIndex);
+                } else {
+                    this.$message.error(message);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        },
+        /*
+         表格操作
+         type: 操作类型： 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已联系，
+                         6=发offer，7=通过，8=接受，9=到岗，10=去人才库, 11=设置提醒
+         */
+        async handleData({ data, type }) {
+            let params = {
+                id: data.id,
+                userId: this.userId,
+                type: type
+            };
+            switch (type) {
+                case 0:
+                    params.stageId = 2;
+                    params.statusId = "attendInterview";
+                    break;
+                case 1:
+                    this.operateInfo = {
+                        id: data.id,
+                        noticeTime: "",
+                        modeId: "",
+                        interviewDate: "",
+                        interviewTime: "",
+                        interviewerId: "",
+                        type: type,
+                        statusId: "firstInterview"
+                    };
+                    this.showDialog = true;
+                    break;
+                case 2:
+                    this.operateInfo = {
+                        id: data.id,
+                        noticeTime: "",
+                        modeId: "",
+                        interviewDate: "",
+                        interviewTime: "",
+                        interviewerId: "",
+                        type: type,
+                        statusId: "secondInterview"
+                    };
+                    this.showDialog = true;
+                    break;
+                case 3:
+                    this.operateInfo = {
+                        id: data.id,
+                        noticeTime: "",
+                        modeId: "",
+                        interviewDate: "",
+                        interviewTime: "",
+                        interviewerId: "",
+                        type: type,
+                        statusId: "thirdInterview"
+                    };
+                    this.showDialog = true;
+                    break;
+                case 4:
+                    params.stageId = 3;
+                    params.statusId = "employ";
+                    break;
+                case 5:
+                    params.stageId = 3;
+                    params.statusId = "contacted";
+                    break;
+                case 6:
+                    this.joinInfo = {
+                        joinDate: data.joinDate,
+                        id: data.id,
+                        type: type,
+                        stageId: 3,
+                        statusId: "offerApproval"
+                    };
+                    this.showJoinDialog = true;
+                    break;
+                case 7:
+                    params.stageId = 3;
+                    params.statusId = "offerConfirm";
+                    break;
+                case 8:
+                    params.stageId = 4;
+                    params.statusId = "joining";
+                    break;
+                case 9:
+                    params.stageId = 5;
+                    params.statusId = "join";
+                    break;
+                case 10:
+                    break;
+                case 11:
+                    this.noticeInfo = {
+                        noticeStr: data.noticeStr,
+                        noticeDate: data.noticeDate,
+                        id: data.id,
+                        type: type
+                    };
+                    this.showNoticeDialog = true;
+                    break;
+            }
+            const types = [1, 2, 3, 6, 11];
+            if (!types.includes(type)) {
+                const {
+                    data: { retCode, message }
+                } = await changeSchedule(params);
+
+                if (retCode === 0) {
+                    this.$message.success("执行成功");
+                    this.search(this.pageIndex);
+                } else {
+                    this.$message.error(message);
+                }
             }
         },
         // 导出数据

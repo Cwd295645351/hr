@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:22:02
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 22:16:16
+ * @LastEditTime: 2022-02-27 22:39:58
  */
 
 export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:80";
@@ -19,10 +19,11 @@ export const GET_CHANNEL_LIST = `${HOST}/api/common/getChannelList`; // 获取�
 export const GET_STATUS_LIST = `${HOST}/api/common/getStatusList`; // 获取渠道列表
 
 export const GET_INTERVIEW_LIST = `${HOST}/api/situation/getList`; // 获取面试情况
-export const ADD_INTERVIEWEE = `${HOST}/api/situation/addInterviewee`; // 新增面试者
-export const IMPORT_INTERVIEWEE = `${HOST}/api/situation/importInterviewee`; // 批量导入面试者
-export const EDIT_INTERVIEWEE = `${HOST}/api/situation/editInterviewee`; // 修改面试者
-export const DELETE_INTERVIEWEE = `${HOST}/api/situation/deleteInterviewee`; // 删除面试者
+export const ADD_INTERVIEWEE = `${HOST}/api/situation/addInterviewee`; // 新增候选人
+export const IMPORT_INTERVIEWEE = `${HOST}/api/situation/importInterviewee`; // 批量导入候选人
+export const EDIT_INTERVIEWEE = `${HOST}/api/situation/editInterviewee`; // 修改候选人
+export const CHANGE_INTERVIEWEE_SCHEDULE = `${HOST}/api/situation/changeSchedule`; // 修改候选人面试进程
+export const DELETE_INTERVIEWEE = `${HOST}/api/situation/deleteInterviewee`; // 删除候选人
 
 export const GET_RECRUITMENT_LIST = `${HOST}/api/recruitment/getList`; // 获取需求
 export const ADD_RECRUITMENT = `${HOST}/api/recruitment/addRecruitment`; // 新增需求
