@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-06 12:31:17
+ * @LastEditTime: 2022-03-06 23:26:56
 -->
 <template>
     <div class="tab-content">
@@ -690,12 +690,10 @@ export default {
                         "YYYY-MM-DD"
                     ),
                     modeId: operateInfo.modeId,
-                    // interviewDate: this.$dayjs(
-                    //     operateInfo.interviewDate
-                    // ).format("YYYY-MM-DD"),
                     interviewDate: operateInfo.interviewDate.toISOString(),
                     interviewTime: operateInfo.interviewTime,
-                    interviewerId: operateInfo.interviewerId
+                    interviewerId: operateInfo.interviewerId,
+                    order: operateInfo.order
                 }
             };
             const {
@@ -781,6 +779,7 @@ export default {
                         interviewTime: "",
                         interviewerId: "",
                         type: type,
+                        order: 1,
                         statusId: "firstInterview"
                     };
                     this.showDialog = true;
@@ -794,6 +793,7 @@ export default {
                         interviewTime: "",
                         interviewerId: "",
                         type: type,
+                        order: 2,
                         statusId: "secondInterview"
                     };
                     this.showDialog = true;
@@ -807,6 +807,7 @@ export default {
                         interviewTime: "",
                         interviewerId: "",
                         type: type,
+                        order: 3,
                         statusId: "thirdInterview"
                     };
                     this.showDialog = true;

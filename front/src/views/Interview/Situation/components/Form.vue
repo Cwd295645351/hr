@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-06 12:29:23
+ * @LastEditTime: 2022-03-06 23:28:08
 -->
 <template>
     <div class="form-box">
@@ -431,7 +431,8 @@ export default {
                                     modeId: "",
                                     interviewDate: "",
                                     interviewTime: "",
-                                    interviewerId: ""
+                                    interviewerId: "",
+                                    order: 1
                                 }
                             ];
                         }
@@ -446,7 +447,8 @@ export default {
                                 modeId: "",
                                 interviewDate: "",
                                 interviewTime: "",
-                                interviewerId: ""
+                                interviewerId: "",
+                                order: 2
                             });
                         } else {
                             editLine.schedules = [
@@ -455,14 +457,16 @@ export default {
                                     modeId: "",
                                     interviewDate: "",
                                     interviewTime: "",
-                                    interviewerId: ""
+                                    interviewerId: "",
+                                    order: 1
                                 },
                                 {
                                     noticeTime: "",
                                     modeId: "",
                                     interviewDate: "",
                                     interviewTime: "",
-                                    interviewerId: ""
+                                    interviewerId: "",
+                                    order: 2
                                 }
                             ];
                         }
@@ -475,7 +479,8 @@ export default {
                                 modeId: "",
                                 interviewDate: "",
                                 interviewTime: "",
-                                interviewerId: ""
+                                interviewerId: "",
+                                order: 3
                             });
                         } else if (schedules.length == 1) {
                             editLine.schedules.push(
@@ -484,14 +489,16 @@ export default {
                                     modeId: "",
                                     interviewDate: "",
                                     interviewTime: "",
-                                    interviewerId: ""
+                                    interviewerId: "",
+                                    order: 2
                                 },
                                 {
                                     noticeTime: "",
                                     modeId: "",
                                     interviewDate: "",
                                     interviewTime: "",
-                                    interviewerId: ""
+                                    interviewerId: "",
+                                    order: 3
                                 }
                             );
                         } else if (schedules.length == 0) {
@@ -501,21 +508,24 @@ export default {
                                     modeId: "",
                                     interviewDate: "",
                                     interviewTime: "",
-                                    interviewerId: ""
+                                    interviewerId: "",
+                                    order: 1
                                 },
                                 {
                                     noticeTime: "",
                                     modeId: "",
                                     interviewDate: "",
                                     interviewTime: "",
-                                    interviewerId: ""
+                                    interviewerId: "",
+                                    order: 2
                                 },
                                 {
                                     noticeTime: "",
                                     modeId: "",
                                     interviewDate: "",
                                     interviewTime: "",
-                                    interviewerId: ""
+                                    interviewerId: "",
+                                    order: 3
                                 }
                             ];
                         }

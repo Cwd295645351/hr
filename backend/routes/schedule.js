@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:17:20
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-28 19:05:56
+ * @LastEditTime: 2022-03-06 23:47:11
  */
 import Router from "koa-router";
 import getSchedule from "../controller/schedule";
@@ -22,23 +22,11 @@ router.get("/getSchedule", async (ctx, next) => {
 		ctx.body = new ErrorModel(null, "userId不能为空");
 		return;
 	}
-	if (params.beginDate != "") {
-		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
-		if (reg.test(params.beginDate) == false) {
-			ctx.body = new ErrorModel(null, "开始时间不规范");
-			return;
-		}
-	} else {
+	if (params.beginDate == "") {
 		ctx.body = new ErrorModel(null, "开始时间不能为空");
 		return;
 	}
-	if (params.endDate != "") {
-		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
-		if (reg.test(params.endDate) == false) {
-			ctx.body = new ErrorModel(null, "结束时间不规范");
-			return;
-		}
-	} else {
+	if (params.endDate == "") {
 		ctx.body = new ErrorModel(null, "结束时间不能为空");
 		return;
 	}
@@ -47,29 +35,23 @@ router.get("/getSchedule", async (ctx, next) => {
 	// 整合结果
 	let map = new Map();
 	res.forEach((item) => {
-		let interviewers = item.schedules.interviewer.split("/");
-		interviewers = interviewers.map((item) => {
-			item = item.slice(0, 2);
-			return item;
-		});
-
 		let scheduleObj = {
 			name: item.name,
-			time: item.schedules.time,
-			interviewer: interviewers.join("/"),
-			form: item.schedules.form,
-			property: item.property,
+			time: item.schedules.interviewTime,
+			jobName: item.jobName,
+			modeName: item.schedules.modeName,
+			interviewer: item.schedules.interviewerName,
 			statusName: item.statusName,
-			majorName: item.majorName
+			order: item.schedules.order
 		};
-		if (map.has(item.schedules.date)) {
-			let dateArray = map.get(item.schedules.date);
+		if (map.has(item.schedules.interviewDate)) {
+			let dateArray = map.get(item.schedules.interviewDate);
 			dateArray.push(scheduleObj);
-			map.set(item.schedules.date, dateArray);
+			map.set(item.schedules.interviewDate, dateArray);
 		} else {
 			let dateArray = new Array();
 			dateArray.push(scheduleObj);
-			map.set(item.schedules.date, dateArray);
+			map.set(item.schedules.interviewDate, dateArray);
 		}
 	});
 

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:08:36
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:12:07
+ * @LastEditTime: 2022-03-06 23:46:58
  */
 
 import Interview from "../db/models/Interviewees";
@@ -17,13 +17,28 @@ const getSchedule = async (params) => {
 		},
 		isDelete: false
 	};
-	const res = await Interview.find(mp, {
-		name: 1,
-		majorName: 1,
-		statusName: 1,
-		schedules: 1,
-		property: 1
-	});
+	const res = await Interview.aggregate([
+		{
+			$unwind: "$schedules"
+		},
+		{
+			$match: {
+				userId: params.userId,
+				"schedules.interviewDate": {
+					$gte: params.beginDate,
+					$lte: params.endDate
+				}
+			}
+		},
+		{
+			$project: {
+				name: 1,
+				jobName: 1,
+				statusName: 1,
+				schedules: 1,
+			}
+		}
+	]);
 	return res;
 };
 export default getSchedule;
