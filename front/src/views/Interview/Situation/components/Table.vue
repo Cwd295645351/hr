@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-06 12:43:05
+ * @LastEditTime: 2022-03-06 23:59:00
 -->
 !<template>
     <div class="">
@@ -50,7 +50,7 @@
                     <div
                         class="major"
                         :style="{
-                            'background-color': majorsColor[scope.row.jobId]
+                            'background-color': majorsColor[scope.row.apartmentId]
                         }"
                         v-else
                     >
@@ -78,7 +78,7 @@
                     <div
                         class="major"
                         :style="{
-                            'background-color': majorsColor[scope.row.jobId]
+                            'background-color': majorsColor[scope.row.apartmentId]
                         }"
                         v-else
                     >
@@ -627,19 +627,12 @@ export default {
             },
             // 专业颜色
             majorsColor: {
-                architecture: "#ff9933",
-                structure: "#0099cc",
-                drainage: "#99cc00",
-                HVAC: "#ff6666",
-                projectAssistant: "#ff6600",
-                marketingSpecialist: "#009966",
-                finance: "#ffcc33",
-                BIM: "#666999",
-                electricity: "#cc9999",
-                greenBuilding: "#cc3399",
-                front: "#009999",
-                landScape: "#66cccc",
-                hr: "#cc3333"
+                0: "#ff9933",
+                1: "#0099cc",
+                2: "#99cc00",
+                3: "#cc9999",
+                4: "#ffcc33",
+                5: "#009999"
             }
         };
     },
