@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-09 22:14:09
+ * @LastEditTime: 2022-03-06 09:40:45
 -->
 <template>
     <div class="main">
@@ -44,7 +44,7 @@ import { refreshToken } from "../../../apis/login";
 export default {
     data() {
         return {
-            current_module: "面试",
+            current_module: "招聘",
             modules: [
                 {
                     title: "招聘",

@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-05 18:42:51
+ * @LastEditTime: 2022-03-06 12:31:17
 -->
 <template>
     <div class="tab-content">
@@ -139,6 +139,8 @@
                 :modes="modes"
                 :types="types"
                 @operate="handleData"
+                @editData="editData"
+                @deleteData="deleteData"
             ></my-table>
             <div class="page-container">
                 <el-pagination
@@ -154,6 +156,39 @@
                 </el-pagination>
             </div>
         </div>
+        <el-drawer
+            title="修改面试情况"
+            :before-close="handleClose"
+            :visible.sync="editInterviewShow"
+            direction="rtl"
+            ref="drawer"
+        >
+            <div>
+                <my-form
+                    v-if="editInterviewShow"
+                    ref="editLine"
+                    :edit-line="editLine"
+                    :channel-options="channelOptions"
+                    :job-options="jobOptions"
+                    :interviewer-options="interviewerOptions"
+                    :school-property="schoolProperty"
+                    :degrees="degrees"
+                    :modes="modes"
+                    :types="types"
+                    :status-options="statusOptions"
+                ></my-form>
+                <div class="demo-drawer__footer">
+                    <el-button @click="cancelForm">取 消</el-button>
+                    <el-button
+                        type="primary"
+                        @click="submitEditInterviewee"
+                        :loading="btnLoading"
+                        >{{ btnLoading ? "提交中 ..." : "确 定" }}</el-button
+                    >
+                </div>
+            </div>
+        </el-drawer>
+
         <el-dialog title="面试日程" :visible.sync="showDialog" width="280px">
             <el-form
                 :model="operateInfo"
@@ -304,10 +339,13 @@
 <script>
 import {
     addInterviewee,
+    editInterviewee,
+    deleteInterviewee,
     changeSchedule,
     getInterviewList
 } from "../../../../../apis/interview/interview";
 import MyTable from "./Table.vue";
+import MyForm from "./Form.vue";
 export default {
     props: {
         // 用户id
@@ -333,7 +371,7 @@ export default {
         // 是否展示按钮组
         showRadio: { type: Boolean, default: false }
     },
-    components: { MyTable },
+    components: { MyTable, MyForm },
 
     data() {
         let _this = this;
@@ -382,6 +420,8 @@ export default {
                     }
                 }
             },
+            btnLoading: false, // 按钮loading
+            editInterviewShow: false,
             statusId: "", // 简历状态
             statusArr: [], // 状态数组
             // 搜索条件
@@ -395,6 +435,7 @@ export default {
             },
             totalJobs: [], // 所有职位列表
             newLine: {}, // 新增数据
+            editLine: {}, // 编辑数据
             tableDatas: [], // 简历表格数据
             tableLoading: false, // 表格loading
             pageIndex: 0, // 页码
@@ -503,10 +544,12 @@ export default {
             let interviewBeginDate = "",
                 interviewEndDate = "";
             if (this.searchInfo.interviewBeginDate) {
-                interviewBeginDate = this.searchInfo.interviewBeginDate.toISOString();
+                interviewBeginDate =
+                    this.searchInfo.interviewBeginDate.toISOString();
             }
             if (this.searchInfo.interviewEndDate) {
-                interviewEndDate = this.searchInfo.interviewEndDate.toISOString();
+                interviewEndDate =
+                    this.searchInfo.interviewEndDate.toISOString();
             }
             this.tableLoading = true;
             const params = {
@@ -533,10 +576,12 @@ export default {
             this.noticeList = [];
             if (retCode === 0) {
                 // console.log("查询结果", data);
-                this.tableDatas = data.datas.map(item => {
-                    item.schedules.forEach(ite => {
-                        ite.interviewDate = this.$dayjs(new Date(ite.interviewDate)).format("YYYY-MM-DD")
-                    })
+                this.tableDatas = data.datas.map((item) => {
+                    item.schedules.forEach((ite) => {
+                        ite.interviewDate = this.$dayjs(
+                            new Date(ite.interviewDate)
+                        ).format("YYYY-MM-DD");
+                    });
                     return item;
                 });
                 const nowDate = new Date();
@@ -713,7 +758,8 @@ export default {
         /*
          表格操作
          type: 操作类型： 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已联系，
-                         6=发offer，7=通过，8=接受，9=到岗，10=去人才库, 11=设置提醒
+                         6=发offer，7=通过，8=接受，9=到岗，10=去人才库,
+                         11=设置提醒, 12=到面
          */
         async handleData({ data, type }) {
             let params = {
@@ -806,6 +852,10 @@ export default {
                     };
                     this.showNoticeDialog = true;
                     break;
+                case 12:
+                    console.log(data.isArrivalInterview);
+                    params.isArrivalInterview = data.isArrivalInterview;
+                    break;
             }
             const types = [1, 2, 3, 6, 11];
             if (!types.includes(type)) {
@@ -820,6 +870,104 @@ export default {
                     this.$message.error(message);
                 }
             }
+        },
+        // 修改候选人信息
+        async submitEditInterviewee() {
+            let fileList = [];
+            this.editLine.fileList.forEach((item) => {
+                if (item.status === "success") {
+                    let url = "",
+                        name = "";
+                    if (item.url) {
+                        url = item.url;
+                        name = item.name;
+                    } else {
+                        url = item.response.path;
+                        name = item.response.name;
+                    }
+                    fileList.push({
+                        name: name,
+                        url: url
+                    });
+                }
+            });
+            this.editLine.fileList = fileList;
+            this.btnLoading = true;
+            const params = JSON.parse(JSON.stringify(this.editLine));
+            params.userId = this.userId;
+
+            if (
+                params.statusId == "1-pass" ||
+                params.statusId == "2-attendInterview"
+            ) {
+                params.schedules = [];
+            }
+            try {
+                const {
+                    data: { data, retCode, message }
+                } = await editInterviewee(params);
+                this.btnLoading = false;
+                if (retCode === 0) {
+                    this.editInterviewShow = false;
+                    this.editLine.fileList = [];
+                    this.$message.success(message);
+                    this.search(this.pageIndex);
+                } else {
+                    this.$message.error(message);
+                }
+            } catch (err) {
+                console.error(err);
+                this.btnLoading = false;
+            }
+        },
+        // 删除数据
+        async deleteData(row) {
+            this.$confirm("此操作将永久删除该候选人, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(async () => {
+                    const params = {
+                        userId: this.userId,
+                        id: row.id
+                    };
+                    const {
+                        data: { data, retCode, message }
+                    } = await deleteInterviewee(params);
+                    if (retCode === 0) {
+                        this.search(this.pageIndex);
+                        this.$message.success(message);
+                    } else {
+                        this.$message.error(message);
+                    }
+                })
+                .catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消删除"
+                    });
+                });
+        },
+        // 编辑数据
+        editData(data) {
+            this.editInterviewShow = true;
+            this.editLine = JSON.parse(JSON.stringify(data));
+        },
+        // 关闭抽屉
+        handleClose(done) {
+            if (this.btnLoading) {
+                return;
+            }
+            this.$confirm("是否未保存修改就退出？")
+                .then(async (_) => {
+                    done();
+                })
+                .catch((_) => {});
+        },
+        cancelForm() {
+            this.btnLoading = false;
+            this.editInterviewShow = false;
         },
         // 导出数据
         exportData() {}

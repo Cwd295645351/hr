@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-05 18:40:52
+ * @LastEditTime: 2022-03-06 12:40:04
  */
 
 import xss from "xss";
@@ -65,19 +65,18 @@ export const getList = async (params) => {
 	}
 
 	if (params.interviewBeginDate && params.interviewEndDate) {
-		mp['schedules.0.interviewDate'] = {
+		mp["schedules.0.interviewDate"] = {
 			$gte: params.interviewBeginDate,
 			$lte: params.interviewEndDate
 		};
 	} else if (params.interviewBeginDate && !params.interviewEndDate) {
-		mp['schedules.0.interviewDate'] = {
+		mp["schedules.0.interviewDate"] = {
 			$gte: params.interviewBeginDate
 		};
 	} else if (!params.interviewBeginDate && params.interviewEndDate) {
-		mp['schedules.0.interviewDate'] = {
+		mp["schedules.0.interviewDate"] = {
 			$lte: params.interviewEndDate
 		};
-
 	}
 	console.log(mp);
 	if (params.jobId) {
@@ -111,6 +110,7 @@ export const getList = async (params) => {
 		isWork: 1,
 		statusId: 1,
 		statusName: 1,
+		stageId: 1,
 		joinDate: 1,
 		schedules: 1,
 		noticeDate: 1,
@@ -135,6 +135,7 @@ export const getList = async (params) => {
 export const addInterviewee = async (data) => {
 	xssData(data);
 	try {
+		// 获取部门和职位名称
 		const apartment = await getJobName(data.apartmentId, data.jobId);
 		data.apartmentName = apartment.apartmentName;
 		data.jobName = apartment.jobName;
@@ -174,36 +175,111 @@ export const importInterviewee = async (data) => {
 export const editInterviewee = async (data) => {
 	xssData(data);
 	try {
-		const majorName = await getMajorNameById(data.majorId);
-		data.majorName = majorName;
-		const channelName = await getChannelNameById(data.channelId);
-		data.channelName = channelName;
-		const statusName = await getStatusNameById(data.statusId);
-		data.statusName = statusName;
+		const params = {
+			_id: mongoose.Types.ObjectId(data.id),
+			userId: data.userId,
+			isDelete: false
+		};
+		const originData = await Interview.findOne(params);
+
+		// 获取部门和职位名称
+		if (
+			originData.jobId !== data.jobId ||
+			originData.apartmentId !== data.apartmentId
+		) {
+			const apartment = await getJobName(data.apartmentId, data.jobId);
+			data.apartmentName = apartment.apartmentName;
+			data.jobName = apartment.jobName;
+		}
+		if (originData.channelId !== data.channelId) {
+			data.channelName = await getChannelNameById(data.channelId);
+		}
+
+		const config = await getConfig();
+		if (originData.schoolPropertyId !== data.schoolPropertyId) {
+			data.schoolPropertyName = config.schoolProperty.find(
+				(item) => item.id == data.schoolPropertyId
+			).name;
+		}
+		if (originData.degreeId !== data.degreeId) {
+			data.degreeName = config.degree.find(
+				(item) => item.id == data.degreeId
+			).name;
+		}
+		if (originData.typeId !== data.typeId) {
+			data.typeName = config.type.find(
+				(item) => item.id == data.typeId
+			).name;
+		}
+		const statusArr = data.statusId.split("-");
+		data.statusId = statusArr[1];
+		if (originData.statusId != data.statusId) {
+			data.stageId = +statusArr[0];
+			data.statusName = await getStatusNameById(
+				data.stageId,
+				data.statusId
+			);
+		}
+		const originSchedule = originData.schedules;
+		for (let i = 0; i < data.schedules.length; i++) {
+			if (originSchedule[i]) {
+				// 修改面试官信息
+				if (originSchedule[i].interviewerId !== data.interviewerId) {
+					data.schedules[i].interviewerName =
+						await getInterviewerName(
+							data.schedules[i].interviewerId
+						);
+				}
+				// 修改面试形式
+				if (originSchedule[i].modeId !== data.modeId) {
+					data.schedules[i].modeName = config.mode.find(
+						(item) => item.id == data.schedules[i].modeId
+					).name;
+				}
+			} else {
+				// 修改面试官信息
+				data.schedules[i].interviewerName = await getInterviewerName(
+					data.schedules[i].interviewerId
+				);
+				// 修改面试形式
+				data.schedules[i].modeName = config.mode.find(
+					(item) => item.id == data.schedules[i].modeId
+				).name;
+			}
+		}
+
 		const res = await Interview.findOneAndUpdate(
-			{
-				_id: mongoose.Types.ObjectId(data.id),
-				userId: data.userId,
-				isDelete: false
-			},
+			params,
 			{
 				date: data.date,
-				majorId: data.majorId,
-				majorName: data.majorName,
-				name: data.name,
-				property: data.property,
-				phoneNum: data.phoneNum,
-				email: data.email,
+				apartmentId: data.apartmentId,
+				apartmentName: data.apartmentName,
+				jobId: data.jobId,
+				jobName: data.jobName,
+				typeId: data.typeId,
+				typeName: data.typeName,
 				channelId: data.channelId,
 				channelName: data.channelName,
+				name: data.name,
+				sex: data.sex,
+				phoneNum: data.phoneNum,
+				email: data.email,
+				city: data.city,
+				school: data.school,
+				schoolPropertyId: data.schoolPropertyId,
+				schoolPropertyName: data.schoolPropertyName,
+				degreeId: data.degreeId,
+				degreeName: data.degreeName,
+				isFullTime: data.isFullTime,
+				graduationDate: data.graduationDate,
+				stageId: data.stageId,
 				statusId: data.statusId,
-				joinDate: data.joinDate,
 				statusName: data.statusName,
+				joinDate: data.joinDate,
 				schedules: data.schedules,
-				phoneInterviewSituation: data.phoneInterviewSituation,
+				isArrivalInterview: data.isArrivalInterview,
 				fileList: data.fileList,
-				remark: data.remark,
-				apartment: data.apartment
+				remark: data.remark
 			},
 			{ new: true }
 		);
@@ -217,6 +293,7 @@ export const editInterviewee = async (data) => {
 			};
 		}
 	} catch (e) {
+		console.log(11111111, e);
 		return {
 			retCode: 1,
 			err: e
@@ -247,7 +324,10 @@ export const changeSchedule = async (data) => {
 				changeData = {
 					statusId: data.statusId,
 					stageId: data.stageId,
-					statusName: await getStatusNameById(data.stageId, data.statusId)
+					statusName: await getStatusNameById(
+						data.stageId,
+						data.statusId
+					)
 				};
 				break;
 			case 1:
@@ -263,7 +343,11 @@ export const changeSchedule = async (data) => {
 				);
 				changeData = {
 					statusId: data.statusId,
-					statusName: await getStatusNameById(data.stageId, data.statusId),
+					statusName: await getStatusNameById(
+						data.stageId,
+						data.statusId
+					),
+					isArrivalInterview: 0,
 					$addToSet: {
 						schedules: schedules
 					}
@@ -272,7 +356,10 @@ export const changeSchedule = async (data) => {
 			case 6:
 				changeData = {
 					statusId: data.statusId,
-					statusName: await getStatusNameById(data.stageId, data.statusId),
+					statusName: await getStatusNameById(
+						data.stageId,
+						data.statusId
+					),
 					joinDate: data.joinDate
 				};
 				break;
@@ -287,6 +374,10 @@ export const changeSchedule = async (data) => {
 					noticeDate: data.noticeDate
 				};
 				break;
+			case 12:
+				changeData = {
+					isArrivalInterview: data.isArrivalInterview
+				};
 		}
 		const res = await Interview.findOneAndUpdate(filterData, changeData, {
 			new: true
