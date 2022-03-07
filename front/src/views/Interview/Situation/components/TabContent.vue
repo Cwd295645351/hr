@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-06 23:26:56
+ * @LastEditTime: 2022-03-07 11:40:49
 -->
 <template>
     <div class="tab-content">
@@ -527,7 +527,7 @@ export default {
             if (this.tableStatus == "add") {
                 this.tableStatus = "view";
                 this.newLine = {};
-                this.tableData.shift();
+                this.tableDatas.shift();
             }
             let beginDate = "",
                 endDate = "";

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-06 23:59:00
+ * @LastEditTime: 2022-03-07 11:52:41
 -->
 !<template>
     <div class="">
@@ -108,7 +108,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="招聘渠道" width="100">
+            <el-table-column align="center" label="招聘渠道" width="85">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -141,7 +141,7 @@
                     <div v-else>{{ scope.row.name }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="性别" width="80">
+            <el-table-column align="center" label="性别" width="60">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -191,7 +191,7 @@
                     <div v-else>{{ scope.row.email }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="所在城市" width="160">
+            <el-table-column align="center" label="所在城市" width="100">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-input
@@ -204,7 +204,7 @@
                     <div v-else>{{ scope.row.city }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="毕业学校" width="160">
+            <el-table-column align="center" label="毕业学校" width="100">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-input
@@ -217,7 +217,7 @@
                     <div v-else>{{ scope.row.school }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="学校性质" width="130">
+            <el-table-column align="center" label="学校性质" width="85">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -237,7 +237,7 @@
                     <div v-else>{{ scope.row.schoolPropertyName }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="学历" width="130">
+            <el-table-column align="center" label="学历" width="60">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -257,7 +257,7 @@
                     <div v-else>{{ scope.row.degreeName }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="是否全日制" width="130">
+            <el-table-column align="center" label="是否全日制" width="80">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -296,7 +296,7 @@
                     <div v-else>{{ scope.row.graduationDate }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="是否在职" width="130">
+            <el-table-column align="center" label="是否在职" width="60">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -389,7 +389,7 @@
                 v-if="statusId !== 'pass' && statusId !== 'attendInterview'"
                 align="center"
                 label="是否到面"
-                width="130"
+                width="85"
             >
                 <template slot-scope="scope">
                     <div>
@@ -473,7 +473,7 @@
                 fixed="right"
                 align="center"
                 label="操作"
-                width="90"
+                width="150"
             >
                 <template slot-scope="scope">
                     <div v-if="tableStatus == 'view' || scope.$index > 0">
