@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-27 21:42:41
+ * @LastEditTime: 2022-03-07 17:35:28
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -62,7 +62,7 @@ const IntervieweesSchema = mongoose.Schema(
 		graduationDate: {
 			type: Date,
 			get: (v) => {
-				return v ? dayjs(v).format("YYYY-MM-DD") : "";
+				return v ? dayjs(v).format("YYYY-MM") : "";
 			}
 		},
 		// 是否在职（0=否，1=是）

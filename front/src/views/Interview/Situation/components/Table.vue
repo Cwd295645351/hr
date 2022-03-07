@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 11:52:41
+ * @LastEditTime: 2022-03-07 17:32:43
 -->
 !<template>
     <div class="">
@@ -172,7 +172,6 @@
                             v-model="newLine.phoneNum"
                             size="small"
                             placeholder="请输入电话"
-                            clearable
                         ></el-input>
                     </div>
                     <div v-else>{{ scope.row.phoneNum }}</div>
@@ -286,7 +285,7 @@
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-date-picker
                             v-model="newLine.graduationDate"
-                            type="date"
+                            type="month"
                             size="small"
                             value-format="yyyy-MM-dd"
                             placeholder="选择日期"

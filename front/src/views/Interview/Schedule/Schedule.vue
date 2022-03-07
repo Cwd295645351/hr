@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-06 23:44:24
+ * @LastEditTime: 2022-03-07 17:39:05
 -->
 <template>
     <div class="schedule">
@@ -378,7 +378,7 @@ export default {
             }
         }
         .weekend {
-            width: 220px !important;
+            width: 200px !important;
             flex: none !important;
         }
         .week {

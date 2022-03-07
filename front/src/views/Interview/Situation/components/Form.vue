@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-06 23:28:08
+ * @LastEditTime: 2022-03-07 17:33:49
 -->
 <template>
     <div class="form-box">
@@ -174,7 +174,7 @@
             <el-form-item label="毕业时间">
                 <el-date-picker
                     v-model="editLine.graduationDate"
-                    type="date"
+                    type="month"
                     size="small"
                     value-format="yyyy-MM-dd"
                     placeholder="选择日期"
