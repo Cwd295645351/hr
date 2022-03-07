@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 17:33:49
+ * @LastEditTime: 2022-03-07 23:49:06
 -->
 <template>
     <div class="form-box">
@@ -160,16 +160,15 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="是否全日制">
-                <el-select
+            <el-form-item label="全日制">
+                <el-switch
                     v-model="editLine.isFullTime"
-                    size="small"
-                    placeholder="请选择学历"
-                    clearable
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    :active-value="1"
+                    :inactive-value="0"
                 >
-                    <el-option label="是" :value="1"></el-option>
-                    <el-option label="否" :value="0"></el-option>
-                </el-select>
+                </el-switch>
             </el-form-item>
             <el-form-item label="毕业时间">
                 <el-date-picker
@@ -181,16 +180,15 @@
                     clearable
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="是否在职">
-                <el-select
+            <el-form-item label="在职">
+                <el-switch
                     v-model="editLine.isWork"
-                    size="small"
-                    placeholder="请选择是否在职"
-                    clearable
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    :active-value="1"
+                    :inactive-value="0"
                 >
-                    <el-option label="是" :value="1"></el-option>
-                    <el-option label="否" :value="0"></el-option>
-                </el-select>
+                </el-switch>
             </el-form-item>
 
             <el-form-item label="当前简历状态">
@@ -254,7 +252,7 @@
                             size="small"
                             placeholder="选择时间"
                             :picker-options="{
-                                start: '08:00',
+                                start: '09:00',
                                 step: '00:15',
                                 end: '20:00'
                             }"
@@ -278,16 +276,16 @@
                 </div>
             </template>
             <el-divider></el-divider>
-            <el-form-item label="是否到面">
-                <el-select
-                    v-model="editLine.sex"
-                    size="small"
-                    placeholder="请选择性别"
-                    clearable
+            <el-form-item  label="到面">
+                <el-switch
+                    @change="handleData(scope.row, 12)"
+                    v-model="editLine.isArrivalInterview"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    :active-value="1"
+                    :inactive-value="0"
                 >
-                    <el-option label="是" :value="1"></el-option>
-                    <el-option label="否" :value="0"></el-option>
-                </el-select>
+                </el-switch>
             </el-form-item>
             <el-form-item label="备注">
                 <el-input

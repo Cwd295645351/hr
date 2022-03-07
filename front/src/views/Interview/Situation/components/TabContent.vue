@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 21:46:51
+ * @LastEditTime: 2022-03-07 23:43:13
 -->
 <template>
     <div class="tab-content">
@@ -140,6 +140,7 @@
                 :types="types"
                 @operate="handleData"
                 @editData="editData"
+                @copyData="copyData"
                 @deleteData="deleteData"
             ></my-table>
             <div class="page-container">
@@ -234,7 +235,7 @@
                         size="small"
                         placeholder="选择时间"
                         :picker-options="{
-                            start: '08:00',
+                            start: '09:00',
                             step: '00:15',
                             end: '20:00'
                         }"
@@ -261,6 +262,40 @@
                     >取消</el-button
                 >
                 <el-button type="primary" size="small" @click="submitInterview"
+                    >确定</el-button
+                >
+            </div>
+        </el-dialog>
+        <el-dialog
+            title="去人才库"
+            :visible.sync="fireDialogShow"
+            width="280px"
+        >
+            <el-form
+                :model="operateInfo"
+                label-position="right"
+                label-width="70px"
+            >
+                <el-form-item label="原因">
+                    <el-select
+                        v-model="fireInfo.statusId"
+                        size="small"
+                        placeholder="请选择原因"
+                    >
+                        <el-option
+                            v-for="(item, index) in fireOptions"
+                            :key="item.name + '_' + index"
+                            :label="item.name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="fireDialogShow = false"
+                    >取消</el-button
+                >
+                <el-button type="primary" size="small" @click="submitFire"
                     >确定</el-button
                 >
             </div>
@@ -448,7 +483,10 @@ export default {
             showNoticeDialog: false, // 强提醒弹窗显示
             joinInfo: "", // 入职时间内容,
             showJoinDialog: false, // 入职时间弹窗显示
-            noticeList: [] // 强提醒队列
+            noticeList: [], // 强提醒队列
+            fireInfo: {}, // 去人才库内容
+            fireOptions: [], // 去人才库下拉选项
+            fireDialogShow: false // 去人才库弹窗
         };
     },
 
@@ -708,6 +746,27 @@ export default {
                 this.$message.error(message);
             }
         },
+        // 去人才库弹窗结果提交
+        async submitFire() {
+            const fireInfo = this.fireInfo;
+            const params = {
+                id: fireInfo.id,
+                userId: this.userId,
+                statusId: fireInfo.statusId,
+                type: fireInfo.type
+            };
+            const {
+                data: { retCode, message }
+            } = await changeSchedule(params);
+
+            if (retCode === 0) {
+                this.fireDialogShow = false;
+                this.$message.success("执行成功");
+                this.search(this.pageIndex);
+            } else {
+                this.$message.error(message);
+            }
+        },
         // 设置强提醒
         async submitNotice() {
             const params = {
@@ -842,8 +901,6 @@ export default {
                     params.stageId = 5;
                     params.statusId = "join";
                     break;
-                case 10:
-                    break;
                 case 11:
                     this.noticeInfo = {
                         noticeStr: data.noticeStr,
@@ -858,7 +915,7 @@ export default {
                     params.isArrivalInterview = data.isArrivalInterview;
                     break;
             }
-            const types = [1, 2, 3, 6, 11];
+            const types = [1, 2, 3, 6, 10, 11];
             if (!types.includes(type)) {
                 const {
                     data: { retCode, message }
@@ -870,6 +927,80 @@ export default {
                 } else {
                     this.$message.error(message);
                 }
+            } else if (type == 10) {
+                // 去人才库的单独处理
+                this.fireHandle(data, params);
+            }
+        },
+        // 去人才库处理
+        async fireHandle(data, params) {
+            switch (data.statusId) {
+                case "pass":
+                    params.statusId = 0;
+                    break;
+                case "attendInterview":
+                    params.statusId = 1;
+                    break;
+                case "firstInterview":
+                    this.fireInfo = {
+                        ...params,
+                        statusId: ""
+                    };
+                    this.fireOptions = [
+                        { id: 2, name: "一面未通过" },
+                        { id: 3, name: "一面爽约" },
+                        { id: 4, name: "二面未应约" }
+                    ];
+                    this.fireDialogShow = true;
+                    return;
+                case "secondInterview":
+                    this.fireInfo = {
+                        ...params,
+                        statusId: ""
+                    };
+                    this.fireOptions = [
+                        { id: 5, name: "二面未通过" },
+                        { id: 6, name: "二面爽约" },
+                        { id: 7, name: "三面未应约" }
+                    ];
+                    this.fireDialogShow = true;
+                    return;
+                case "thirdInterview":
+                    this.fireInfo = {
+                        ...params,
+                        statusId: ""
+                    };
+                    this.fireOptions = [
+                        { id: 8, name: "三面未通过" },
+                        { id: 9, name: "三面爽约" }
+                    ];
+                    this.fireDialogShow = true;
+                    return;
+                case "employ":
+                    params.statusId = 10;
+                    break;
+                case "contacted":
+                    params.statusId = 11;
+                    break;
+                case "offerApproval":
+                    params.statusId = 12;
+                    break;
+                case "offerConfirm":
+                    params.statusId = 13;
+                    break;
+                case "joining":
+                    params.statusId = 14;
+                    break;
+            }
+            const {
+                data: { retCode, message }
+            } = await changeSchedule(params);
+
+            if (retCode === 0) {
+                this.$message.success("执行成功");
+                this.search(this.pageIndex);
+            } else {
+                this.$message.error(message);
             }
         },
         // 修改候选人信息
@@ -903,9 +1034,12 @@ export default {
             ) {
                 params.schedules = [];
             }
-            params.schedules.forEach(item => {
-                item.interviewDate = this.$dayjs(item.interviewDate, "YYYY-MM-DD").toISOString();
-            })
+            params.schedules.forEach((item) => {
+                item.interviewDate = this.$dayjs(
+                    item.interviewDate,
+                    "YYYY-MM-DD"
+                ).toISOString();
+            });
             try {
                 const {
                     data: { data, retCode, message }
@@ -923,6 +1057,42 @@ export default {
                 console.error(err);
                 this.btnLoading = false;
             }
+        },
+        // 复制数据
+        copyData(row) {
+            this.tableStatus = "add";
+            this.newLine = {
+                stageId: this.stageId,
+                statusId: this.statusId,
+                date: row.date,
+                apartmentId: row.apartmentId,
+                jobId: row.jobId,
+                typeId: "",
+                channelId: row.channelId,
+                name: "",
+                sex: "",
+                phoneNum: "",
+                email: "",
+                city: "",
+                school: "",
+                schoolPropertyId: "",
+                degreeId: "",
+                isFullTime: "",
+                graduationDate: "",
+                isWork: "",
+                joinDate: "",
+                schedules: [],
+                isArrivalInterview: "",
+                fileList: [],
+                remark: "",
+                noticeStr: "",
+                noticeDate: "",
+                joinRemark: "",
+                hideTag: "0",
+                isDelete: false
+            };
+            this.tableDatas.unshift(this.newLine);
+            this.tableDatas = JSON.parse(JSON.stringify(this.tableDatas));
         },
         // 删除数据
         async deleteData(row) {

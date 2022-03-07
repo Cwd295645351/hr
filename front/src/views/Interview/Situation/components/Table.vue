@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 21:58:05
+ * @LastEditTime: 2022-03-07 23:22:21
 -->
 !<template>
     <div class="">
@@ -24,7 +24,6 @@
                             size="small"
                             value-format="yyyy-MM-dd"
                             placeholder="选择日期"
-                            clearable
                         ></el-date-picker>
                     </div>
                     <div v-else>{{ scope.row.date }}</div>
@@ -37,7 +36,6 @@
                             v-model="newLine.apartmentId"
                             placeholder="请选择部门"
                             size="small"
-                            clearable
                         >
                             <el-option
                                 v-for="(item, index) in jobOptions"
@@ -66,7 +64,6 @@
                             v-model="newLine.jobId"
                             placeholder="请选择职位"
                             size="small"
-                            clearable
                         >
                             <el-option
                                 v-for="(item, index) in jobs"
@@ -95,7 +92,6 @@
                             v-model="newLine.typeId"
                             placeholder="请选择类别"
                             size="small"
-                            clearable
                         >
                             <el-option
                                 v-for="(item, index) in types"
@@ -117,7 +113,6 @@
                             v-model="newLine.channelId"
                             size="small"
                             placeholder="请选择渠道"
-                            clearable
                         >
                             <el-option
                                 v-for="(item, index) in channelOptions"
@@ -137,7 +132,6 @@
                             v-model="newLine.name"
                             size="small"
                             placeholder="请输入姓名"
-                            clearable
                         ></el-input>
                     </div>
                     <div v-else>{{ scope.row.name }}</div>
@@ -150,7 +144,6 @@
                             v-model="newLine.sex"
                             size="small"
                             placeholder="请选择性别"
-                            clearable
                         >
                             <el-option label="男" :value="1"></el-option>
                             <el-option label="女" :value="0"></el-option>
@@ -180,20 +173,18 @@
                             v-model="newLine.email"
                             size="small"
                             placeholder="请输入邮箱"
-                            clearable
                         ></el-input>
                     </div>
                     <div v-else>{{ scope.row.email }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="所在城市" width="100">
+            <el-table-column align="center" label="所在城市" width="85">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-input
                             v-model="newLine.city"
                             size="small"
                             placeholder="请输入城市"
-                            clearable
                         ></el-input>
                     </div>
                     <div v-else>{{ scope.row.city }}</div>
@@ -206,7 +197,6 @@
                             v-model="newLine.school"
                             size="small"
                             placeholder="请输入毕业学校"
-                            clearable
                         ></el-input>
                     </div>
                     <div v-else>{{ scope.row.school }}</div>
@@ -219,7 +209,6 @@
                             v-model="newLine.schoolPropertyId"
                             size="small"
                             placeholder="请选择学校性质"
-                            clearable
                         >
                             <el-option
                                 v-for="(item, index) in schoolProperty"
@@ -239,7 +228,6 @@
                             v-model="newLine.degreeId"
                             size="small"
                             placeholder="请选择学历"
-                            clearable
                         >
                             <el-option
                                 v-for="(item, index) in degrees"
@@ -252,18 +240,17 @@
                     <div v-else>{{ scope.row.degreeName }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="是否全日制" width="80">
+            <el-table-column align="center" label="全日制" width="70">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                        <el-select
+                        <el-switch
                             v-model="newLine.isFullTime"
-                            size="small"
-                            placeholder="请选择学历"
-                            clearable
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                            :active-value="1"
+                            :inactive-value="0"
                         >
-                            <el-option label="是" :value="1"></el-option>
-                            <el-option label="否" :value="0"></el-option>
-                        </el-select>
+                        </el-switch>
                     </div>
                     <div v-else>
                         {{
@@ -285,24 +272,22 @@
                             size="small"
                             value-format="yyyy-MM-dd"
                             placeholder="选择日期"
-                            clearable
                         ></el-date-picker>
                     </div>
                     <div v-else>{{ scope.row.graduationDate }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="是否在职" width="60">
+            <el-table-column align="center" label="在职" width="60">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                        <el-select
+                        <el-switch
                             v-model="newLine.isWork"
-                            size="small"
-                            placeholder="请选择是否在职"
-                            clearable
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                            :active-value="1"
+                            :inactive-value="0"
                         >
-                            <el-option label="是" :value="1"></el-option>
-                            <el-option label="否" :value="0"></el-option>
-                        </el-select>
+                        </el-switch>
                     </div>
                     <div v-else>
                         {{
@@ -386,7 +371,7 @@
             <el-table-column
                 v-if="statusId !== 'pass' && statusId !== 'attendInterview'"
                 align="center"
-                label="是否到面"
+                label="到面"
                 width="85"
             >
                 <template slot-scope="scope">
@@ -546,6 +531,7 @@
                             >到岗</el-link
                         >
                         <el-link
+                            v-if="statusId != 'join'"
                             @click="handleData(scope.row, 10)"
                             type="info"
                             class="modify"
@@ -567,6 +553,17 @@
                             type="info"
                             class="modify"
                             >修改</el-link
+                        >
+                        <el-link
+                            v-if="
+                                tableStatus == 'view' &&
+                                (statusId == 'pass' ||
+                                    statusId == 'attendInterview')
+                            "
+                            @click="copyData(scope.row)"
+                            type="info"
+                            class="modify"
+                            >复制</el-link
                         >
                         <el-link @click="deleteData(scope.row)" type="info"
                             >删除</el-link
@@ -703,6 +700,10 @@ export default {
                 data: row
             };
             this.$emit("operate", operateInfo);
+        },
+        // 复制数据
+        copyData(row) {
+            this.$emit("copyData", row);
         },
         // 删除表格
         deleteData(row) {

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 21:53:20
+ * @LastEditTime: 2022-03-07 23:38:41
  */
 
 import xss from "xss";
@@ -152,7 +152,9 @@ export const addInterviewee = async (data) => {
 			).name;
 		}
 		if (data.typeId) {
-			data.typeName = config.type.find((item) => item.id == data.typeId).name;
+			data.typeName = config.type.find(
+				(item) => item.id == data.typeId
+			).name;
 		}
 		if (data.channelId) {
 			data.channelName = await getChannelNameById(data.channelId);
@@ -372,7 +374,9 @@ export const changeSchedule = async (data) => {
 				break;
 			case 10:
 				changeData = {
-					stageId: 6
+					stageId: 6,
+					statusId: data.statusId,
+					statusName: await getStatusNameById(6, data.statusId)
 				};
 				break;
 			case 11:
