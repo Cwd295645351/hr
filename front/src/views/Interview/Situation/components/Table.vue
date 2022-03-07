@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 17:32:43
+ * @LastEditTime: 2022-03-07 21:58:05
 -->
 !<template>
     <div class="">
@@ -50,7 +50,8 @@
                     <div
                         class="major"
                         :style="{
-                            'background-color': majorsColor[scope.row.apartmentId]
+                            'background-color':
+                                majorsColor[scope.row.apartmentId]
                         }"
                         v-else
                     >
@@ -78,7 +79,8 @@
                     <div
                         class="major"
                         :style="{
-                            'background-color': majorsColor[scope.row.apartmentId]
+                            'background-color':
+                                majorsColor[scope.row.apartmentId]
                         }"
                         v-else
                     >
@@ -155,13 +157,7 @@
                         </el-select>
                     </div>
                     <div v-else>
-                        {{
-                            scope.row.sex !== ""
-                                ? scope.row.sex
-                                    ? "男"
-                                    : "女"
-                                : ""
-                        }}
+                        {{ scope.row.sex ? (scope.row.sex ? "男" : "女") : "" }}
                     </div>
                 </template>
             </el-table-column>
@@ -271,7 +267,7 @@
                     </div>
                     <div v-else>
                         {{
-                            scope.row.isFullTime !== ""
+                            scope.row.isFullTime
                                 ? scope.row.isFullTime
                                     ? "是"
                                     : "否"
@@ -310,7 +306,7 @@
                     </div>
                     <div v-else>
                         {{
-                            scope.row.isWork !== ""
+                            scope.row.isWork
                                 ? scope.row.isWork
                                     ? "是"
                                     : "否"
@@ -354,7 +350,8 @@
                             <div>
                                 {{
                                     scope.row.schedules[index]
-                                        ? scope.row.schedules[index].interviewDate
+                                        ? scope.row.schedules[index]
+                                              .interviewDate
                                         : ""
                                 }}
                             </div>
@@ -365,7 +362,8 @@
                             <div>
                                 {{
                                     scope.row.schedules[index]
-                                        ? scope.row.schedules[index].interviewTime
+                                        ? scope.row.schedules[index]
+                                              .interviewTime
                                         : ""
                                 }}
                             </div>
@@ -376,7 +374,8 @@
                             <div>
                                 {{
                                     scope.row.schedules[index]
-                                        ? scope.row.schedules[index].interviewerName
+                                        ? scope.row.schedules[index]
+                                              .interviewerName
                                         : ""
                                 }}
                             </div>
@@ -408,7 +407,7 @@
                         </el-switch>
                         <div v-else>
                             {{
-                                scope.row.isArrivalInterview !== ""
+                                scope.row.isArrivalInterview
                                     ? scope.row.isArrivalInterview
                                         ? "是"
                                         : "否"
@@ -712,7 +711,7 @@ export default {
     }
 };
 </script>
-<style scoped lang='less'>
+<style scoped lang="less">
 .table-box {
     .modify {
         padding-right: 5px;

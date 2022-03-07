@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 19:34:00
+ * @LastEditTime: 2022-03-07 21:46:51
 -->
 <template>
     <div class="tab-content">
@@ -904,7 +904,7 @@ export default {
                 params.schedules = [];
             }
             params.schedules.forEach(item => {
-                item.interviewDate = new Date(item.interviewDate).toISOString()
+                item.interviewDate = this.$dayjs(item.interviewDate, "YYYY-MM-DD").toISOString();
             })
             try {
                 const {

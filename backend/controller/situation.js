@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-06 12:40:04
+ * @LastEditTime: 2022-03-07 21:53:20
  */
 
 import xss from "xss";
@@ -141,16 +141,23 @@ export const addInterviewee = async (data) => {
 		data.jobName = apartment.jobName;
 
 		const config = await getConfig();
-		data.schoolPropertyName = config.schoolProperty.find(
-			(item) => item.id == data.schoolPropertyId
-		).name;
-		data.degreeName = config.degree.find(
-			(item) => item.id == data.degreeId
-		).name;
-		data.typeName = config.type.find((item) => item.id == data.typeId).name;
-		data.channelName = await getChannelNameById(data.channelId);
+		if (data.schoolPropertyId) {
+			data.schoolPropertyName = config.schoolProperty.find(
+				(item) => item.id == data.schoolPropertyId
+			).name;
+		}
+		if (data.degreeId) {
+			data.degreeName = config.degree.find(
+				(item) => item.id == data.degreeId
+			).name;
+		}
+		if (data.typeId) {
+			data.typeName = config.type.find((item) => item.id == data.typeId).name;
+		}
+		if (data.channelId) {
+			data.channelName = await getChannelNameById(data.channelId);
+		}
 		data.statusName = await getStatusNameById(data.stageId, data.statusId);
-		console.log(data);
 		const res = await Interview.create(data);
 		return {
 			retCode: res ? 0 : 1
