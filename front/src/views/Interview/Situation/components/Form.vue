@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 23:49:06
+ * @LastEditTime: 2022-03-08 22:26:05
 -->
 <template>
     <div class="form-box">
@@ -161,14 +161,8 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="全日制">
-                <el-switch
-                    v-model="editLine.isFullTime"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949"
-                    :active-value="1"
-                    :inactive-value="0"
-                >
-                </el-switch>
+                <el-radio v-model="editLine.isFullTime" :label="1">是</el-radio>
+                <el-radio v-model="editLine.isFullTime" :label="0">否</el-radio>
             </el-form-item>
             <el-form-item label="毕业时间">
                 <el-date-picker
@@ -181,14 +175,8 @@
                 ></el-date-picker>
             </el-form-item>
             <el-form-item label="在职">
-                <el-switch
-                    v-model="editLine.isWork"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949"
-                    :active-value="1"
-                    :inactive-value="0"
-                >
-                </el-switch>
+                <el-radio v-model="editLine.isWork" :label="1">是</el-radio>
+                <el-radio v-model="editLine.isWork" :label="0">否</el-radio>
             </el-form-item>
 
             <el-form-item label="当前简历状态">

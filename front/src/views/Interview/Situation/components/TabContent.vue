@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 23:43:13
+ * @LastEditTime: 2022-03-08 22:08:48
 -->
 <template>
     <div class="tab-content">
@@ -196,16 +196,6 @@
                 label-position="right"
                 label-width="70px"
             >
-                <el-form-item label="通知日期">
-                    <el-date-picker
-                        v-model="operateInfo.noticeTime"
-                        type="date"
-                        size="small"
-                        value-format="yyyy-MM-dd"
-                        placeholder="选择日期"
-                        clearable
-                    ></el-date-picker>
-                </el-form-item>
                 <el-form-item label="面试形式">
                     <el-select
                         v-model="operateInfo.modeId"
@@ -607,6 +597,8 @@ export default {
                 data: { data, retCode, message }
             } = await getInterviewList(params);
 
+            console.log(data);
+
             this.tableLoading = false;
             this.noticeList.forEach((item) => {
                 item.close();
@@ -684,6 +676,7 @@ export default {
                 schedules: [],
                 isArrivalInterview: "",
                 fileList: [],
+                remindDate: "",
                 remark: "",
                 noticeStr: "",
                 noticeDate: "",
@@ -712,7 +705,6 @@ export default {
             } catch (err) {
                 console.error(err);
             }
-            changeSchedule();
         },
         // 面试日程提交
         async submitInterview() {
@@ -724,9 +716,6 @@ export default {
                 stageId: 2,
                 type: operateInfo.type,
                 schedulesInfo: {
-                    noticeTime: this.$dayjs(operateInfo.noticeTime).format(
-                        "YYYY-MM-DD"
-                    ),
                     modeId: operateInfo.modeId,
                     interviewDate: operateInfo.interviewDate.toISOString(),
                     interviewTime: operateInfo.interviewTime,
@@ -832,7 +821,6 @@ export default {
                 case 1:
                     this.operateInfo = {
                         id: data.id,
-                        noticeTime: "",
                         modeId: "",
                         interviewDate: "",
                         interviewTime: "",
@@ -846,7 +834,6 @@ export default {
                 case 2:
                     this.operateInfo = {
                         id: data.id,
-                        noticeTime: "",
                         modeId: "",
                         interviewDate: "",
                         interviewTime: "",
@@ -860,7 +847,6 @@ export default {
                 case 3:
                     this.operateInfo = {
                         id: data.id,
-                        noticeTime: "",
                         modeId: "",
                         interviewDate: "",
                         interviewTime: "",
@@ -1034,12 +1020,17 @@ export default {
             ) {
                 params.schedules = [];
             }
-            params.schedules.forEach((item) => {
-                item.interviewDate = this.$dayjs(
-                    item.interviewDate,
-                    "YYYY-MM-DD"
-                ).toISOString();
-            });
+            params.schedules = params.schedules
+                .filter((item) => item.interviewDate)
+                .map((item) => {
+                    if (item.interviewDate) {
+                        item.interviewDate = this.$dayjs(
+                            item.interviewDate,
+                            "YYYY-MM-DD"
+                        ).toISOString();
+                    }
+                    return item;
+                });
             try {
                 const {
                     data: { data, retCode, message }
@@ -1084,6 +1075,7 @@ export default {
                 schedules: [],
                 isArrivalInterview: "",
                 fileList: [],
+                remindDate: "",
                 remark: "",
                 noticeStr: "",
                 noticeDate: "",

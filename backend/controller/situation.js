@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 23:38:41
+ * @LastEditTime: 2022-03-08 22:16:02
  */
 
 import xss from "xss";
@@ -108,6 +108,7 @@ export const getList = async (params) => {
 		isFullTime: 1,
 		graduationDate: 1,
 		isWork: 1,
+		remindDate: 1,
 		statusId: 1,
 		statusName: 1,
 		stageId: 1,
@@ -160,6 +161,7 @@ export const addInterviewee = async (data) => {
 			data.channelName = await getChannelNameById(data.channelId);
 		}
 		data.statusName = await getStatusNameById(data.stageId, data.statusId);
+		console.log(data);
 		const res = await Interview.create(data);
 		return {
 			retCode: res ? 0 : 1
@@ -247,13 +249,18 @@ export const editInterviewee = async (data) => {
 				}
 			} else {
 				// 修改面试官信息
-				data.schedules[i].interviewerName = await getInterviewerName(
-					data.schedules[i].interviewerId
-				);
+				if (data.schedules[i].interviewerId) {
+					data.schedules[i].interviewerName =
+						await getInterviewerName(
+							data.schedules[i].interviewerId
+						);
+				}
 				// 修改面试形式
-				data.schedules[i].modeName = config.mode.find(
-					(item) => item.id == data.schedules[i].modeId
-				).name;
+				if (data.schedules[i].modeId) {
+					data.schedules[i].modeName = config.mode.find(
+						(item) => item.id == data.schedules[i].modeId
+					).name;
+				}
 			}
 		}
 
@@ -281,6 +288,8 @@ export const editInterviewee = async (data) => {
 				degreeName: data.degreeName,
 				isFullTime: data.isFullTime,
 				graduationDate: data.graduationDate,
+				isWork: data.isWork,
+				remindDate: data.remindDate,
 				stageId: data.stageId,
 				statusId: data.statusId,
 				statusName: data.statusName,

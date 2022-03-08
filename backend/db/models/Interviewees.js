@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 17:35:28
+ * @LastEditTime: 2022-03-08 21:36:08
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -75,6 +75,13 @@ const IntervieweesSchema = mongoose.Schema(
 		statusName: { type: String },
 		// 入职时间
 		joinDate: {
+			type: Date,
+			get: (v) => {
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
+			}
+		},
+		// 通知日期
+		remindDate: {
 			type: Date,
 			get: (v) => {
 				return v ? dayjs(v).format("YYYY-MM-DD") : "";

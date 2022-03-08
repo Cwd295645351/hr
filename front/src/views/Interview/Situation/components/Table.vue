@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 23:22:21
+ * @LastEditTime: 2022-03-08 22:26:44
 -->
 !<template>
     <div class="">
@@ -240,21 +240,20 @@
                     <div v-else>{{ scope.row.degreeName }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="全日制" width="70">
+            <el-table-column align="center" label="全日制" width="60">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                        <el-switch
-                            v-model="newLine.isFullTime"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
-                            :active-value="1"
-                            :inactive-value="0"
+                        <el-radio v-model="newLine.isFullTime" :label="1"
+                            >是</el-radio
                         >
-                        </el-switch>
+                        <el-radio v-model="newLine.isFullTime" :label="0"
+                            >否</el-radio
+                        >
                     </div>
                     <div v-else>
                         {{
-                            scope.row.isFullTime
+                            scope.row.isFullTime !== "" &&
+                            scope.row.isFullTime !== null
                                 ? scope.row.isFullTime
                                     ? "是"
                                     : "否"
@@ -280,24 +279,36 @@
             <el-table-column align="center" label="在职" width="60">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
-                        <el-switch
-                            v-model="newLine.isWork"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
-                            :active-value="1"
-                            :inactive-value="0"
+                        <el-radio v-model="newLine.isWork" :label="1"
+                            >是</el-radio
                         >
-                        </el-switch>
+                        <el-radio v-model="newLine.isWork" :label="0"
+                            >否</el-radio
+                        >
                     </div>
                     <div v-else>
                         {{
-                            scope.row.isWork
+                            scope.row.isWork !== "" && scope.row.isWork !== null
                                 ? scope.row.isWork
                                     ? "是"
                                     : "否"
                                 : ""
                         }}
                     </div>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="通知日期" width="100">
+                <template slot-scope="scope">
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'">
+                        <el-date-picker
+                            v-model="newLine.remindDate"
+                            type="date"
+                            size="small"
+                            value-format="yyyy-MM-dd"
+                            placeholder="选择日期"
+                        ></el-date-picker>
+                    </div>
+                    <div v-else>{{ scope.row.remindDate }}</div>
                 </template>
             </el-table-column>
             <!-- 面试信息 -->
@@ -308,17 +319,6 @@
                     align="center"
                     :label="schedulesLabels[index]"
                 >
-                    <el-table-column width="95" align="center" label="通知日期">
-                        <template slot-scope="scope">
-                            <div>
-                                {{
-                                    scope.row.schedules[index]
-                                        ? scope.row.schedules[index].noticeTime
-                                        : ""
-                                }}
-                            </div>
-                        </template>
-                    </el-table-column>
                     <el-table-column width="95" align="center" label="面试形式">
                         <template slot-scope="scope">
                             <div>
@@ -392,7 +392,8 @@
                         </el-switch>
                         <div v-else>
                             {{
-                                scope.row.isArrivalInterview
+                                scope.row.isArrivalInterview !== "" &&
+                                scope.row.isArrivalInterview !== null
                                     ? scope.row.isArrivalInterview
                                         ? "是"
                                         : "否"
