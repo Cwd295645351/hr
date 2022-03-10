@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-10 22:41:54
+ * @LastEditTime: 2022-03-10 23:13:17
 -->
 !<template>
     <div class="">
@@ -13,9 +13,14 @@
             style="width: 100%"
             border
             class="table-box"
-            max-height="730"
+            max-height="662"
         >
-            <el-table-column align="center" label="简历推送日期" width="130">
+            <el-table-column
+                align="center"
+                label="简历推送日期"
+                fixed="left"
+                width="100"
+            >
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-date-picker
@@ -29,7 +34,12 @@
                     <div v-else>{{ scope.row.date }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="应聘部门" width="100">
+            <el-table-column
+                align="center"
+                label="应聘部门"
+                fixed="left"
+                width="100"
+            >
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -57,7 +67,12 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column width="100" align="center" label="应聘职位">
+            <el-table-column
+                width="100"
+                align="center"
+                fixed="left"
+                label="应聘职位"
+            >
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -85,7 +100,12 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column width="60" align="center" label="类别">
+            <el-table-column
+                width="60"
+                align="center"
+                fixed="left"
+                label="类别"
+            >
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -106,7 +126,12 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="招聘渠道" width="85">
+            <el-table-column
+                align="center"
+                label="招聘渠道"
+                fixed="left"
+                width="85"
+            >
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-select
@@ -125,7 +150,12 @@
                     <div v-else>{{ scope.row.channelName }}</div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="姓名" width="80">
+            <el-table-column
+                align="center"
+                label="姓名"
+                fixed="left"
+                width="80"
+            >
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-input
