@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-10 23:34:05
+ * @LastEditTime: 2022-03-10 23:39:36
 -->
 !<template>
     <div class="">
@@ -180,7 +180,7 @@
                         </el-select>
                     </div>
                     <div v-else>
-                        {{ scope.row.sex ? (scope.row.sex ? "男" : "女") : "" }}
+                        {{ scope.row.sex != null ? (scope.row.sex ? "男" : "女") : "" }}
                     </div>
                 </template>
             </el-table-column>
