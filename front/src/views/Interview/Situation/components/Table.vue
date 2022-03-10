@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-10 23:13:17
+ * @LastEditTime: 2022-03-10 23:34:05
 -->
 !<template>
     <div class="">
@@ -13,7 +13,7 @@
             style="width: 100%"
             border
             class="table-box"
-            max-height="662"
+            :max-height="tableMaxHeight"
         >
             <el-table-column
                 align="center"
@@ -433,7 +433,41 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="备注" width="130">
+            <el-table-column align="center" label="相关材料" width="100">
+                <template slot-scope="scope">
+                    <div v-if="scope.$index == 0 && tableStatus == 'add'"></div>
+                    <div v-else>
+                        <div v-for="item in scope.row.fileList" :key="item.url">
+                            <a :href="item.url" target="_blank">{{
+                                item.name
+                            }}</a>
+                        </div>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
+                v-if="joinDateShow"
+                align="center"
+                label="入职时间"
+                prop="joinDate"
+                width="95"
+            >
+            </el-table-column>
+
+            <el-table-column
+                v-if="stageId == 6"
+                align="center"
+                label="淘汰状态"
+                prop="statusName"
+                width="95"
+            >
+            </el-table-column>
+            <el-table-column
+                align="center"
+                fixed="right"
+                label="备注"
+                width="130"
+            >
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-input
@@ -455,35 +489,6 @@
                 </template>
             </el-table-column>
             <el-table-column
-                v-if="joinDateShow"
-                align="center"
-                label="入职时间"
-                prop="joinDate"
-                width="95"
-            >
-            </el-table-column>
-            <el-table-column align="center" label="相关材料" width="100">
-                <template slot-scope="scope">
-                    <div v-if="scope.$index == 0 && tableStatus == 'add'"></div>
-                    <div v-else>
-                        <div v-for="item in scope.row.fileList" :key="item.url">
-                            <a :href="item.url" target="_blank">{{
-                                item.name
-                            }}</a>
-                        </div>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                v-if="stageId == 6"
-                align="center"
-                label="淘汰状态"
-                prop="statusName"
-                width="95"
-            >
-            </el-table-column>
-            <el-table-column
-                v-if="stageId !== 6"
                 fixed="right"
                 align="center"
                 label="操作"
@@ -562,7 +567,7 @@
                             >到岗</el-link
                         >
                         <el-link
-                            v-if="statusId != 'join'"
+                            v-if="stageId != 5 && stageId != 6"
                             @click="handleData(scope.row, 10)"
                             type="info"
                             class="modify"
@@ -666,6 +671,10 @@ export default {
     created() {},
     watch: {},
     computed: {
+        // 表格最大高度
+        tableMaxHeight() {
+            return this.stageId != 2 && this.stageId != 3 ? 662 : 610;
+        },
         // 招聘职位
         jobs() {
             const apartmentId = this.newLine.apartmentId;
@@ -755,7 +764,7 @@ export default {
         border-radius: 4px;
     }
     .remark-situation {
-        height: 86px;
+        height: 30px;
         text-align: left;
     }
 }
