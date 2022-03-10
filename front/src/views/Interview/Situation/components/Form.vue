@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-08 22:26:05
+ * @LastEditTime: 2022-03-10 22:42:39
 -->
 <template>
     <div class="form-box">
@@ -264,7 +264,7 @@
                 </div>
             </template>
             <el-divider></el-divider>
-            <el-form-item  label="到面">
+            <el-form-item label="到面">
                 <el-switch
                     @change="handleData(scope.row, 12)"
                     v-model="editLine.isArrivalInterview"
@@ -355,7 +355,7 @@ export default {
         // 招聘职位
         jobs() {
             const apartmentId = this.editLine.apartmentId;
-            return apartmentId
+            return apartmentId !== ""
                 ? this.jobOptions[this.editLine.apartmentId].jobs
                 : [];
         },

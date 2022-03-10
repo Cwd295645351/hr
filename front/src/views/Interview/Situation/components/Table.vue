@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-08 22:26:44
+ * @LastEditTime: 2022-03-10 22:41:54
 -->
 !<template>
     <div class="">
@@ -639,7 +639,7 @@ export default {
         // 招聘职位
         jobs() {
             const apartmentId = this.newLine.apartmentId;
-            return apartmentId
+            return apartmentId !== ""
                 ? this.jobOptions[this.newLine.apartmentId].jobs
                 : [];
         },
