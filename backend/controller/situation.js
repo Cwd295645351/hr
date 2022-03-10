@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-08 22:16:02
+ * @LastEditTime: 2022-03-10 23:00:09
  */
 
 import xss from "xss";
@@ -78,7 +78,6 @@ export const getList = async (params) => {
 			$lte: params.interviewEndDate
 		};
 	}
-	console.log(mp);
 	if (params.jobId) {
 		const jobArr = params.jobId.split("-");
 		mp.apartmentId = jobArr[0];
@@ -152,7 +151,7 @@ export const addInterviewee = async (data) => {
 				(item) => item.id == data.degreeId
 			).name;
 		}
-		if (data.typeId) {
+		if (data.typeId !== "") {
 			data.typeName = config.type.find(
 				(item) => item.id == data.typeId
 			).name;
@@ -161,7 +160,6 @@ export const addInterviewee = async (data) => {
 			data.channelName = await getChannelNameById(data.channelId);
 		}
 		data.statusName = await getStatusNameById(data.stageId, data.statusId);
-		console.log(data);
 		const res = await Interview.create(data);
 		return {
 			retCode: res ? 0 : 1
@@ -311,7 +309,7 @@ export const editInterviewee = async (data) => {
 			};
 		}
 	} catch (e) {
-		console.log(11111111, e);
+		console.log(e);
 		return {
 			retCode: 1,
 			err: e
