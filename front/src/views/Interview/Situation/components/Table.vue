@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-10 23:39:36
+ * @LastEditTime: 2022-03-10 23:42:46
 -->
 !<template>
     <div class="">
@@ -716,6 +716,8 @@ export default {
                     default:
                         labels = ["一面信息", "二面信息", "三面信息"];
                 }
+            } else {
+                labels = ["一面信息", "二面信息", "三面信息"];
             }
             return labels;
         }
