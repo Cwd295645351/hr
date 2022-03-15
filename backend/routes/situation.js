@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-27 22:05:27
+ * @LastEditTime: 2022-03-15 22:49:12
  */
 import Router from "koa-router";
 import {
@@ -71,6 +71,8 @@ router.post("/addInterviewee", async (ctx, next) => {
 	const res = await addInterviewee(interviewee);
 	if (res.retCode == 0) {
 		ctx.body = new SuccessModel("", "新增成功");
+	} else if (res.retCode == 2) {
+		ctx.body = new ErrorModel(null, "候选人已存在");
 	} else {
 		let message = [];
 		const errors = res.err.errors;

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-10 23:00:09
+ * @LastEditTime: 2022-03-15 22:50:43
  */
 
 import xss from "xss";
@@ -135,35 +135,50 @@ export const getList = async (params) => {
 export const addInterviewee = async (data) => {
 	xssData(data);
 	try {
-		// 获取部门和职位名称
-		const apartment = await getJobName(data.apartmentId, data.jobId);
-		data.apartmentName = apartment.apartmentName;
-		data.jobName = apartment.jobName;
-
-		const config = await getConfig();
-		if (data.schoolPropertyId) {
-			data.schoolPropertyName = config.schoolProperty.find(
-				(item) => item.id == data.schoolPropertyId
-			).name;
-		}
-		if (data.degreeId) {
-			data.degreeName = config.degree.find(
-				(item) => item.id == data.degreeId
-			).name;
-		}
-		if (data.typeId !== "") {
-			data.typeName = config.type.find(
-				(item) => item.id == data.typeId
-			).name;
-		}
-		if (data.channelId) {
-			data.channelName = await getChannelNameById(data.channelId);
-		}
-		data.statusName = await getStatusNameById(data.stageId, data.statusId);
-		const res = await Interview.create(data);
-		return {
-			retCode: res ? 0 : 1
+		const params = {
+			name: data.name,
+			userId: data.userId,
+			isDelete: false
 		};
+		const findUser = await Interview.findOne(params);
+		if (!findUser) {
+			// 获取部门和职位名称
+			const apartment = await getJobName(data.apartmentId, data.jobId);
+			data.apartmentName = apartment.apartmentName;
+			data.jobName = apartment.jobName;
+
+			const config = await getConfig();
+			if (data.schoolPropertyId) {
+				data.schoolPropertyName = config.schoolProperty.find(
+					(item) => item.id == data.schoolPropertyId
+				).name;
+			}
+			if (data.degreeId) {
+				data.degreeName = config.degree.find(
+					(item) => item.id == data.degreeId
+				).name;
+			}
+			if (data.typeId !== "") {
+				data.typeName = config.type.find(
+					(item) => item.id == data.typeId
+				).name;
+			}
+			if (data.channelId) {
+				data.channelName = await getChannelNameById(data.channelId);
+			}
+			data.statusName = await getStatusNameById(
+				data.stageId,
+				data.statusId
+			);
+			const res = await Interview.create(data);
+			return {
+				retCode: res ? 0 : 1
+			};
+		} else {
+			return {
+				retCode: 2
+			};
+		}
 	} catch (e) {
 		console.log(e);
 		return {
