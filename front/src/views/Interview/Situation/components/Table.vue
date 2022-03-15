@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-10 23:42:46
+ * @LastEditTime: 2022-03-15 22:28:21
 -->
 !<template>
     <div class="">
@@ -180,7 +180,13 @@
                         </el-select>
                     </div>
                     <div v-else>
-                        {{ scope.row.sex != null ? (scope.row.sex ? "男" : "女") : "" }}
+                        {{
+                            scope.row.sex != null
+                                ? scope.row.sex
+                                    ? "男"
+                                    : "女"
+                                : ""
+                        }}
                     </div>
                 </template>
             </el-table-column>
@@ -436,7 +442,7 @@
             <el-table-column align="center" label="相关材料" width="100">
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'"></div>
-                    <div v-else>
+                    <div v-else class="material">
                         <div v-for="item in scope.row.fileList" :key="item.url">
                             <a :href="item.url" target="_blank">{{
                                 item.name
@@ -641,21 +647,6 @@ export default {
     },
     data() {
         return {
-            // 状态颜色
-            statusColor: {
-                pass: "#a593e0", // 通过初筛
-                noAnswer: "#6e7783", // 未应约
-                attendInterview: "#58c9b9", // 已约面
-                breakPromise: "#6e7783", // 爽约
-                faced: "#47b8e0", // 已到面
-                noHire: "#6e7783", // 不录用
-                employ: "#56a902", // 意向录用，待联系
-                contacted: "#a5dff9", // 已联系，待回复
-                refuseOffer: "#ffc952", // 拒Offer
-                joining: "#af4034", // 待入职
-                breachContract: "#6e7783", // 毁约
-                join: "#ff7473" // 已入职
-            },
             // 专业颜色
             majorsColor: {
                 0: "#ff9933",
@@ -768,6 +759,23 @@ export default {
     .remark-situation {
         height: 30px;
         text-align: left;
+    }
+    .material {
+        height: 30px;
+        overflow: auto;
+
+        &::-webkit-scrollbar {
+            width: 6px; /* 横向滚动条 */
+            height: 7px; /* 纵向滚动条 必写 */
+        }
+        &::-webkit-scrollbar-track-piece {
+            background: #fff; // 滚动条背景颜色
+        }
+        /* 滚动条的滑块 */
+        &::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 3.5px;
+        }
     }
 }
 </style>
