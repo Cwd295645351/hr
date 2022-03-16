@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-10 22:42:39
+ * @LastEditTime: 2022-03-16 10:26:27
 -->
 <template>
     <div class="form-box">
@@ -178,6 +178,16 @@
                 <el-radio v-model="editLine.isWork" :label="1">是</el-radio>
                 <el-radio v-model="editLine.isWork" :label="0">否</el-radio>
             </el-form-item>
+            <el-form-item label="通知日期">
+            <el-date-picker
+                v-model="editLine.remindDate"
+                type="date"
+                size="small"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"
+                clearable
+            ></el-date-picker>
+        </el-form-item>
 
             <el-form-item label="当前简历状态">
                 <el-select
@@ -201,16 +211,7 @@
                     :key="'interview' + index"
                 >
                     <el-divider>{{ item }}</el-divider>
-                    <el-form-item label="通知日期">
-                        <el-date-picker
-                            v-model="editLine.schedules[index].noticeTime"
-                            type="date"
-                            size="small"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期"
-                            clearable
-                        ></el-date-picker>
-                    </el-form-item>
+                    
                     <el-form-item label="面试形式">
                         <el-select
                             v-model="editLine.schedules[index].modeId"
