@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-15 22:50:43
+ * @LastEditTime: 2022-03-16 19:02:29
  */
 
 import xss from "xss";
@@ -148,12 +148,12 @@ export const addInterviewee = async (data) => {
 			data.jobName = apartment.jobName;
 
 			const config = await getConfig();
-			if (data.schoolPropertyId) {
+			if (data.schoolPropertyId !== "") {
 				data.schoolPropertyName = config.schoolProperty.find(
 					(item) => item.id == data.schoolPropertyId
 				).name;
 			}
-			if (data.degreeId) {
+			if (data.degreeId !== "") {
 				data.degreeName = config.degree.find(
 					(item) => item.id == data.degreeId
 				).name;
