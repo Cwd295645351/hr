@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-10 22:39:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-26 22:12:11
+ * @LastEditTime: 2022-03-20 23:34:22
  */
 import Router from "koa-router";
 import {
@@ -12,7 +12,8 @@ import {
 	getStatusList,
 	getConfig,
 	getJobList,
-	getInterviewerList
+	getInterviewerList,
+	getCityList
 } from "../controller/common";
 import { SuccessModel, ErrorModel } from "../model/resModel";
 import toPdf from "office-to-pdf";
@@ -65,7 +66,19 @@ router.get("/getConfig", async (ctx, next) => {
 
 // 获取面试官列表
 router.get("/getInterviewerList", async (ctx, next) => {
-	const res = await getInterviewerList();
+	const params = ctx.request.query;
+	const isLeader = params.isLeader ? true : undefined
+	const res = await getInterviewerList(isLeader);
+	if (res.length >= 0) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel("", "获取失败");
+	}
+});
+
+// 获取城市列表
+router.get("/getCityList", async (ctx, next) => {
+	const res = await getCityList();
 	if (res.length >= 0) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
