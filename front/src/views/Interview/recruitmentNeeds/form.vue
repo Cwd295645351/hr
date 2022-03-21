@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-26 23:20:32
  * @LastEditors: Chen
- * @LastEditTime: 2021-07-06 23:06:31
+ * @LastEditTime: 2022-03-22 00:01:56
 -->
 <template>
     <div class="form-box">
@@ -19,44 +19,99 @@
                     clearable
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="专业">
+            <el-form-item label="部门">
                 <el-select
-                    v-model="editLine.majorId"
-                    placeholder="请选择专业"
+                    v-model="editLine.apartmentId"
+                    placeholder="请选择部门"
                     size="small"
                     clearable
                 >
                     <el-option
-                        v-for="(item, index) in majorOptions"
-                        :key="item + '_editLine_' + index"
-                        :label="item.majorName"
-                        :value="item.majorId"
+                        v-for="(item, index) in jobOptions"
+                        :key="item + '_apartment_' + index"
+                        :label="item.apartmentName"
+                        :value="item.apartmentId"
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="部门">
-                <el-input
-                    v-model="editLine.apartment"
+            <el-form-item label="岗位">
+                <el-select
+                    v-model="editLine.jobId"
+                    placeholder="请选择岗位"
                     size="small"
-                    placeholder="请输入部门"
+                    clearable
+                >
+                    <el-option
+                        v-for="(item, index) in jobs"
+                        :key="item + '_jobOptions_' + index"
+                        :label="item.name"
+                        :value="item.id"
+                    ></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="薪酬范围">
+                <el-input
+                    v-model="editLine.salaryMin"
+                    class="money"
+                    size="small"
+                    placeholder="请输入"
+                    clearable
+                ></el-input
+                >-
+                <el-input
+                    v-model="editLine.salaryMax"
+                    size="small"
+                    class="money"
+                    placeholder="请输入"
                     clearable
                 ></el-input>
             </el-form-item>
-            <el-form-item label="性质">
+            <el-form-item label="类别">
                 <el-select
-                    v-model="editLine.property"
-                    placeholder="选择性质"
+                    v-model="editLine.typeId"
+                    placeholder="请选择类别"
                     size="small"
                     clearable
                 >
                     <el-option
-                        v-for="(item, index) in propertyOptions"
-                        :key="item + '_propertyOptions_' + index"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="(item, index) in types"
+                        :key="item + '_typesOptions_' + index"
+                        :label="item.name"
+                        :value="item.id"
                     ></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="用人经理">
+                <el-select
+                    v-model="editLine.interviewerId"
+                    placeholder="请选择类别"
+                    size="small"
+                    clearable
+                >
+                    <el-option
+                        v-for="(item, index) in interviewerOptions"
+                        :key="item + '_interviewerOptions_' + index"
+                        :label="item.name"
+                        :value="item.id"
+                    ></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="地点">
+                <el-select
+                    v-model="editLine.cityId"
+                    placeholder="请选择地点"
+                    size="small"
+                    clearable
+                >
+                    <el-option
+                        v-for="(item, index) in citiesOptions"
+                        :key="item + '_cityOptions_' + index"
+                        :label="item.name"
+                        :value="item.id"
+                    ></el-option>
+                </el-select>
+            </el-form-item>
+
             <el-form-item label="人数">
                 <el-input
                     v-model="editLine.num"
@@ -104,12 +159,16 @@
                 ></el-input>
             </el-form-item>
             <el-form-item label="进度">
-                <el-input
-                    v-model="editLine.schedule"
+                <el-select
+                    v-model="editLine.scheduleId"
                     size="small"
-                    placeholder="请输入进度"
+                    placeholder="请选择类别"
                     clearable
-                ></el-input>
+                >
+                    <el-option label="开放中" :value="1"></el-option>
+                    <el-option label="已关闭" :value="2"></el-option>
+                    <el-option label="暂停" :value="3"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="备注">
                 <el-input
@@ -156,20 +215,12 @@ export default {
             }
         };
     },
-    computed: {},
     props: {
-        editLine: {
-            type: Object,
-            default: {}
-        },
-        majorOptions: {
-            type: Array,
-            default: () => []
-        },
-        propertyOptions: {
-            type: Array,
-            default: () => []
-        }
+        editLine: { type: Object, default: () => {} },
+        jobOptions: { type: Array, default: () => [] },
+        interviewerOptions: { type: Array, default: () => [] },
+        citiesOptions: { type: Array, default: () => [] },
+        types: { type: Array, default: () => [] }
     },
     created() {},
     mounted() {},
@@ -189,6 +240,14 @@ export default {
             } else {
                 return "";
             }
+        },
+        // 招聘职位
+        jobs() {
+            console.log(111);
+            const apartmentId = this.editLine.apartmentId;
+            return apartmentId !== ""
+                ? this.jobOptions[this.editLine.apartmentId].jobs
+                : [];
         }
     },
     methods: {}

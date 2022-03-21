@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-16 19:02:29
+ * @LastEditTime: 2022-03-21 23:38:08
  */
 
 import xss from "xss";
@@ -12,7 +12,6 @@ import mongoose from "../db/db";
 
 import Interview from "../db/models/Interviewees";
 import {
-	getMajorNameById,
 	getChannelNameById,
 	getStatusNameById,
 	getJobName,

@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-07-06 21:45:27
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 18:18:31
+ * @LastEditTime: 2022-03-20 23:43:22
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -20,24 +20,40 @@ const RecruitmentNeedsSchema = mongoose.Schema(
 				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
-		// 专业id
-		majorId: { type: String },
-		// 专业名称
-		majorName: { type: String },
-		// 部门
-		apartment: { type: String },
-		// 性质
-		property: { type: String },
+		// 应聘部门id
+		apartmentId: { type: Number },
+		// 应聘部门名称
+		apartmentName: { type: String },
+		// 应聘职位id
+		jobId: { type: Number },
+		// 应聘职位名称
+		jobName: { type: String },
+		// 最低薪酬
+		salaryMin: { type: Number },
+		// 最高薪酬
+		salaryMax: { type: Number },
+		// 类别id
+		typeId: { type: Number },
+		// 类别名称
+		typeName: { type: String },
+		// 用人经理id
+		interviewerId: { type: Number },
+		// 用人经理名称
+		interviewerName: { type: String },
+		// 城市id
+		cityId: { type: Number },
+		// 城市名称
+		cityName: { type: String },
 		// 人数
 		num: { type: Number },
-		// 具体要求
+		// JD
 		demand: { type: String },
 		// 希望到岗时间
 		hopeArrivalTime: { type: String },
 		// 实际到岗时间
 		actualArrivalTime: { type: String },
-		// 进度
-		schedule: { type: String },
+		// 进度id
+		scheduleId: { type: Number },
 		// 备注
 		remark: { type: String },
 		// 是否删除

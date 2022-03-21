@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-01 12:32:04
+ * @LastEditTime: 2022-03-22 00:06:43
 -->
 <template>
     <div class="originNums">
@@ -48,57 +48,145 @@
                         <div v-else>{{ scope.row.date }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column align="center" label="专业">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-select
-                                v-model="newLine.majorId"
-                                placeholder="请选择专业"
-                                size="small"
-                                clearable
-                            >
-                                <el-option
-                                    v-for="(item, index) in majorOptions"
-                                    :key="item + '_newLine_' + index"
-                                    :label="item.majorName"
-                                    :value="item.majorId"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div v-else>{{ scope.row.majorName }}</div>
-                    </template>
-                </el-table-column>
                 <el-table-column align="center" label="部门">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-input
-                                v-model="newLine.apartment"
-                                size="small"
-                                placeholder="请输入部门"
-                                clearable
-                            ></el-input>
-                        </div>
-                        <div v-else>{{ scope.row.apartment }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" label="性质">
-                    <template slot-scope="scope">
-                        <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-select
-                                v-model="newLine.property"
+                                v-model="newLine.apartmentId"
+                                placeholder="请选择部门"
                                 size="small"
-                                placeholder="请选择性质"
-                                clearable
                             >
                                 <el-option
-                                    v-for="(item, index) in propertyOptions"
-                                    :key="item + '_propertyOptions_' + index"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    v-for="(item, index) in jobOptions"
+                                    :key="item + '_apartment_' + index"
+                                    :label="item.apartmentName"
+                                    :value="item.apartmentId"
                                 ></el-option>
                             </el-select>
                         </div>
-                        <div v-else>{{ scope.row.property }}</div>
+                        <div
+                            class="major"
+                            :style="{
+                                'background-color':
+                                    majorsColor[scope.row.apartmentId]
+                            }"
+                            v-else
+                        >
+                            {{ scope.row.apartmentName }}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="岗位">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.jobId"
+                                placeholder="请选择岗位"
+                                size="small"
+                            >
+                                <el-option
+                                    v-for="(item, index) in jobs"
+                                    :key="item + '_jobOptions_' + index"
+                                    :label="item.name"
+                                    :value="item.id"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div
+                            class="major"
+                            :style="{
+                                'background-color':
+                                    majorsColor[scope.row.apartmentId]
+                            }"
+                            v-else
+                        >
+                            {{ scope.row.jobName }}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="薪酬范围" width="140">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-input
+                                v-model="newLine.salaryMin"
+                                class="money"
+                                size="small"
+                                placeholder="请输入"
+                                clearable
+                            ></el-input
+                            >-
+                            <el-input
+                                v-model="newLine.salaryMax"
+                                size="small"
+                                class="money"
+                                placeholder="请输入"
+                                clearable
+                            ></el-input>
+                        </div>
+                        <div v-else>
+                            {{ scope.row.salaryMin }} -
+                            {{ scope.row.salaryMax }} K
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="类别">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.typeId"
+                                size="small"
+                                placeholder="请选择类别"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item, index) in types"
+                                    :key="item + '_typesOptions_' + index"
+                                    :label="item.name"
+                                    :value="item.id"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>{{ scope.row.typeName }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="用人经理">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.interviewerId"
+                                size="small"
+                                placeholder="请选择用人经理"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item, index) in interviewerOptions"
+                                    :key="item + '_interviewerOptions_' + index"
+                                    :label="item.name"
+                                    :value="item.id"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>{{ scope.row.interviewerName }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="地点">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.cityId"
+                                size="small"
+                                placeholder="请选择地点"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item, index) in citiesOptions"
+                                    :key="item + '_cityOptions_' + index"
+                                    :label="item.name"
+                                    :value="item.id"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>{{ scope.row.cityName }}</div>
                     </template>
                 </el-table-column>
 
@@ -115,14 +203,14 @@
                         <div v-else>{{ scope.row.num }}</div>
                     </template>
                 </el-table-column>
-                <el-table-column align="center" label="具体要求">
+                <el-table-column align="center" label="JD">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 type="textarea"
                                 v-model="newLine.demand"
                                 autosize
-                                placeholder="请输入具体要求"
+                                placeholder="请输入JD"
                             ></el-input>
                         </div>
                         <div v-else>{{ scope.row.demand }}</div>
@@ -168,14 +256,24 @@
                 <el-table-column align="center" label="进度">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-input
-                                v-model="newLine.schedule"
+                            <el-select
+                                v-model="newLine.scheduleId"
                                 size="small"
-                                placeholder="请输入进度"
+                                placeholder="请选择类别"
                                 clearable
-                            ></el-input>
+                            >
+                                <el-option
+                                    label="开放中"
+                                    :value="1"
+                                ></el-option>
+                                <el-option
+                                    label="已关闭"
+                                    :value="2"
+                                ></el-option>
+                                <el-option label="暂停" :value="3"></el-option>
+                            </el-select>
                         </div>
-                        <div v-else>{{ scope.row.schedule }}</div>
+                        <div v-else>{{ scope.row.scheduleName }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -245,8 +343,10 @@
                 <my-form
                     ref="editLine"
                     :editLine="editLine"
-                    :propertyOptions="propertyOptions"
-                    :majorOptions="majorOptions"
+                    :job-options="jobOptions"
+                    :interviewer-options="interviewerOptions"
+                    :citied-options="citiesOptions"
+                    :types="types"
                 ></my-form>
                 <div class="demo-drawer__footer">
                     <el-button :disable="loading" @click="cancelForm"
@@ -272,14 +372,18 @@ import {
     deleteCruitment
 } from "../../../../apis/interview/cruitmentNeeds";
 import myForm from "./form";
-import { getMajorList } from "../../../../apis/common";
+import {
+    getJobList,
+    getConfig,
+    getInterviewerList,
+    getCityList
+} from "../../../../apis/common";
 export default {
     components: { myForm },
     data() {
         const _this = this;
         return {
-            // 用户id
-            userId: "",
+            userId: "", // 用户id
             // 开始时间限制条件
             beginDateOptions: {
                 disabledDate(time) {
@@ -306,56 +410,90 @@ export default {
                     }
                 }
             },
-            // 表格loading
-            loading: false,
-            // 表格数据
-            tableData: [],
-            // 表格总数
-            pageIndex: 0,
-            pageSize: 10,
-            total: 0,
-            // 新增标志,true为正在新增，false为已保存
-            addLineTag: false,
-            // 修改招聘需求数侧拉
-            operateDialogTag: false,
-            // 新增一行
-            newLine: {},
-            // 编辑信息
-            editLine: {},
-            // 专业数组
-            majorOptions: [],
-            // 性质数组
-            propertyOptions: [
-                {
-                    label: "社招",
-                    value: "社招"
-                },
-                {
-                    label: "校招",
-                    value: "校招"
-                },
-                {
-                    label: "实习",
-                    value: "实习"
-                }
-            ]
+            loading: false, // 表格loading
+            tableData: [], // 表格数据
+            pageIndex: 0, // 页码
+            pageSize: 10, // 每页大小
+            total: 0, // 表格总数
+            addLineTag: false, // 新增标志,true为正在新增，false为已保存
+            operateDialogTag: false, // 修改招聘需求数侧拉
+            newLine: {}, // 新增一行
+            editLine: {}, // 编辑信息
+            interviewerOptions: [], // 面试官数组
+            jobOptions: [], // 应聘部门-职位数组
+            citiesOptions: [], // 城市数据
+            types: [], // 类别数据
+            // 专业颜色
+            majorsColor: {
+                0: "#ff9933",
+                1: "#0099cc",
+                2: "#99cc00",
+                3: "#cc9999",
+                4: "#ffcc33",
+                5: "#009999"
+            }
         };
     },
     created() {},
+    computed: {
+        // 招聘职位
+        jobs() {
+            const apartmentId = this.newLine.apartmentId;
+            return apartmentId !== ""
+                ? this.jobOptions[this.newLine.apartmentId].jobs
+                : [];
+        }
+    },
     mounted() {
         const userInfo = this.$tools.getUserInfo();
         this.userId = userInfo.userId;
-        this.getMajorList();
+        this.getJobList();
+        this.getConfig();
+        this.getInterviewerList();
+        this.getCityList();
         this.search(1);
     },
     methods: {
-        // 获取专业列表
-        async getMajorList() {
+        // 获取职位列表
+        async getJobList() {
             const {
                 data: { data, retCode, message }
-            } = await getMajorList();
+            } = await getJobList();
             if (retCode === 0) {
-                this.majorOptions = data;
+                this.jobOptions = data;
+            } else {
+                this.$message.error(message);
+            }
+        },
+        // 获取配置
+        async getConfig() {
+            const {
+                data: { data, retCode, message }
+            } = await getConfig();
+            if (retCode === 0) {
+                this.types = data.type;
+            } else {
+                this.$message.error(message);
+            }
+        },
+        // 获取面试官列表
+        async getInterviewerList() {
+            const {
+                data: { data, retCode, message }
+            } = await getInterviewerList(true);
+            if (retCode === 0) {
+                this.interviewerOptions = data;
+            } else {
+                this.$message.error(message);
+            }
+        },
+        // 获取面试官列表
+        async getCityList() {
+            const {
+                data: { data, retCode, message }
+            } = await getCityList();
+            if (retCode === 0) {
+                this.citiesOptions = data;
             } else {
                 this.$message.error(message);
             }
@@ -401,6 +539,17 @@ export default {
                     } else {
                         item.recruitmentTime = "";
                     }
+                    switch (item.scheduleId) {
+                        case 0:
+                            item.scheduleName = "开放中";
+                            break;
+                        case 1:
+                            item.scheduleName = "已关闭";
+                            break;
+                        case 2:
+                            item.scheduleName = "暂停";
+                            break;
+                    }
                     return item;
                 });
                 this.total = data.total;
@@ -413,15 +562,24 @@ export default {
             this.addLineTag = true;
             this.newLine = {
                 date: "",
-                majorId: "",
-                apartment: "",
-                property: "",
+                apartmentId: "",
+                apartmentName: "",
+                jobId: "",
+                jobName: "",
+                salaryMin: "",
+                salaryMax: "",
+                typeId: "",
+                typeName: "",
+                interviewerId: "",
+                interviewerName: "",
+                cityId: "",
+                cityName: "",
                 num: "",
                 demand: "",
                 hopeArrivalTime: "",
                 actualArrivalTime: "",
                 recruitmentTime: "",
-                schedule: "",
+                scheduleId: "",
                 remark: "",
                 isDelete: false
             };
@@ -554,71 +712,21 @@ export default {
                 border-right: 1px solid #c5c5c5;
                 margin-right: 5px;
             }
-            .status {
-                color: #fff;
-                border-radius: 4px;
-                &.join {
-                    background: #fdb13f;
-                }
-                &.employ {
-                    background: #ff4d4d;
-                }
-                &.faced {
-                    background: #a64dff;
-                }
-                &.attendInterview {
-                    background: #4d4dff;
-                }
-                &.pass {
-                    background: #ffa64d;
-                }
-                &.hire {
-                    background: #9b9b9b;
-                }
-                &.refuse {
-                    background: #85b96f;
-                }
-            }
             .major {
                 color: #fff;
                 border-radius: 4px;
-                &.architecture {
-                    background: #4da6ff;
-                }
-                &.structure {
-                    background: #4d4dff;
-                }
-                &.drainage {
-                    background: #ff4d4d;
-                }
-                &.HVAC {
-                    background: #1ee08f;
-                }
-                &.projectAssistant {
-                    background: #ffa64d;
-                }
-                &.marketingSpecialist {
-                    background: #a64dff;
-                }
-                &.finance {
-                    background: #ffff4d;
-                }
-                &.BIM {
-                    background: #00d1d1;
-                }
-                &.electricity {
-                    background: #ff4dff;
-                }
-            }
-            .phone-interview-situation {
-                height: 100px;
-                text-align: left;
             }
             .remark {
                 // height: 100px;
                 display: flex;
                 align-items: center;
                 text-align: left;
+            }
+            .money {
+                width: 80px;
+                /deep/.el-input__inner {
+                    width: 100%;
+                }
             }
         }
         .page {
