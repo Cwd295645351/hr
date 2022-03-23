@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-07-06 21:43:26
+ * @LastEditTime: 2022-03-07 17:14:47
 -->
 <template>
     <div class="interview">
@@ -70,7 +70,7 @@ export default {
                     route: "situation",
                     icon: "el-icon-document"
                 },
-                {
+                /* {
                     title: "统计信息",
                     route: "statistics",
                     icon: "el-icon-pie-chart"
@@ -84,7 +84,7 @@ export default {
                     title: "入职信息",
                     route: "joinInfo",
                     icon: "el-icon-s-management"
-                },
+                }, */
                 {
                     title: "需求登记",
                     route: "recruitmentNeeds",

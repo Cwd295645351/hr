@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-22 00:06:43
+ * @LastEditTime: 2022-03-23 21:46:18
 -->
 <template>
     <div class="originNums">
@@ -33,6 +33,23 @@
                 :loading="loading"
                 v-loading="loading"
             >
+                <el-table-column align="center" label="优先级">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index == 0 && addLineTag == true">
+                            <el-select
+                                v-model="newLine.priority"
+                                size="small"
+                                placeholder="请选择优先级"
+                                clearable
+                            >
+                                <el-option label="高" :value="1"></el-option>
+                                <el-option label="中" :value="2"></el-option>
+                                <el-option label="低" :value="3"></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>{{ scope.row.priorityName }}</div>
+                    </template>
+                </el-table-column>
                 <el-table-column align="center" label="登记日期">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
@@ -540,14 +557,25 @@ export default {
                         item.recruitmentTime = "";
                     }
                     switch (item.scheduleId) {
-                        case 0:
+                        case 1:
                             item.scheduleName = "开放中";
                             break;
-                        case 1:
+                        case 2:
                             item.scheduleName = "已关闭";
                             break;
-                        case 2:
+                        case 3:
                             item.scheduleName = "暂停";
+                            break;
+                    }
+                    switch (item.priority) {
+                        case 1:
+                            item.priorityName = "高";
+                            break;
+                        case 2:
+                            item.priorityName = "中";
+                            break;
+                        case 3:
+                            item.priorityName = "低";
                             break;
                     }
                     return item;
@@ -580,6 +608,7 @@ export default {
                 actualArrivalTime: "",
                 recruitmentTime: "",
                 scheduleId: "",
+                priority: "",
                 remark: "",
                 isDelete: false
             };

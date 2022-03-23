@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-07-06 21:57:14
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-22 00:07:05
+ * @LastEditTime: 2022-03-23 21:50:15
  */
 import xss from "xss";
 import mongoose from "../db/db";
@@ -58,11 +58,12 @@ export const getList = async (params) => {
 		hopeArrivalTime: 1,
 		actualArrivalTime: 1,
 		scheduleId: 1,
+		priority: 1,
 		remark: 1
 	};
 
 	const res = await RecruitmentNeeds.find(mp, filterData)
-		.sort({ date: -1, scheduleId: 1 })
+		.sort({  scheduleId: 1, priority: 1, jobId: 1, date: -1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
 	const length = await RecruitmentNeeds.find(mp).count();
@@ -158,7 +159,8 @@ export const editRecruitment = async (data) => {
 				demand: data.demand,
 				hopeArrivalTime: data.hopeArrivalTime,
 				actualArrivalTime: data.actualArrivalTime,
-				schedule: data.schedule,
+				scheduleId: data.scheduleId,
+				priority: data.priority,
 				remark: data.remark
 			},
 			{ new: true }

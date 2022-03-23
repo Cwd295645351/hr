@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-10 22:39:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-20 23:34:22
+ * @LastEditTime: 2022-03-23 19:19:32
  */
 import Router from "koa-router";
 import {
@@ -67,7 +67,7 @@ router.get("/getConfig", async (ctx, next) => {
 // 获取面试官列表
 router.get("/getInterviewerList", async (ctx, next) => {
 	const params = ctx.request.query;
-	const isLeader = params.isLeader ? true : undefined
+	const isLeader = params.isLeader =='true' ? true : false
 	const res = await getInterviewerList(isLeader);
 	if (res.length >= 0) {
 		ctx.body = new SuccessModel(res, "获取成功");

@@ -4,7 +4,7 @@
  * @Author:
  * @Date: 2021-07-06 21:45:27
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-20 23:43:22
+ * @LastEditTime: 2022-03-23 21:51:22
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
@@ -54,6 +54,8 @@ const RecruitmentNeedsSchema = mongoose.Schema(
 		actualArrivalTime: { type: String },
 		// 进度id
 		scheduleId: { type: Number },
+		// 优先级
+		priority: { type: Number },
 		// 备注
 		remark: { type: String },
 		// 是否删除

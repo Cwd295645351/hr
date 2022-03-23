@@ -4,11 +4,23 @@
  * @Author: Chen
  * @Date: 2021-03-26 23:20:32
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-22 00:01:56
+ * @LastEditTime: 2022-03-23 21:47:32
 -->
 <template>
     <div class="form-box">
         <el-form :model="editLine" label-width="130px" label-position="left">
+            <el-form-item label="优先级">
+                <el-select
+                    v-model="editLine.priority"
+                    size="small"
+                    placeholder="请选择优先级"
+                    clearable
+                >
+                    <el-option label="高" :value="1"></el-option>
+                    <el-option label="中" :value="2"></el-option>
+                    <el-option label="低" :value="3"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="日期">
                 <el-date-picker
                     v-model="editLine.date"
