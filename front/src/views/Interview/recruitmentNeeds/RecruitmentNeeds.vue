@@ -3,8 +3,8 @@
  * @Version: 
  * @Author: Chen
  * @Date: 2021-03-13 14:37:51
- * @LastEditors: Chen
- * @LastEditTime: 2022-03-23 21:46:18
+ * @LastEditors: ChenWeidong
+ * @LastEditTime: 2022-03-28 15:48:37
 -->
 <template>
     <div class="originNums">
@@ -362,7 +362,7 @@
                     :editLine="editLine"
                     :job-options="jobOptions"
                     :interviewer-options="interviewerOptions"
-                    :citied-options="citiesOptions"
+                    :cities-options="citiesOptions"
                     :types="types"
                 ></my-form>
                 <div class="demo-drawer__footer">
@@ -547,10 +547,10 @@ export default {
             if (retCode === 0) {
                 console.log(data);
                 this.tableData = data.datas.map((item) => {
-                    if (item.actualArrivalTime && item.hopeArrivalTime) {
+                    if (item.actualArrivalTime && item.date) {
                         item.recruitmentTime =
                             (new Date(item.actualArrivalTime) -
-                                new Date(item.hopeArrivalTime)) /
+                                new Date(item.date)) /
                                 86400000 +
                             "天";
                     } else {
