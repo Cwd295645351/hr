@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-15 22:28:21
+ * @LastEditTime: 2022-03-27 16:12:49
 -->
 !<template>
     <div class="">
@@ -230,6 +230,7 @@
                 <template slot-scope="scope">
                     <div v-if="scope.$index == 0 && tableStatus == 'add'">
                         <el-input
+                            @change="schoolChange"
                             v-model="newLine.school"
                             size="small"
                             placeholder="请输入毕业学校"
@@ -640,6 +641,10 @@ export default {
         schoolProperty: { type: Array, default: () => [] },
         // 学历数组
         degrees: { type: Array, default: () => [] },
+        // 985名单
+        school985: { type: Array, default: () => [] },
+        // 211名单
+        school211: { type: Array, default: () => [] },
         // 面试形式数组
         modes: { type: Array, default: () => [] },
         // 类别数组
@@ -733,6 +738,15 @@ export default {
                 data: row
             };
             this.$emit("operate", operateInfo);
+        },
+        schoolChange(val) {
+            if (this.school985.includes(val)) {
+                this.newLine.schoolPropertyId = 0;
+            } else if (this.school211.includes(val)) {
+                this.newLine.schoolPropertyId = 1;
+            } else {
+                this.newLine.schoolPropertyId = 5;
+            }
         },
         // 复制数据
         copyData(row) {

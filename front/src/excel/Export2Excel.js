@@ -120,22 +120,58 @@ export function export_table_to_excel(id) {
 function formatJson(jsonData) {
     console.log(jsonData)
 }
-export function export_json_to_excel(th, jsonData, defaultTitle) {
+// export function export_json_to_excel(th, jsonData, defaultTitle) {
+
+//     /* original data */
+
+//     var data = jsonData;
+//     data.unshift(th);
+//     var ws_name = "SheetJS";
+
+//     var wb = new Workbook(), ws = sheet_from_array_of_arrays(data);
+
+
+//     /* add worksheet to workbook */
+//     wb.SheetNames.push(ws_name);
+//     wb.Sheets[ws_name] = ws;
+
+//     var wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: false, type: 'binary'});
+//     var title = defaultTitle || '列表'
+//     saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), title + ".xlsx")
+// }
+
+export function export_json_to_excel({
+    multiHeader = [],	// 第一行表头
+    multiHeader2 = [], // 第二行表头
+    // header,	// 第三行表头
+    data,
+    filename, //文件名
+    merges = [], // 合并
+    bookType = 'xlsx'
+} = {}) {
 
     /* original data */
-
-    var data = jsonData;
-    data.unshift(th);
+    filename = filename || '列表';
+    data = [...data];
+    // data.unshift(header);
     var ws_name = "SheetJS";
 
+    data.unshift(multiHeader)
+
+    data.unshift(multiHeader2)
     var wb = new Workbook(), ws = sheet_from_array_of_arrays(data);
 
-
+    if (merges.length > 0) {
+        if (!ws['!merges']) ws['!merges'] = [];
+        merges.forEach(item => {
+            ws['!merges'].push(XLSX.utils.decode_range(item))
+        })
+    }
+  
     /* add worksheet to workbook */
     wb.SheetNames.push(ws_name);
     wb.Sheets[ws_name] = ws;
 
-    var wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: false, type: 'binary'});
-    var title = defaultTitle || '列表'
-    saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), title + ".xlsx")
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary' });
+    saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), `${filename}.${bookType}`)
 }

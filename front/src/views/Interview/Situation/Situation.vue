@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-27 00:14:44
+ * @LastEditTime: 2022-03-27 15:21:56
 -->
 <template>
     <div class="situation">
@@ -18,6 +18,8 @@
                     :job-options="jobOptions"
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
+                    :school211="school211"
+                    :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
                     :types="types"
@@ -33,6 +35,8 @@
                     :job-options="jobOptions"
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
+                    :school211="school211"
+                    :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
                     :types="types"
@@ -49,6 +53,8 @@
                     :job-options="jobOptions"
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
+                    :school211="school211"
+                    :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
                     :types="types"
@@ -65,6 +71,8 @@
                     :job-options="jobOptions"
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
+                    :school211="school211"
+                    :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
                     :types="types"
@@ -80,6 +88,8 @@
                     :job-options="jobOptions"
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
+                    :school211="school211"
+                    :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
                     :types="types"
@@ -95,6 +105,8 @@
                     :job-options="jobOptions"
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
+                    :school211="school211"
+                    :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
                     :types="types"
@@ -128,6 +140,8 @@ export default {
             degrees: [], // 学历
             modes: [], // 面试形式
             types: [], // 类别
+            school985: [], // 985学校名单
+            school211: [], // 211学校名单
             statusOptions: [] // 阶段-状态数组
         };
     },
@@ -163,6 +177,8 @@ export default {
                 this.degrees = data.degree;
                 this.modes = data.mode;
                 this.types = data.type;
+                this.school985 = data._985;
+                this.school211 = data._211;
             } else {
                 this.$message.error(message);
             }

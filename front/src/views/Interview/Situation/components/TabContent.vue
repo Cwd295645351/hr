@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-08 22:08:48
+ * @LastEditTime: 2022-04-06 18:23:56
 -->
 <template>
     <div class="tab-content">
@@ -138,6 +138,8 @@
                 :degrees="degrees"
                 :modes="modes"
                 :types="types"
+                :school985="school985"
+                :school211="school211"
                 @operate="handleData"
                 @editData="editData"
                 @copyData="copyData"
@@ -173,6 +175,8 @@
                     :job-options="jobOptions"
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
+                    :school985="school985"
+                    :school211="school211"
                     :degrees="degrees"
                     :modes="modes"
                     :types="types"
@@ -371,7 +375,9 @@ import {
 } from "../../../../../apis/interview/interview";
 import MyTable from "./Table.vue";
 import MyForm from "./Form.vue";
+import exportMixin from "./importFile";
 export default {
+    mixins: [exportMixin],
     props: {
         // 用户id
         userId: { type: String, default: "" },
@@ -391,6 +397,10 @@ export default {
         modes: { type: Array, default: () => [] },
         // 类别数组
         types: { type: Array, default: () => [] },
+        // 985名单
+        school985: { type: Array, default: () => [] },
+        // 211名单
+        school211: { type: Array, default: () => [] },
         // 阶段-状态数组
         statusOptions: { type: Array, default: () => [] },
         // 是否展示按钮组
@@ -625,7 +635,7 @@ export default {
                         );
                         arr.forEach((item) => {
                             const notifyObj = this.$notify({
-                                title: "强提醒",
+                                title: item.name,
                                 duration: 0,
                                 message: item.noticeStr,
                                 position: "bottom-right"
@@ -1136,7 +1146,52 @@ export default {
             this.editInterviewShow = false;
         },
         // 导出数据
-        exportData() {}
+        async exportData() {
+            let beginDate = "",
+                endDate = "";
+            if (this.searchInfo.beginDate) {
+                beginDate = this.$dayjs(this.searchInfo.beginDate).format(
+                    "YYYY-MM-DD"
+                );
+            }
+            if (this.searchInfo.endDate) {
+                endDate = this.$dayjs(this.searchInfo.endDate).format(
+                    "YYYY-MM-DD"
+                );
+            }
+            let interviewBeginDate = "",
+                interviewEndDate = "";
+            if (this.searchInfo.interviewBeginDate) {
+                interviewBeginDate =
+                    this.searchInfo.interviewBeginDate.toISOString();
+            }
+            if (this.searchInfo.interviewEndDate) {
+                interviewEndDate =
+                    this.searchInfo.interviewEndDate.toISOString();
+            }
+            const params = {
+                userId: this.userId,
+                statusId: this.statusId,
+                stageId: this.stageId,
+                beginDate: beginDate,
+                endDate: endDate,
+                interviewBeginDate: interviewBeginDate,
+                interviewEndDate: interviewEndDate,
+                jobId: this.searchInfo.jobId,
+                name: this.searchInfo.name,
+                pageIndex: 1,
+                pageSize: this.pageSize
+            };
+            const {
+                data: { data, retCode, message }
+            } = await getInterviewList(params);
+            if (retCode === 0) {
+                console.log("查询结果", data);
+                this.getExcel_city(data.datas);
+            } else {
+                this.$message.error(message);
+            }
+        }
     }
 };
 </script>

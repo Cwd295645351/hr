@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2022-01-22 09:07:30
  * @LastEditors: Chen
- * @LastEditTime: 2022-01-22 09:57:36
+ * @LastEditTime: 2022-03-27 23:15:58
  */
 
 const { export_json_to_excel } = require("../../../../excel/Export2Excel");
@@ -13,52 +13,109 @@ var importMixin = {
 		//导出方法
 		getExcel_city(res) {
 			require.ensure([], () => {
-				const tHeader = [
-					"登记日期",
-					"专业",
+				const multiHeader2 = [
+					"简历推送日期",
+					"状态",
+					"应聘部门",
+					"应聘职位",
 					"档案编号",
-					"性质",
+					"类别",
 					"招聘渠道",
 					"姓名",
-					"联系方式",
+					"性别",
+					"电话",
 					"邮箱",
-					"当前简历状态",
-					"入职日期",
-					"入职部门",
-					"入职备注",
-					"电话面试情况",
-					"备注",
-					"面试日期",
-					"面试形式",
-					"面试官",
-					"面试时间"
+					"所在城市",
+					"毕业学校",
+					"学校性质",
+					"学历",
+					"全日制",
+					"毕业时间",
+					"在职",
+					"通知日期",
+					"到面",
+					"相关材料",
+					"备注"
+				];
+				const merges = [
+					"A1:A2",
+					"B1:B2",
+					"C1:C2",
+					"D1:D2",
+					"E1:E2",
+					"F1:F2",
+					"G1:G2",
+					"H1:H2",
+					"I1:I2",
+					"J1:J2",
+					"K1:K2",
+					"L1:L2",
+					"M1:M2",
+					"N1:N2",
+					"O1:O2",
+					"P1:P2",
+					"Q1:Q2",
+					"R1:R2",
+					"S1:S2",
+					"T1:T2",
+					"U1:U2",
+					"V1:V2",
+					"W1:W2",
+				  ]
+				const multiHeader = [
+					"简历推送日期",
+					"状态",
+					"应聘部门",
+					"应聘职位",
+					"档案编号",
+					"类别",
+					"招聘渠道",
+					"姓名",
+					"性别",
+					"电话",
+					"邮箱",
+					"所在城市",
+					"毕业学校",
+					"学校性质",
+					"学历",
+					"全日制",
+					"毕业时间",
+					"在职",
+					"通知日期",
+					"到面",
+					"相关材料",
+					"备注"
 				];
 				const filterVal = [
 					"date",
-					"majorName",
+					"statusName",
+					"apartmentName",
+					"jobName",
 					"NO",
-					"property",
+					"typeName",
 					"channelName",
 					"name",
+					"sex",
 					"phoneNum",
 					"email",
-					"statusName",
-					"joinDate",
-					"apartment",
-					"joinRemark",
-					"phoneInterviewSituation",
-					"remark",
-					"schedules.date",
-					"schedules.form",
-					"schedules.interviewer",
-					"schedules.time"
+					"city",
+					"school",
+					"schoolPropertyName",
+					"degreeName",
+					"isFullTime",
+					"graduationDate",
+					"isWork",
+					"remindDate",
+					"isArrivalInterview",
+					"fileList",
+					"remark"
 				];
 				const list = res;
 				const data = this.formatJson(filterVal, list);
 				var filename =
 					"候选人信息-" +
 					this.$dayjs(new Date()).format("YYYYMMDDHHmmss");
-				export_json_to_excel(tHeader, data, filename);
+				export_json_to_excel({multiHeader, multiHeader2, data, filename, merges});
 			});
 		},
 		//格式化
