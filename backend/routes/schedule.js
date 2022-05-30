@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-15 00:17:20
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-07 17:40:32
+ * @LastEditTime: 2022-05-30 22:51:49
  */
 import Router from "koa-router";
 import getSchedule from "../controller/schedule";
@@ -40,7 +40,7 @@ router.get("/getSchedule", async (ctx, next) => {
 			time: item.schedules.interviewTime,
 			jobName: item.jobName,
 			modeName: item.schedules.modeName,
-			interviewer: item.schedules.interviewerName.slice(0,1),
+			interviewer: item.schedules.interviewerName.map(ite => ite.slice(0,1)).join("/"),
 			statusName: item.statusName,
 			order: item.schedules.order
 		};

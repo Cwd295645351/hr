@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-24 22:55:45
  * @LastEditors: Chen
- * @LastEditTime: 2022-02-13 18:21:30
+ * @LastEditTime: 2022-05-30 22:45:57
  */
 
 import mongoose from "../db";
@@ -19,7 +19,12 @@ const ConfigSchema = mongoose.Schema(
 		// 面试形式
 		mode: { type: Array, required: true },
 		// 类别
-		type: { type: Array, required: true }
+		type: { type: Array, required: true },
+		// 985大学名单
+		_985: { type: Array, required: true },
+		// 211学校名单
+		_211: { type: Array, required: true },
+		
 	},
 	{ timestamps: true }
 );

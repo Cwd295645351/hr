@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-21 23:38:08
+ * @LastEditTime: 2022-05-30 22:44:55
  */
 
 import xss from "xss";
@@ -247,12 +247,11 @@ export const editInterviewee = async (data) => {
 		for (let i = 0; i < data.schedules.length; i++) {
 			if (originSchedule[i]) {
 				// 修改面试官信息
-				if (originSchedule[i].interviewerId !== data.interviewerId) {
-					data.schedules[i].interviewerName =
-						await getInterviewerName(
-							data.schedules[i].interviewerId
-						);
-				}
+				data.schedules[i].interviewerName = await Promise.all(
+					data.schedules[i].interviewerId.map(async (item) => {
+						return await getInterviewerName(item);
+					})
+				);
 				// 修改面试形式
 				if (originSchedule[i].modeId !== data.modeId) {
 					data.schedules[i].modeName = config.mode.find(
@@ -262,10 +261,11 @@ export const editInterviewee = async (data) => {
 			} else {
 				// 修改面试官信息
 				if (data.schedules[i].interviewerId) {
-					data.schedules[i].interviewerName =
-						await getInterviewerName(
-							data.schedules[i].interviewerId
-						);
+					data.schedules[i].interviewerName = await Promise.all(
+						data.schedules[i].interviewerId.map(async (item) => {
+							return await getInterviewerName(item);
+						})
+					);
 				}
 				// 修改面试形式
 				if (data.schedules[i].modeId) {
@@ -368,8 +368,10 @@ export const changeSchedule = async (data) => {
 				schedules.modeName = config.mode.find(
 					(item) => item.id == schedules.modeId
 				).name;
-				schedules.interviewerName = await getInterviewerName(
-					schedules.interviewerId
+				schedules.interviewerName = await Promise.all(
+					schedules.interviewerId.map(async (item) => {
+						return await getInterviewerName(item);
+					})
 				);
 				changeData = {
 					statusId: data.statusId,

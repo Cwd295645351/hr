@@ -252,6 +252,7 @@
                         <el-select
                             v-model="editLine.schedules[index].interviewerId"
                             placeholder="请选择面试官"
+                            multiple
                             size="small"
                         >
                             <el-option

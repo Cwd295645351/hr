@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-04-06 18:23:56
+ * @LastEditTime: 2022-05-30 22:44:09
 -->
 <template>
     <div class="tab-content">
@@ -240,6 +240,7 @@
                     <el-select
                         v-model="operateInfo.interviewerId"
                         placeholder="请选择面试官"
+                        multiple
                         size="small"
                     >
                         <el-option
@@ -621,6 +622,11 @@ export default {
                         ite.interviewDate = this.$dayjs(
                             new Date(ite.interviewDate)
                         ).format("YYYY-MM-DD");
+                        ite.interviewerName = ite.interviewerName.reduce(
+                            (curr, prev) => {
+                                return curr + "," + prev;
+                            }
+                        );
                     });
                     return item;
                 });
@@ -834,7 +840,7 @@ export default {
                         modeId: "",
                         interviewDate: "",
                         interviewTime: "",
-                        interviewerId: "",
+                        interviewerId: [],
                         type: type,
                         order: 1,
                         statusId: "firstInterview"
@@ -847,7 +853,7 @@ export default {
                         modeId: "",
                         interviewDate: "",
                         interviewTime: "",
-                        interviewerId: "",
+                        interviewerId: [],
                         type: type,
                         order: 2,
                         statusId: "secondInterview"
@@ -860,7 +866,7 @@ export default {
                         modeId: "",
                         interviewDate: "",
                         interviewTime: "",
-                        interviewerId: "",
+                        interviewerId: [],
                         type: type,
                         order: 3,
                         statusId: "thirdInterview"
