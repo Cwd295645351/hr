@@ -4,11 +4,12 @@
  * @Author: Chen
  * @Date: 2021-01-23 13:41:03
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-01 12:42:19
+ * @LastEditTime: 2022-06-06 23:12:19
  */
 
 import {
 	GET_INTERVIEW_LIST,
+	EXPORT_INTERVIEW_DATA,
 	ADD_INTERVIEWEE,
 	IMPORT_INTERVIEWEE,
 	EDIT_INTERVIEWEE,
@@ -20,6 +21,11 @@ import axios from "../AxiosConfig";
 // 获取面试情况
 export const getInterviewList = (data) => {
 	return axios.post(GET_INTERVIEW_LIST, data);
+};
+
+// 导出面试情况
+export const exportInterviewData = (data) => {
+	return axios.post(EXPORT_INTERVIEW_DATA, data);
 };
 
 // 新增候选人

@@ -4,11 +4,12 @@
  * @Author: Chen
  * @Date: 2020-12-29 00:00:00
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-15 22:49:12
+ * @LastEditTime: 2022-06-06 23:14:17
  */
 import Router from "koa-router";
 import {
 	getList,
+	exportData,
 	addInterviewee,
 	importInterviewee,
 	editInterviewee,
@@ -43,6 +44,34 @@ router.post("/getList", async (ctx, next) => {
 		}
 	}
 	const res = await getList(params);
+	if (res) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel(null, "获取失败");
+	}
+});
+
+router.post("/exportData", async (ctx, next) => {
+	const params = ctx.request.body;
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
+	if (params.beginDate != "" && params.beginDate != undefined) {
+		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
+		if (reg.test(params.beginDate) == false) {
+			ctx.body = new ErrorModel(null, "开始时间不规范");
+			return;
+		}
+	}
+	if (params.endDate != "" && params.endDate != undefined) {
+		const reg = /^\d{4}-\d{2}-\d{2}$/gi;
+		if (reg.test(params.endDate) == false) {
+			ctx.body = new ErrorModel(null, "结束时间不规范");
+			return;
+		}
+	}
+	const res = await exportData(params);
 	if (res) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
@@ -122,7 +151,7 @@ router.post("/changeSchedule", async (ctx, next) => {
 	} else if (res.retCode == -1) {
 		ctx.body = new ErrorModel("", "编辑失败");
 	}
-})
+});
 
 // 删除候选人
 router.post("/deleteInterviewee", async (ctx, next) => {

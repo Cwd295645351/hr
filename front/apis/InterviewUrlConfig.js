@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:22:02
  * @LastEditors: Chen
- * @LastEditTime: 2022-03-20 23:36:36
+ * @LastEditTime: 2022-06-06 23:13:46
  */
 
 export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:80";
@@ -20,6 +20,7 @@ export const GET_CHANNEL_LIST = `${HOST}/api/common/getChannelList`; // 获取�
 export const GET_STATUS_LIST = `${HOST}/api/common/getStatusList`; // 获取渠道列表
 
 export const GET_INTERVIEW_LIST = `${HOST}/api/situation/getList`; // 获取面试情况
+export const EXPORT_INTERVIEW_DATA = `${HOST}/api/situation/exportData`; // 获取面试情况
 export const ADD_INTERVIEWEE = `${HOST}/api/situation/addInterviewee`; // 新增候选人
 export const IMPORT_INTERVIEWEE = `${HOST}/api/situation/importInterviewee`; // 批量导入候选人
 export const EDIT_INTERVIEWEE = `${HOST}/api/situation/editInterviewee`; // 修改候选人

@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-05 22:39:09
  * @LastEditors: Chen
- * @LastEditTime: 2022-05-30 22:44:55
+ * @LastEditTime: 2022-06-06 23:14:47
  */
 
 import xss from "xss";
@@ -127,6 +127,95 @@ export const getList = async (params) => {
 	return {
 		datas: res,
 		total: length
+	};
+};
+
+// 导出数据
+export const exportData = async (params) => {
+	let mp = {
+		userId: params.userId,
+		name: new RegExp(params.name, "ig"),
+		isDelete: false
+	};
+
+	if (params.beginDate && params.endDate) {
+		mp.date = {
+			$gte: new Date(params.beginDate),
+			$lte: new Date(params.endDate)
+		};
+	} else if (params.beginDate && !params.endDate) {
+		mp.date = {
+			$gte: new Date(params.beginDate)
+		};
+	} else if (!params.beginDate && params.endDate) {
+		mp.date = {
+			$lte: new Date(params.endDate)
+		};
+	}
+
+	if (params.interviewBeginDate && params.interviewEndDate) {
+		mp["schedules.0.interviewDate"] = {
+			$gte: params.interviewBeginDate,
+			$lte: params.interviewEndDate
+		};
+	} else if (params.interviewBeginDate && !params.interviewEndDate) {
+		mp["schedules.0.interviewDate"] = {
+			$gte: params.interviewBeginDate
+		};
+	} else if (!params.interviewBeginDate && params.interviewEndDate) {
+		mp["schedules.0.interviewDate"] = {
+			$lte: params.interviewEndDate
+		};
+	}
+	if (params.jobId) {
+		const jobArr = params.jobId.split("-");
+		mp.apartmentId = jobArr[0];
+		mp.jobId = jobArr[1];
+	}
+
+	const filterData = {
+		date: 1,
+		apartmentId: 1,
+		apartmentName: 1,
+		jobId: 1,
+		jobName: 1,
+		typeId: 1,
+		typeName: 1,
+		channelId: 1,
+		channelName: 1,
+		name: 1,
+		sex: 1,
+		phoneNum: 1,
+		email: 1,
+		city: 1,
+		school: 1,
+		schoolPropertyId: 1,
+		schoolPropertyName: 1,
+		degreeId: 1,
+		degreeName: 1,
+		isFullTime: 1,
+		graduationDate: 1,
+		isWork: 1,
+		remindDate: 1,
+		statusId: 1,
+		statusName: 1,
+		stageId: 1,
+		joinDate: 1,
+		schedules: 1,
+		noticeDate: 1,
+		noticeStr: 1,
+		isArrivalInterview: 1,
+		fileList: 1,
+		remark: 1
+	};
+
+	const res = await Interview.find(mp, filterData).sort({
+		date: -1,
+		jobName: -1,
+		"schedules.0.interviewDate": -1
+	});
+	return {
+		datas: res
 	};
 };
 

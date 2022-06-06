@@ -3,8 +3,8 @@
  * @Version:
  * @Author:Chen
  * @Date: 2022-01-22 09:07:30
- * @LastEditors: ChenWeidong
- * @LastEditTime: 2022-06-06 12:40:57
+ * @LastEditors: Chen
+ * @LastEditTime: 2022-06-06 22:33:55
  */
 
 const { export_json_to_excel } = require("../../../../excel/Export2Excel");
@@ -37,6 +37,14 @@ var importMixin = {
                     "",
                     "",
                     "",
+                    "二面信息",
+                    "",
+                    "",
+                    "",
+                    "三面信息",
+                    "",
+                    "",
+                    "",
                     "到面",
                     "相关材料",
                     "备注"
@@ -61,6 +69,14 @@ var importMixin = {
                     "",
                     "",
                     "",
+                    "面试形式",
+                    "面试日期",
+                    "面试时间",
+                    "面试官",
+                    "面试形式",
+                    "面试日期",
+                    "面试时间",
+                    "面试官",
                     "面试形式",
                     "面试日期",
                     "面试时间",
@@ -90,9 +106,11 @@ var importMixin = {
                     "R1:R2",
                     "S1:S2",
                     "T1:W1",
-                    "X1:X2",
-                    "Y1:Y2",
-                    "Z1:Z2"
+                    "X1:AA1",
+                    "AB1:AE1",
+                    "AF1:AF2",
+                    "AG:AG2",
+                    "AH1:AH2"
                 ];
                 const filterVal = [
                     "date",
@@ -115,6 +133,14 @@ var importMixin = {
                     "isWork",
                     "remindDate",
                     "isArrivalInterview",
+                    "fileList",
+                    "fileList",
+                    "fileList",
+                    "fileList",
+                    "fileList",
+                    "fileList",
+                    "fileList",
+                    "fileList",
                     "fileList",
                     "fileList",
                     "fileList",

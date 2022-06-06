@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-05-30 22:44:09
+ * @LastEditTime: 2022-06-06 23:12:49
 -->
 <template>
     <div class="tab-content">
@@ -372,7 +372,8 @@ import {
     editInterviewee,
     deleteInterviewee,
     changeSchedule,
-    getInterviewList
+    getInterviewList,
+    exportInterviewData
 } from "../../../../../apis/interview/interview";
 import MyTable from "./Table.vue";
 import MyForm from "./Form.vue";
@@ -1177,23 +1178,23 @@ export default {
             }
             const params = {
                 userId: this.userId,
-                statusId: this.statusId,
-                stageId: this.stageId,
                 beginDate: beginDate,
                 endDate: endDate,
                 interviewBeginDate: interviewBeginDate,
                 interviewEndDate: interviewEndDate,
                 jobId: this.searchInfo.jobId,
-                name: this.searchInfo.name,
-                pageIndex: 1,
-                pageSize: this.pageSize
+                name: this.searchInfo.name
             };
             const {
                 data: { data, retCode, message }
-            } = await getInterviewList(params);
+            } = await exportInterviewData(params);
             if (retCode === 0) {
                 console.log("查询结果", data);
-                this.getExcel_city(data.datas);
+                const changeData = data.datas.map(item => {
+                    
+                    return item;
+                })
+                this.getExcel_city(changeData);
             } else {
                 this.$message.error(message);
             }
