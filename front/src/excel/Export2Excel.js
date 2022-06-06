@@ -140,38 +140,40 @@ function formatJson(jsonData) {
 //     saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), title + ".xlsx")
 // }
 
+/*export_json_to_excel文件*/
 export function export_json_to_excel({
-    multiHeader = [],	// 第一行表头
+    multiHeader = [], // 第一行表头
     multiHeader2 = [], // 第二行表头
     // header,	// 第三行表头
     data,
     filename, //文件名
     merges = [], // 合并
-    bookType = 'xlsx'
+    bookType = "xlsx"
 } = {}) {
-
     /* original data */
-    filename = filename || '列表';
+    filename = filename || "列表";
     data = [...data];
     // data.unshift(header);
-    var ws_name = "SheetJS";
+    var ws_name = "面试信息";
 
-    data.unshift(multiHeader)
+    data.unshift(multiHeader2);
 
-    data.unshift(multiHeader2)
-    var wb = new Workbook(), ws = sheet_from_array_of_arrays(data);
+    data.unshift(multiHeader);
+
+    var wb = new Workbook(),
+        ws = sheet_from_array_of_arrays(data);
 
     if (merges.length > 0) {
-        if (!ws['!merges']) ws['!merges'] = [];
-        merges.forEach(item => {
-            ws['!merges'].push(XLSX.utils.decode_range(item))
-        })
+        if (!ws["!merges"]) ws["!merges"] = [];
+        merges.forEach((item) => {
+            ws["!merges"].push(XLSX.utils.decode_range(item));
+        });
     }
-  
+
     /* add worksheet to workbook */
     wb.SheetNames.push(ws_name);
     wb.Sheets[ws_name] = ws;
 
-    var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary' });
-    saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), `${filename}.${bookType}`)
+    var wbout = XLSX.write(wb, { bookType: "xlsx", bookSST: false, type: "binary" });
+    saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), `${filename}.${bookType}`);
 }
