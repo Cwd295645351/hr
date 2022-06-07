@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2022-01-22 09:07:30
  * @LastEditors: Chen
- * @LastEditTime: 2022-06-06 22:33:55
+ * @LastEditTime: 2022-06-08 00:09:52
  */
 
 const { export_json_to_excel } = require("../../../../excel/Export2Excel");
@@ -132,19 +132,19 @@ var importMixin = {
                     "graduationDate",
                     "isWork",
                     "remindDate",
+                    "schedules.0.modeName",
+                    "schedules.0.interviewDate",
+                    "schedules.0.interviewTime",
+                    "schedules.0.interviewerName",
+                    "schedules.1.modeName",
+                    "schedules.1.interviewDate",
+                    "schedules.1.interviewTime",
+                    "schedules.1.interviewerName",
+                    "schedules.2.modeName",
+                    "schedules.2.interviewDate",
+                    "schedules.2.interviewTime",
+                    "schedules.2.interviewerName",
                     "isArrivalInterview",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
-                    "fileList",
                     "fileList",
                     "remark"
                 ];
@@ -162,7 +162,7 @@ var importMixin = {
                 filterVal.map((j) => {
                     if (j.includes(".")) {
                         const arr = j.split(".");
-                        return v[arr[0]][arr[1]];
+                        return v[arr[0]][+arr[1]][arr[2]];
                     } else {
                         return v[j];
                     }
