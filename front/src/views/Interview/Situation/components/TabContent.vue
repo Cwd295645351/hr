@@ -4,7 +4,7 @@
  * @Author: 
  * @Date: 2022-02-21 22:41:06
  * @LastEditors: Chen
- * @LastEditTime: 2022-06-06 23:12:49
+ * @LastEditTime: 2022-06-09 00:04:58
 -->
 <template>
     <div class="tab-content">
@@ -107,18 +107,20 @@
                             >保存</el-button
                         >
                         <el-button @click="exportData">导出</el-button>
-                        <!-- <el-upload
-                        class="upload-demo"
-                        action
-                        :on-change="handleChange"
-                        :on-remove="handleRemove"
-                        :on-exceed="handleExceed"
-                        :show-file-list="false"
-                        :limit="1"
-                        :auto-upload="false"
-                    >
-                        <el-button size="small" type="primary">上传</el-button>
-                    </el-upload> -->
+                        <el-upload
+                            class="upload-demo"
+                            action
+                            :on-change="handleChange"
+                            :on-remove="handleRemove"
+                            :on-exceed="handleExceed"
+                            :show-file-list="false"
+                            :limit="1"
+                            :auto-upload="false"
+                        >
+                            <el-button size="small" type="primary"
+                                >上传</el-button
+                            >
+                        </el-upload>
                     </el-form-item>
                 </el-form>
             </div>
@@ -1189,11 +1191,21 @@ export default {
                 data: { data, retCode, message }
             } = await exportInterviewData(params);
             if (retCode === 0) {
-                console.log("查询结果", data);
-                const changeData = data.datas.map(item => {
-                    
+                const setName = (obj, key, trueName, falseName) => {
+                    if (obj[key] != null) {
+                        obj[key] = obj[key] === 1 ? trueName : falseName;
+                    }
+                };
+                const changeData = data.datas.map((item) => {
+                    setName(item, "sex", "男", "女");
+                    setName(item, "isWork", "是", "否");
+                    setName(item, "isFullTime", "是", "否");
+                    setName(item, "isArrivalInterview", "是", "否");
+                    item.fileList = item.fileList.map((file) => {
+                        return window.location.origin + file.url;
+                    });
                     return item;
-                })
+                });
                 this.getExcel_city(changeData);
             } else {
                 this.$message.error(message);
@@ -1221,6 +1233,10 @@ export default {
         flex-direction: column;
         .searchBar {
             text-align: left;
+            .upload-demo {
+                margin-left: 10px;
+                display: inline-block;
+            }
         }
         .table-container {
             flex: 1;
