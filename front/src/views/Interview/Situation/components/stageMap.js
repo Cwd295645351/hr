@@ -1,6 +1,7 @@
-export default {
-	初筛简历: {
+export default [
+	{
 		stageId: 1,
+		stageName: "初筛简历",
 		status: [
 			{
 				id: "pass",
@@ -8,8 +9,9 @@ export default {
 			}
 		]
 	},
-	面试: {
+	{
 		stageId: 2,
+		stageName: "面试",
 		status: [
 			{
 				id: "attendInterview",
@@ -29,8 +31,9 @@ export default {
 			}
 		]
 	},
-	录用: {
+	{
 		stageId: 3,
+		stageName: "录用",
 		status: [
 			{
 				id: "employ",
@@ -50,8 +53,9 @@ export default {
 			}
 		]
 	},
-	待入职: {
+	{
 		stageId: 4,
+		stageName: "待入职",
 		status: [
 			{
 				id: "joining",
@@ -59,8 +63,9 @@ export default {
 			}
 		]
 	},
-	到岗: {
+	{
 		stageId: 5,
+		stageName: "到岗",
 		status: [
 			{
 				id: "join",
@@ -68,8 +73,9 @@ export default {
 			}
 		]
 	},
-	人才库: {
+	{
 		stageId: 6,
+		stageName: "人才库",
 		status: [
 			{
 				id: 0,
@@ -133,4 +139,4 @@ export default {
 			}
 		]
 	}
-};
+];

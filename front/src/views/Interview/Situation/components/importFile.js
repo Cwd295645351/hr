@@ -4,7 +4,7 @@
  * @Author:Chen
  * @Date: 2022-01-22 09:07:30
  * @LastEditors: Chen
- * @LastEditTime: 2022-06-08 23:42:45
+ * @LastEditTime: 2022-06-12 23:55:04
  */
 
 const { export_json_to_excel } = require("../../../../excel/Export2Excel");
@@ -47,6 +47,7 @@ var importMixin = {
 					"",
 					"到面",
 					"相关材料",
+					"入职时间",
 					"备注"
 				];
 				const multiHeader2 = [
@@ -82,6 +83,7 @@ var importMixin = {
 					"面试官",
 					"",
 					"",
+					"",
 					""
 				];
 				const merges = [
@@ -108,7 +110,8 @@ var importMixin = {
 					"AA1:AD1",
 					"AE1:AE2",
 					"AF:AF2",
-					"AG1:AG2"
+					"AG1:AG2",
+					"AH1:AH2"
 				];
 				const filterVal = [
 					"date",
@@ -143,6 +146,7 @@ var importMixin = {
 					"schedules.2.interviewerName",
 					"isArrivalInterview",
 					"fileList",
+					"joinDate",
 					"remark"
 				];
 				const list = res;
@@ -239,7 +243,46 @@ var importMixin = {
 					let arr = [];
 					console.log(outdata, "======", wb.Sheets[wb.SheetNames[0]]);
 
-					outdata.forEach((item) => {});
+					outdata.forEach((item) => {
+						const obj = {
+							schedules: [],
+							fileList: [],
+							stageId: 0,
+							stageName: "",
+							statusId: "",
+							statusName: item["状态"],
+							date: _this.$dayjs(new Date()).format("YYYY-MM-DD"),
+							apartmentId: 0,
+							apartmentName: item["应聘部门"],
+							jobId: 0,
+							jobName: item["应聘职位"],
+							typeId: 0,
+							typeName: item["类别"],
+							channelId: "",
+							channelName: item["招聘渠道"],
+							name: item["姓名"],
+							sex: item["性别"] === "男" ? 1 : 0,
+							phoneNum: item["电话"],
+							email: item["邮箱"],
+							city: item["所在城市"],
+							school: item["毕业学校"],
+							schoolPropertyId: 0,
+							schoolPropertyName: item["学校性质"],
+							degreeId: 0,
+							degreeName: item["学历"],
+							isFullTime: item["全日制"] === "是" ? 1 : 0,
+							graduationDate: item["毕业时间"],
+							isWork: item["在职"] === "是" ? 1 : 0,
+							joinDate: item["入职时间"],
+							isArrivalInterview: 0,
+							remindDate: item["通知日期"],
+							remark: item["备注"],
+							noticeStr: "",
+							noticeDate: ""
+						};
+						this.handleImportData(obj);
+						arr.push(obj);
+					});
 
 					/* importInterviewee(arr).then((res) => {
                         // console.log(res);
@@ -266,7 +309,9 @@ var importMixin = {
 		// 移除文件的操作方法
 		handleRemove(file, fileList) {
 			this.fileTemp = null;
-		}
+		},
+		// 处理导入数据，将中文转化成对应的id
+		handleImportData(item) {}
 	}
 };
 
