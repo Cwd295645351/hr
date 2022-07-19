@@ -3,8 +3,8 @@
  * @Version: 
  * @Author: 
  * @Date: 2022-02-21 22:41:06
- * @LastEditors: Chen
- * @LastEditTime: 2022-06-09 00:04:58
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-07-19 22:13:37
 -->
 <template>
     <div class="tab-content">
@@ -1077,7 +1077,7 @@ export default {
                 date: row.date,
                 apartmentId: row.apartmentId,
                 jobId: row.jobId,
-                typeId: "",
+                typeId: row.typeId,
                 channelId: row.channelId,
                 name: "",
                 sex: "",
