@@ -3,8 +3,8 @@
  * @Version: 1.0.1
  * @Author: Chen
  * @Date: 2022-01-31 11:05:20
- * @LastEditors: Chen
- * @LastEditTime: 2022-03-27 16:12:49
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-07-27 00:03:41
 -->
 !<template>
     <div class="">
@@ -659,7 +659,8 @@ export default {
                 2: "#99cc00",
                 3: "#cc9999",
                 4: "#ffcc33",
-                5: "#009999"
+                5: "#009999",
+                6: '#3ab55a'
             }
         };
     },
