@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-23 13:48:58
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-13 14:15:01
+ * @LastEditTime: 2021-05-09 16:39:43
  */
 import {
 	GET_INTERVIEW_STATISTICS,
@@ -27,8 +27,8 @@ export const getEntryRate = (params) => {
 };
 
 // 获取初始简历列表
-export const getOriginNumsList = (params) => {
-	return axios.get(GET_ORIGIN_NUM_LIST, { params: params });
+export const getOriginNumsList = (data) => {
+	return axios.post(GET_ORIGIN_NUM_LIST, data);
 };
 
 // 新增初始简历数

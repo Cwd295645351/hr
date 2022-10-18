@@ -4,23 +4,33 @@
  * @Author: Chen
  * @Date: 2021-01-05 21:22:02
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-25 22:26:20
+ * @LastEditTime: 2022-06-06 23:13:46
  */
 
-export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:8000";
+export const HOST = process.env.NODE_ENV == "production" ? window.location.origin : "http://127.0.0.1:80";
 
 export const LOGIN = `${HOST}/api/user/login`; // 登录
 export const REFRESH_TOKEN = `${HOST}/api/user/refreshToken`; // 刷新token
 
-export const GET_MAJOR_LIST = `${HOST}/api/common/getMajorList`; // 获取专业列表
+export const GET_CONFIG = `${HOST}/api/common/getConfig`; // 获取配置
+export const GET_INTERVIEWER_LIST = `${HOST}/api/common/getInterviewerList`; // 获取面试官列表
+export const GET_JOB_LIST = `${HOST}/api/common/getJobList`; // 获取专业列表
+export const GET_CITY_LIST = `${HOST}/api/common/getCityList`; // 获取城市列表
 export const GET_CHANNEL_LIST = `${HOST}/api/common/getChannelList`; // 获取渠道列表
 export const GET_STATUS_LIST = `${HOST}/api/common/getStatusList`; // 获取渠道列表
 
 export const GET_INTERVIEW_LIST = `${HOST}/api/situation/getList`; // 获取面试情况
-export const ADD_INTERVIEWEE = `${HOST}/api/situation/addInterviewee`; // 新增面试者
-export const IMPORT_INTERVIEWEE = `${HOST}/api/situation/importInterviewee`; // 批量导入面试者
-export const EDIT_INTERVIEWEE = `${HOST}/api/situation/editInterviewee`; // 修改面试者
-export const DELETE_INTERVIEWEE = `${HOST}/api/situation/deleteInterviewee`; // 删除面试者
+export const EXPORT_INTERVIEW_DATA = `${HOST}/api/situation/exportData`; // 获取面试情况
+export const ADD_INTERVIEWEE = `${HOST}/api/situation/addInterviewee`; // 新增候选人
+export const IMPORT_INTERVIEWEE = `${HOST}/api/situation/importInterviewee`; // 批量导入候选人
+export const EDIT_INTERVIEWEE = `${HOST}/api/situation/editInterviewee`; // 修改候选人
+export const CHANGE_INTERVIEWEE_SCHEDULE = `${HOST}/api/situation/changeSchedule`; // 修改候选人面试进程
+export const DELETE_INTERVIEWEE = `${HOST}/api/situation/deleteInterviewee`; // 删除候选人
+
+export const GET_RECRUITMENT_LIST = `${HOST}/api/recruitment/getList`; // 获取需求
+export const ADD_RECRUITMENT = `${HOST}/api/recruitment/addRecruitment`; // 新增需求
+export const EDIT_RECRUITMENT = `${HOST}/api/recruitment/editRecruitment`; // 修改需求
+export const DELETE_RECRUITMENT = `${HOST}/api/recruitment/deleteRecruitment`; // 删除需求
 
 export const GET_INTERVIEW_STATISTICS = `${HOST}/api/statistics/getStatisticsData`; // 获取面试统计信息
 export const GET_ENTRY_RATE = `${HOST}/api/statistics/getEntryRate`; // 获取不同专业入职比例

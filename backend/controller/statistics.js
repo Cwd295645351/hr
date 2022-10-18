@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-01-14 21:44:37
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-26 23:50:05
+ * @LastEditTime: 2022-02-01 12:36:55
  */
 
 import xss from "xss";
@@ -29,6 +29,7 @@ const xssData = (data) => {
 // 获取面试统计信息
 export const getStatisticsData = async (params) => {
 	let mp = {};
+	mp.userId = params.userId;
 	if (params.beginDate && params.endDate) {
 		mp.date = {
 			$gte: new Date(params.beginDate),
@@ -44,6 +45,7 @@ export const getStatisticsData = async (params) => {
 		};
 	}
 	mp.majorId = new RegExp(params.majorId, "ig");
+	mp.isDelete = false;
 	const res = await Interview.find(mp, {
 		channelName: 1,
 		statusId: 1
@@ -54,6 +56,7 @@ export const getStatisticsData = async (params) => {
 // 获取不同专业入职比例
 export const getEntryRate = async (params) => {
 	let mp = {};
+	mp.userId = params.userId;
 	if (params.beginDate && params.endDate) {
 		mp.date = {
 			$gte: new Date(params.beginDate),
@@ -68,8 +71,8 @@ export const getEntryRate = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
-	mp.statusId = "join";
-	const res = await Interview.find(mp, { majorName: 1 });
+	mp.isDelete = false;
+	const res = await Interview.find(mp, { majorName: 1, statusId: 1 });
 	return res;
 };
 
@@ -79,6 +82,7 @@ export const getOriginNums = async (params) => {
 
 	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
 	const pageSize = parseInt(params.pageSize);
+	mp.userId = params.userId;
 	if (params.beginDate && params.endDate) {
 		mp.date = {
 			$gte: new Date(params.beginDate),
@@ -93,8 +97,33 @@ export const getOriginNums = async (params) => {
 			$lte: new Date(params.endDate)
 		};
 	}
-	mp.majorId = new RegExp(params.majorId, "ig");
-	const res = await OriginNums.find(mp)
+	if (params.property && params.property.length > 0) {
+		mp.property = {
+			$in: params.property
+		};
+	}
+	if (params.channelId && params.channelId.length > 0) {
+		mp.channelId = {
+			$in: params.channelId
+		};
+	}
+	if (params.majorId && params.majorId.length > 0) {
+		mp.majorId = {
+			$in: params.majorId
+		};
+	}
+	mp.isDelete = false;
+	const filterData = {
+		date: 1,
+		majorId: 1,
+		majorName: 1,
+		property: 1,
+		channelId: 1,
+		channelName: 1,
+		originNum: 1,
+		passNum: 1
+	};
+	const res = await OriginNums.find(mp, filterData)
 		.sort({ date: -1, _id: 1 })
 		.skip(pageIndex * pageSize)
 		.limit(pageSize);
@@ -145,11 +174,12 @@ export const editOriginNums = async (data) => {
 				majorName: data.majorName,
 				channelId: data.channelId,
 				channelName: data.channelName,
-				num: data.num
+				property: data.property,
+				originNum: data.originNum,
+				passNum: data.passNum
 			},
 			{ new: true }
 		);
-		console.log(res);
 		if (res) {
 			return {
 				retCode: 0
@@ -171,8 +201,16 @@ export const editOriginNums = async (data) => {
 export const deleteOriginNums = async (data) => {
 	const mp = {
 		_id: mongoose.Types.ObjectId(data.id),
-		userId: data.userId
+		userId: data.userId,
+		isDelete: false
 	};
-	const res = await OriginNums.findOneAndDelete(mp);
-	return res;
+	const res = await OriginNums.findOneAndUpdate(
+		mp,
+		{
+			isDelete: true
+		},
+		{ new: true }
+	);
+	if (res) return true;
+	else return false;
 };

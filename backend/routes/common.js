@@ -4,13 +4,16 @@
  * @Author: Chen
  * @Date: 2021-01-10 22:39:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-05-05 20:21:10
+ * @LastEditTime: 2022-03-23 19:19:32
  */
 import Router from "koa-router";
 import {
-	getMajorList,
 	getChannelList,
-	getStatusList
+	getStatusList,
+	getConfig,
+	getJobList,
+	getInterviewerList,
+	getCityList
 } from "../controller/common";
 import { SuccessModel, ErrorModel } from "../model/resModel";
 import toPdf from "office-to-pdf";
@@ -21,10 +24,10 @@ const router = Router({
 	prefix: "/api/common"
 });
 
-// 获取专业列表
-router.get("/getMajorList", async (ctx, next) => {
-	const res = await getMajorList();
-	if (res.length > 0) {
+// 获取职位列表
+router.get("/getJobList", async (ctx, next) => {
+	const res = await getJobList();
+	if (res.length >= 0) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
 		ctx.body = new ErrorModel("", "获取失败");
@@ -34,7 +37,7 @@ router.get("/getMajorList", async (ctx, next) => {
 // 获取渠道列表
 router.get("/getChannelList", async (ctx, next) => {
 	const res = await getChannelList();
-	if (res.length > 0) {
+	if (res.length >= 0) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
 		ctx.body = new ErrorModel("", "获取失败");
@@ -44,7 +47,39 @@ router.get("/getChannelList", async (ctx, next) => {
 // 获取状态列表
 router.get("/getStatusList", async (ctx, next) => {
 	const res = await getStatusList();
-	if (res.length > 0) {
+	if (res.length >= 0) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel("", "获取失败");
+	}
+});
+
+// 获取配置
+router.get("/getConfig", async (ctx, next) => {
+	const res = await getConfig();
+	if (res) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel("", "获取失败");
+	}
+});
+
+// 获取面试官列表
+router.get("/getInterviewerList", async (ctx, next) => {
+	const params = ctx.request.query;
+	const isLeader = params.isLeader =='true' ? true : false
+	const res = await getInterviewerList(isLeader);
+	if (res.length >= 0) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel("", "获取失败");
+	}
+});
+
+// 获取城市列表
+router.get("/getCityList", async (ctx, next) => {
+	const res = await getCityList();
+	if (res.length >= 0) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
 		ctx.body = new ErrorModel("", "获取失败");

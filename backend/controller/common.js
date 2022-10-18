@@ -4,45 +4,146 @@
  * @Author: Chen
  * @Date: 2021-01-10 17:33:06
  * @LastEditors: Chen
- * @LastEditTime: 2021-02-18 12:49:25
+ * @LastEditTime: 2022-03-20 23:37:36
  */
 
+// 招聘渠道
 import Channel from "../db/models/Channel";
-import Major from "../db/models/Major";
+// 招聘配置
+import Config from "../db/models/Config";
+// 状态
 import Status from "../db/models/Status";
+// 职位
+import Job from "../db/models/Jobs";
+// 面试官
+import Interviewer from "../db/models/Interviewer";
+// 城市
+import City from "../db/models/Cities";
 
-// 根据专业Id获取专业Name
-export const getMajorNameById = async (id) => {
-	const res = await Major.findOne({ majorId: id });
-	return res ? res.majorName : null;
-};
-
-// 根据渠道Id获取渠道Name
-export const getChannelNameById = async (id) => {
-	const res = await Channel.findOne({ channelId: id });
-	return res ? res.channelName : null;
-};
-
-// 根据状态Id获取渠道Name
-export const getStatusNameById = async (id) => {
-	const res = await Status.findOne({ statusId: id });
-	return res ? res.statusName : null;
-};
-
-// 获取渠道
+// 获取所有招聘渠道
 export const getChannelList = async () => {
-	const res = await Channel.find();
+	const res = await Channel.find({}, { _id: 0, id: 1, name: 1 }).sort({
+		sort: 1
+	});
 	return res;
 };
 
-// 获取专业
-export const getMajorList = async () => {
-	const res = await Major.find();
-	return res;
+// 根据渠道id获取渠道name
+export const getChannelNameById = async (id) => {
+	const res = await Channel.findOne({ id: id }, { _id: 0, name: 1 });
+	return (res && res.name) || null;
 };
 
-// 获取状态
+// 获取所有配置
+export const getConfig = async () => {
+	const res = await Config.find({}, { _id: 0 });
+	if (res) {
+		const config = res[0];
+		config.degree.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+		config.mode.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+		config.schoolProperty.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+		config.type.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+		return config;
+	} else {
+		return null;
+	}
+};
+
+// 获取所有状态
 export const getStatusList = async () => {
-	const res = await Status.find();
+	const res = await Status.find({}, { _id: 0, stageId: 1, status: 1 }).sort({
+		sort: 1
+	});
 	return res;
+};
+
+// 根据状态Id获取状态Name
+export const getStatusNameById = async (stageId, statusId) => {
+	const res = await Status.findOne(
+		{ stageId: stageId },
+		{ _id: 0, status: 1 }
+	);
+	if (res) {
+		return res.status.find((item) => item.id == statusId).name;
+	} else {
+		return null;
+	}
+};
+
+// 获取职位列表
+export const getJobList = async () => {
+	const res = await Job.find(
+		{},
+		{ _id: 0, apartmentId: 1, apartmentName: 1, jobs: 1 }
+	).sort({
+		sort: 1
+	});
+	res.forEach((item) => {
+		item.jobs.sort((a, b) => {
+			return a.sort - b.sort;
+		});
+	});
+	return res;
+};
+
+// 根据部门id，职位id获取部门名称、职位名称
+export const getJobName = async (apartmentId, jobId) => {
+	// 先找到部门，再过滤职位
+	const apartment = await Job.findOne(
+		{ apartmentId: apartmentId },
+		{ _id: 0, apartmentName: 1, jobs: 1 }
+	);
+	if (apartment) {
+		const jobName = apartment.jobs.find((item) => item.id == jobId).name;
+		if (jobName) {
+			return {
+				apartmentName: apartment.apartmentName,
+				jobName
+			};
+		} else {
+			return null;
+		}
+	} else {
+		return null;
+	}
+};
+
+// 获取所有面试官列表
+export const getInterviewerList = async (isLeader) => {
+	const params = { onWork: true };
+	if (isLeader) {
+		params.isLeader = true;
+	}
+	const res = await Interviewer.find(params, { _id: 0, id: 1, name: 1 }).sort(
+		{ sort: 1 }
+	);
+	return res;
+};
+
+// 根据面试官id查找面试官名称
+export const getInterviewerName = async (id) => {
+	const res = await Interviewer.findOne({ id: id }, { _id: 0, name: 1 });
+	return (res && res.name) || null;
+};
+
+// 获取所有城市列表
+export const getCityList = async () => {
+	const res = await City.find({}, { _id: 0, id: 1, name: 1 }).sort({
+		sort: 1
+	});
+	return res;
+};
+
+// 根据城市id查找城市名称
+export const getCityName = async (id) => {
+	const res = await City.findOne({ id: id }, { _id: 0, name: 1 });
+	return (res && res.name) || null;
 };

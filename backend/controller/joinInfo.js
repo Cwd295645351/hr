@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 23:28:47
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-25 22:58:45
+ * @LastEditTime: 2022-02-13 18:07:53
  */
 
 import xss from "xss";
@@ -30,6 +30,7 @@ const xssData = (data) => {
 export const getList = async (params) => {
 	const mp = {
 		hideTag: "0",
+		userId: params.userId,
 		statusId: {
 			$in: ["joining", "join"]
 		}
@@ -37,7 +38,7 @@ export const getList = async (params) => {
 	const filterData = {
 		NO: 1,
 		joinDate: 1,
-		joinProperty: 1,
+		property: 1,
 		name: 1,
 		apartment: 1,
 		hideTag: 1,
@@ -48,13 +49,22 @@ export const getList = async (params) => {
 	};
 	const pageIndex = params.pageIndex < 1 ? 0 : params.pageIndex - 1;
 	const pageSize = params.pageSize;
+	mp.isDelete = false;
 	const InterviewRes = await Interview.find(mp, filterData);
 	const JoinInfoRes = await JoinInfo.find({
-		hideTag: "0"
+		hideTag: "0",
+		userId: params.userId
 	});
 	const res = InterviewRes.concat(JoinInfoRes);
 
-	const hasData = res
+	// 待入职的信息
+	const joiningData = res.filter((item) => item.statusId === "joining");
+
+	// 已入职的信息
+	const joinData = res.filter((item) => item.statusId === "join");
+
+	// 待入职且已填入职时间的信息，按照入职时间排序
+	const joiningHasData = joiningData
 		.filter((item) => {
 			return item.joinDate;
 		})
@@ -63,11 +73,27 @@ export const getList = async (params) => {
 				new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime()
 			);
 		});
-	const noData = res.filter((item) => {
+	// 筛选出待入职但未填入职时间的信息
+	const joiningNoData = joiningData.filter((item) => {
 		return item.joinDate == "";
 	});
 
-	const total = hasData.concat(noData);
+	// 已入职且已填入职时间的信息，按照入职时间排序
+	const joinHasData = joinData
+		.filter((item) => {
+			return item.joinDate;
+		})
+		.sort((a, b) => {
+			return (
+				new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime()
+			);
+		});
+	// 筛选出已入职但未填入职时间的信息
+	const joinNoData = joinData.filter((item) => {
+		return item.joinDate == "";
+	});
+
+	const total = joiningHasData.concat(joiningNoData, joinHasData, joinNoData);
 
 	return {
 		datas: total.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize),
@@ -109,7 +135,7 @@ export const editInfo = async (data, isFromInfo) => {
 				{
 					NO: data.NO,
 					joinDate: data.joinDate,
-					joinProperty: data.joinProperty,
+					property: data.property,
 					statusId: data.statusId,
 					statusName: data.statusName,
 					name: data.name,
@@ -135,12 +161,13 @@ export const editInfo = async (data, isFromInfo) => {
 			const res = await Interview.findOneAndUpdate(
 				{
 					_id: mongoose.Types.ObjectId(data.id),
-					userId: data.userId
+					userId: data.userId,
+					isDelete: false
 				},
 				{
 					NO: data.NO,
 					joinDate: data.joinDate,
-					joinProperty: data.joinProperty,
+					property: data.property,
 					statusId: data.statusId,
 					statusName: data.statusName,
 					name: data.name,
@@ -175,7 +202,7 @@ export const hideInfo = async (data) => {
 		userId: data.userId
 	};
 	let res = null;
-	if (data.isFromInfo) {
+	if (!data.isFromInfo) {
 		res = await JoinInfo.findOneAndUpdate(
 			mp,
 			{

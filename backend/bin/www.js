@@ -1,7 +1,10 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
+/*
+ * @Description: 
+ * @Version: 
+ * @Author: 
+ * @Date: 2021-02-06 22:28:07
+ * @LastEditors: Chen
+ * @LastEditTime: 2022-02-09 22:14:58
  */
 
 var app = require('../app');
@@ -12,7 +15,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '8000');
+var port = normalizePort(process.env.PORT || '80');
 // app.set('port', port);
 
 /**

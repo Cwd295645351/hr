@@ -4,137 +4,114 @@
  * @Author:
  * @Date: 2021-01-02 17:46:51
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-24 21:32:39
+ * @LastEditTime: 2022-03-08 21:36:08
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
 
 const IntervieweesSchema = mongoose.Schema(
 	{
-		userId: {
-			// 用户id
-			type: String,
-			required: true
-		},
+		// 用户id
+		userId: { type: String, required: true },
+		// 简历推送日期
 		date: {
-			// 登记日期
 			type: Date,
 			get: (v) => {
-				if (v) {
-					return dayjs(v).format("YYYY-MM-DD");
-				} else {
-					return "";
-				}
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
-		majorId: {
-			// 专业id
-			type: String
+		// 应聘部门id
+		apartmentId: { type: Number },
+		// 应聘部门名称
+		apartmentName: { type: String },
+		// 应聘职位id
+		jobId: { type: Number },
+		// 应聘职位名称
+		jobName: { type: String },
+		// 类别id
+		typeId: { type: Number },
+		// 类别名称
+		typeName: { type: String },
+		// 招聘渠道id
+		channelId: { type: String },
+		// 招聘渠道名称
+		channelName: { type: String },
+		// 姓名
+		name: { type: String },
+		// 性别(0=男，1=女)
+		sex: { type: Number },
+		// 电话号码
+		phoneNum: { type: String },
+		// 邮箱
+		email: { type: String },
+		// 所在城市
+		city: { type: String },
+		// 毕业学校
+		school: { type: String },
+		// 学校性质id
+		schoolPropertyId: { type: Number },
+		// 学校性质名称
+		schoolPropertyName: { type: String },
+		// 学历id
+		degreeId: { type: Number },
+		// 学历名称
+		degreeName: { type: String },
+		// 是否全日制（0=否，1=是）
+		isFullTime: { type: Number },
+		// 毕业时间
+		graduationDate: {
+			type: Date,
+			get: (v) => {
+				return v ? dayjs(v).format("YYYY-MM") : "";
+			}
 		},
-		majorName: {
-			// 专业名称
-			type: String
-		},
-		name: {
-			// 姓名
-			type: String
-		},
-		property: {
-			// 招工性质
-			type: String
-		},
-		phoneNum: {
-			// 电话号码
-			type: String
-		},
-		email: {
-			// 邮箱
-			type: String
-		},
-		channelId: {
-			// 渠道id
-			type: String
-		},
-		channelName: {
-			// 渠道名称
-			type: String
-		},
-		statusId: {
-			// 状态
-			type: String
-		},
-		statusName: {
-			// 状态
-			type: String
-		},
+		// 是否在职（0=否，1=是）
+		isWork: { type: Number },
+		// 阶段id
+		stageId: { type: Number },
+		// 状态id
+		statusId: { type: String },
+		// 状态名称
+		statusName: { type: String },
+		// 入职时间
 		joinDate: {
-			// 入职时间
 			type: Date,
 			get: (v) => {
-				if (v) {
-					return dayjs(v).format("YYYY-MM-DD");
-				} else {
-					return "";
-				}
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
-		schedules: {
-			// 面试日程
-			date: {
-				type: Date,
-				get: (v) => {
-					if (v) {
-						return dayjs(v).format("YYYY-MM-DD");
-					} else {
-						return "";
-					}
-				},
-				set: (v) => {
-					return v;
-				}
-			},
-			time: {
-				type: String
-			},
-			interviewer: {
-				type: String
-			},
-			form: {
-				type: String
+		// 通知日期
+		remindDate: {
+			type: Date,
+			get: (v) => {
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
-		phoneInterviewSituation: {
-			// 电话面试情况
-			type: String
+		// 提醒事项
+		noticeStr: { type: String },
+		// 提醒时间
+		noticeDate: {
+			type: Date,
+			get: (v) => {
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
+			}
 		},
-		fileList: {
-			// 相关材料
-			type: Array
-		},
-		remark: {
-			// 备注
-			type: String
-		},
-		NO: {
-			// 档案编号
-			type: String
-		},
-		joinProperty: {
-			// 入职性质
-			type: String
-		},
-		apartment: {
-			// 部门
-			type: String
-		},
-		joinRemark: {
-			// 入职备注
-			type: String
-		},
-		hideTag: {
-			// 隐藏标志
-			type: String
-		}
+		// 面试日程
+		schedules: { type: Array },
+		// 是否到面(0=否，1=是)
+		isArrivalInterview: { type: Number },
+		// 相关材料
+		fileList: { type: Array },
+		// 备注
+		remark: { type: String },
+		// 档案编号
+		NO: { type: String },
+		// 入职备注
+		joinRemark: { type: String },
+		// 隐藏标志(隐藏入职信息):"1"=隐藏，"0"=显示
+		hideTag: { type: String },
+		// 是否删除
+		isDelete: { type: Boolean }
 	},
 	{ timestamps: true }
 );

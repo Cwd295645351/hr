@@ -4,22 +4,19 @@
  * @Author: Chen
  * @Date: 2020-12-24 22:59:19
  * @LastEditors: Chen
- * @LastEditTime: 2021-01-11 00:10:17
+ * @LastEditTime: 2022-02-13 22:34:42
  */
 
 import mongoose from "../db";
 
 const ChannelSchema = mongoose.Schema(
 	{
-		channelId: {
-			type: String,
-			required: true,
-			unique: true
-		},
-		channelName: {
-			type: String,
-			required: true
-		}
+		// id
+		id: { type: String, required: true, unique: true },
+		// 名称
+		name: { type: String, required: true },
+		// 排序
+		sort: { type: String, required: true, unique: true }
 	},
 	{ timestamps: true }
 );

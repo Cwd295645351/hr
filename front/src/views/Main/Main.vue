@@ -3,8 +3,8 @@
  * @Version: 0.0.1
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
- * @LastEditors: Chen Weidong
- * @LastEditTime: 2021-04-21 16:54:38
+ * @LastEditors: Chen
+ * @LastEditTime: 2022-03-06 09:40:45
 -->
 <template>
     <div class="main">
@@ -23,7 +23,7 @@
                     {{ item.title }}
                 </div>
             </div>
-            <div class="log-off">退出</div>
+            <div @click="logout" class="log-off">退出</div>
         </div>
         <router-view v-if="current_module"></router-view>
         <!-- <div class="content" v-else>
@@ -44,18 +44,18 @@ import { refreshToken } from "../../../apis/login";
 export default {
     data() {
         return {
-            current_module: "面试",
+            current_module: "招聘",
             modules: [
                 {
-                    title: "面试",
+                    title: "招聘",
                     route: "/main/interview"
                 },
                 {
-                    title: "人员",
+                    title: "HR",
                     route: "/main/user"
                 },
                 {
-                    title: "薪酬",
+                    title: "HR",
                     route: "/main/salary"
                 }
             ]
@@ -79,7 +79,7 @@ export default {
         // 心跳监测
         heartBeat() {
             const _this = this;
-            const SECONDS_ONE_BEAT = 60; // 心跳频率 s
+            const SECONDS_ONE_BEAT = 5; // 心跳频率 s
             let expiresAt = Number(sessionStorage.getItem("expiresAt"));
             if (!window.heartBeatTimer) {
                 window.heartBeatTimer = setTimeout(() => {
@@ -132,6 +132,9 @@ export default {
             sessionStorage.removeItem("menu");
             this.current_module = "";
             this.$router.push("/main");
+        },
+        logout() {
+            this.$router.push("/login");
         }
     }
 };

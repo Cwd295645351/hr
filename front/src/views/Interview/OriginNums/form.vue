@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-03-26 23:20:32
  * @LastEditors: Chen
- * @LastEditTime: 2021-03-26 23:43:44
+ * @LastEditTime: 2021-05-09 16:27:57
 -->
 <template>
     <div class="form-box">
@@ -34,6 +34,21 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="招工性质">
+                <el-select
+                    v-model="editLine.property"
+                    placeholder="选择性质"
+                    size="small"
+                    clearable
+                >
+                    <el-option
+                        v-for="(item, index) in propertyOptions"
+                        :key="item + '_propertyOptions_' + index"
+                        :label="item.label"
+                        :value="item.value"
+                    ></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="渠道">
                 <el-select
                     v-model="editLine.channelId"
@@ -49,11 +64,19 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="总数">
+            <el-form-item label="初始简历数">
                 <el-input
-                    v-model="editLine.num"
+                    v-model="editLine.originNum"
                     size="small"
-                    placeholder="请输入总数"
+                    placeholder="请输入初始简历数"
+                    clearable
+                ></el-input>
+            </el-form-item>
+            <el-form-item label="通过初筛数">
+                <el-input
+                    v-model="editLine.passNum"
+                    size="small"
+                    placeholder="请输入通过初筛数"
                     clearable
                 ></el-input>
             </el-form-item>
@@ -77,6 +100,10 @@ export default {
             default: () => []
         },
         channelOptions: {
+            type: Array,
+            default: () => []
+        },
+        propertyOptions: {
             type: Array,
             default: () => []
         }

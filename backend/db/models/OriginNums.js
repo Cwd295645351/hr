@@ -4,65 +4,39 @@
  * @Author: Chen
  * @Date: 2021-02-27 22:19:05
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-12 22:39:43
+ * @LastEditTime: 2022-02-13 18:18:23
  */
 import mongoose from "../db";
 import dayjs from "dayjs";
 
 const OriginNumsSchema = mongoose.Schema(
 	{
-		userId: {
-			// 用户id
-			type: String,
-			required: true
-		},
+		// 用户id
+		userId: { type: String, required: true },
+		// 日期
 		date: {
-			// 日期
 			type: Date,
 			required: true,
 			get: (v) => {
-				if (v) {
-					return dayjs(v).format("YYYY-MM-DD");
-				} else {
-					return "";
-				}
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
-		majorId: {
-			// 专业id
-			type: String,
-			required: true
-		},
-		majorName: {
-			// 专业名称
-			type: String,
-			required: true
-		},
-		channelId: {
-			// 渠道id
-			type: String,
-			required: true
-		},
-		channelName: {
-			// 渠道名称
-			type: String,
-			required: true
-		},
-		property: {
-			// 招工性质
-			type: String,
-			required: true
-		},
-		originNum: {
-			// 初始简历数
-			type: String,
-			required: true
-		},
-		passNum: {
-			// 通过初筛数
-			type: Number,
-			required: true
-		}
+		// 专业id
+		majorId: { type: String, required: true },
+		// 专业名称
+		majorName: { type: String, required: true },
+		// 渠道id
+		channelId: { type: String, required: true },
+		// 渠道名称
+		channelName: { type: String, required: true },
+		// 招工性质
+		property: { type: String, required: true },
+		// 初始简历数
+		originNum: { type: Number, required: true },
+		// 通过初筛数
+		passNum: { type: Number, required: true },
+		// 是否删除
+		isDelete: { type: Boolean }
 	},
 	{ timestamps: true }
 );

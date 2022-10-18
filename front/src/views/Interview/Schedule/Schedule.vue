@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2020-12-17 22:42:22
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-11 22:30:54
+ * @LastEditTime: 2022-03-07 17:39:05
 -->
 <template>
     <div class="schedule">
@@ -51,11 +51,11 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.majorName }}</div>
+                            <div>{{ item.order }}</div>
                             ,
-                            <div>{{ item.property }}</div>
+                            <div>{{ item.modeName }}</div>
                             ,
-                            <div>{{ item.form }}</div>
+                            <div>{{ item.jobName }}</div>
                             ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
@@ -74,11 +74,11 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.majorName }}</div>
+                            <div>{{ item.order }}</div>
                             ,
-                            <div>{{ item.property }}</div>
+                            <div>{{ item.modeName }}</div>
                             ,
-                            <div>{{ item.form }}</div>
+                            <div>{{ item.jobName }}</div>
                             ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
@@ -106,11 +106,11 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.majorName }}</div>
+                            <div>{{ item.order }}</div>
                             ,
-                            <div>{{ item.property }}</div>
+                            <div>{{ item.modeName }}</div>
                             ,
-                            <div>{{ item.form }}</div>
+                            <div>{{ item.jobName }}</div>
                             ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
@@ -129,11 +129,11 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.majorName }}</div>
+                            <div>{{ item.order }}</div>
                             ,
-                            <div>{{ item.property }}</div>
+                            <div>{{ item.modeName }}</div>
                             ,
-                            <div>{{ item.form }}</div>
+                            <div>{{ item.jobName }}</div>
                             ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
@@ -161,11 +161,11 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.majorName }}</div>
+                            <div>{{ item.order }}</div>
                             ,
-                            <div>{{ item.property }}</div>
+                            <div>{{ item.modeName }}</div>
                             ,
-                            <div>{{ item.form }}</div>
+                            <div>{{ item.jobName }}</div>
                             ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
@@ -184,11 +184,11 @@
                             <div>{{ item.time }}</div>
                             <div>{{ item.name }}</div>
                             <div>(</div>
-                            <div>{{ item.majorName }}</div>
+                            <div>{{ item.order }}</div>
                             ,
-                            <div>{{ item.property }}</div>
+                            <div>{{ item.modeName }}</div>
                             ,
-                            <div>{{ item.form }}</div>
+                            <div>{{ item.jobName }}</div>
                             ,
                             <div>{{ item.interviewer }}</div>
                             <div>)</div>
@@ -221,26 +221,24 @@ export default {
     created() {
         // this.$dayjs().weekday(1);
         let today = new Date();
-        let todayDate = this.$dayjs(today).format("YYYY-MM-DD");
-        let mondayDate = this.$dayjs(today)
-            .startOf("week")
-            .format("YYYY-MM-DD");
-        let sundayDate = this.$dayjs(today).endOf("week").format("YYYY-MM-DD");
+        let todayDate = this.$dayjs(today).toISOString();
+        let mondayDate = this.$dayjs(today).startOf("week").toISOString();
+        let sundayDate = this.$dayjs(today).endOf("week").toISOString();
 
         if (mondayDate == todayDate) {
             this.beginDate = this.$dayjs(
                 this.$dayjs(mondayDate).subtract(13, "days")
-            ).format("YYYY-MM-DD");
+            ).toISOString();
             this.endDate = this.$dayjs(
                 this.$dayjs(sundayDate).add(7, "days")
-            ).format("YYYY-MM-DD");
+            ).toISOString();
         } else {
             this.beginDate = this.$dayjs(
                 this.$dayjs(mondayDate).subtract(6, "days")
-            ).format("YYYY-MM-DD");
+            ).toISOString();
             this.endDate = this.$dayjs(
                 this.$dayjs(sundayDate).add(8, "days")
-            ).format("YYYY-MM-DD");
+            ).toISOString();
         }
     },
     mounted() {
@@ -263,7 +261,7 @@ export default {
                 this.datas = data.map((item) => {
                     let interview = item.interview;
                     item.morningInterview = interview.filter((item) => {
-                        return item.time < "12:00";
+                        return item.time < "12:00" || item.time == null;
                     });
                     item.afternoonInterview = interview.filter((item) => {
                         return item.time > "12:00";
@@ -278,20 +276,20 @@ export default {
         nextWeek() {
             this.endDate = this.$dayjs(this.endDate)
                 .add(7, "days")
-                .format("YYYY-MM-DD");
+                .toISOString();
             this.beginDate = this.$dayjs(this.beginDate)
                 .add(7, "days")
-                .format("YYYY-MM-DD");
+                .toISOString();
             this.searchData();
         },
         // 上一周
         lastWeek() {
             this.endDate = this.$dayjs(this.endDate)
                 .subtract(7, "days")
-                .format("YYYY-MM-DD");
+                .toISOString();
             this.beginDate = this.$dayjs(this.beginDate)
                 .subtract(7, "days")
-                .format("YYYY-MM-DD");
+                .toISOString();
             this.searchData();
         }
     }
@@ -380,7 +378,7 @@ export default {
             }
         }
         .weekend {
-            width: 220px !important;
+            width: 200px !important;
             flex: none !important;
         }
         .week {

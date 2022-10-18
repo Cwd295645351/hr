@@ -4,7 +4,7 @@
  * @Author: Chen
  * @Date: 2021-04-24 22:40:18
  * @LastEditors: Chen
- * @LastEditTime: 2021-04-29 22:33:07
+ * @LastEditTime: 2022-02-13 18:09:04
 -->
 <template>
     <div class="joinInfo">
@@ -86,14 +86,21 @@
                 <el-table-column align="center" label="性质">
                     <template slot-scope="scope">
                         <div v-if="scope.$index == 0 && addLineTag == true">
-                            <el-input
+                            <el-select
+                                v-model="newLine.property"
                                 size="small"
-                                placeholder="请输入性质"
-                                v-model="newLine.joinProperty"
+                                placeholder="请选择性质"
                                 clearable
-                            ></el-input>
+                            >
+                                <el-option
+                                    v-for="(item, index) in propertyOptions"
+                                    :key="item + '_propertyOptions_' + index"
+                                    :label="item.label"
+                                    :value="item.value"
+                                ></el-option>
+                            </el-select>
                         </div>
-                        <div v-else>{{ scope.row.joinProperty }}</div>
+                        <div v-else>{{ scope.row.property }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column align="center" label="部门">
@@ -101,7 +108,7 @@
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 size="small"
-                                placeholder="请输入性质"
+                                placeholder="请输入部门"
                                 v-model="newLine.apartment"
                                 clearable
                             ></el-input>
@@ -114,7 +121,7 @@
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 size="small"
-                                placeholder="请输入性质"
+                                placeholder="请输入姓名"
                                 v-model="newLine.name"
                                 clearable
                             ></el-input>
@@ -127,7 +134,7 @@
                         <div v-if="scope.$index == 0 && addLineTag == true">
                             <el-input
                                 size="small"
-                                placeholder="请输入性质"
+                                placeholder="请输入手机号"
                                 v-model="newLine.phoneNum"
                                 clearable
                             ></el-input>
@@ -192,6 +199,7 @@
                     ref="editLine"
                     :editLine="editLine"
                     :statusOptions="statusOptions"
+                    :propertyOptions="propertyOptions"
                 ></my-form>
                 <div class="demo-drawer__footer">
                     <el-button :disable="loading" @click="cancelForm"
@@ -242,7 +250,22 @@ export default {
             // 修改初始简历数侧拉
             operateDialogTag: false,
             // 编辑信息
-            editLine: {}
+            editLine: {},
+            // 性质数组
+            propertyOptions: [
+                {
+                    label: "社招",
+                    value: "社招"
+                },
+                {
+                    label: "校招",
+                    value: "校招"
+                },
+                {
+                    label: "实习",
+                    value: "实习"
+                }
+            ]
         };
     },
     created() {},
@@ -255,10 +278,10 @@ export default {
     methods: {
         rowStyle({ row, column, rowIndex, columnIndex }) {
             console.log(row, column, rowIndex, columnIndex);
-            if (row.statusName == "毁约") {
+            if (row.statusName === "毁约") {
                 return "background: #ff6666";
             } else {
-                if (new Date(row.joinDate) < new Date()) {
+                if (row.statusName === "已入职") {
                     return "background: #ffcc99";
                 } else {
                     return "background: rgb(180,198,231)";
@@ -271,7 +294,13 @@ export default {
                 data: { data, retCode, message }
             } = await getStatusList();
             if (retCode === 0) {
-                this.statusOptions = data;
+                this.statusOptions = data.filter((item) => {
+                    return (
+                        item.statusId === "joining" ||
+                        item.statusId === "breachContract" ||
+                        item.statusId === "join"
+                    );
+                });
             } else {
                 this.$message.error(message);
             }
@@ -321,7 +350,7 @@ export default {
                 phoneNum: "",
                 joinDate: "",
                 NO: "",
-                joinProperty: "",
+                property: "",
                 statusId: "",
                 apartment: "",
                 joinRemark: "",
@@ -353,7 +382,7 @@ export default {
                 this.loading = false;
             }
         },
-        // 修改面试流程
+        // 修改入职信息
         editInfo(row) {
             this.operateDialogTag = true;
             this.editLine = JSON.parse(JSON.stringify(row));
@@ -371,8 +400,8 @@ export default {
                         id: row.id,
                         isFromInfo: false
                     };
-                    if (row.updatedAt) {
-                        // 数据存在面试表
+                    if (!row.updatedAt) {
+                        // 数据存在面试表(只有从入职信息表中获取的数据才有updatedAt字段)
                         params.isFromInfo = true;
                     }
                     const {
@@ -462,7 +491,7 @@ export default {
             margin-top: 10px;
             text-align: right;
         }
-        /deep/ .el-table th{
+        /deep/ .el-table th {
             background: #ccc !important;
             color: #666;
         }
