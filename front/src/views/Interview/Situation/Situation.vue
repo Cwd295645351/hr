@@ -19,6 +19,7 @@
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
                     :school211="school211"
+                    :companies="companies"
                     :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
@@ -36,6 +37,7 @@
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
                     :school211="school211"
+                    :companies="companies"
                     :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
@@ -54,6 +56,7 @@
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
                     :school211="school211"
+                    :companies="companies"
                     :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
@@ -72,6 +75,7 @@
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
                     :school211="school211"
+                    :companies="companies"
                     :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
@@ -89,6 +93,7 @@
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
                     :school211="school211"
+                    :companies="companies"
                     :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
@@ -106,6 +111,7 @@
                     :interviewer-options="interviewerOptions"
                     :school-property="schoolProperty"
                     :school211="school211"
+                    :companies="companies"
                     :school985="school985"
                     :degrees="degrees"
                     :modes="modes"
@@ -142,6 +148,7 @@ export default {
             types: [], // 类别
             school985: [], // 985学校名单
             school211: [], // 211学校名单
+            companies: [], // 劳动合同签署公司
             statusOptions: [] // 阶段-状态数组
         };
     },
@@ -179,6 +186,7 @@ export default {
                 this.types = data.type;
                 this.school985 = data._985;
                 this.school211 = data._211;
+                this.companies = data.companies;
             } else {
                 this.$message.error(message);
             }

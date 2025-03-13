@@ -16,7 +16,9 @@ const ChannelSchema = mongoose.Schema(
 		// 名称
 		name: { type: String, required: true },
 		// 排序
-		sort: { type: String, required: true, unique: true }
+		sort: { type: String, required: true, unique: true },
+		// 二级渠道
+		subChannel: { type: Array }
 	},
 	{ timestamps: true }
 );

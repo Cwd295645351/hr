@@ -142,6 +142,7 @@
                 :types="types"
                 :school985="school985"
                 :school211="school211"
+                :companies="companies"
                 @operate="handleData"
                 @editData="editData"
                 @copyData="copyData"
@@ -179,6 +180,7 @@
                     :school-property="schoolProperty"
                     :school985="school985"
                     :school211="school211"
+                    :companies="companies"
                     :degrees="degrees"
                     :modes="modes"
                     :types="types"
@@ -405,6 +407,8 @@ export default {
         school985: { type: Array, default: () => [] },
         // 211名单
         school211: { type: Array, default: () => [] },
+		// 签署公司数组（HKGAI/科大）
+		companies: { type: Array, default: () => [] },
         // 阶段-状态数组
         statusOptions: { type: Array, default: () => [] },
         // 是否展示按钮组
@@ -701,7 +705,15 @@ export default {
                 noticeDate: "",
                 joinRemark: "",
                 hideTag: "0",
-                isDelete: false
+                isDelete: false,
+                EnglishName: '',
+                experience: '',
+                companyId: '',
+                subChannelId: '',
+                subChannelName: '',
+                trialDate: '',
+                leaveDate: '',
+                followUp: ''
             };
             this.tableDatas.unshift(this.newLine);
             this.tableDatas = JSON.parse(JSON.stringify(this.tableDatas));
@@ -739,6 +751,7 @@ export default {
                     interviewDate: operateInfo.interviewDate.toISOString(),
                     interviewTime: operateInfo.interviewTime,
                     interviewerId: operateInfo.interviewerId,
+                    interviewerCommitment: '',
                     order: operateInfo.order
                 }
             };
@@ -824,7 +837,7 @@ export default {
          表格操作
          type: 操作类型： 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已联系，
                          6=发offer，7=通过，8=接受，9=到岗，10=去人才库,
-                         11=设置提醒, 12=到面
+                         11=设置提醒, 12=到面，13=去四面
          */
         async handleData({ data, type }) {
             let params = {
@@ -876,6 +889,19 @@ export default {
                     };
                     this.showDialog = true;
                     break;
+                case 13:
+                    this.operateInfo = {
+                        id: data.id,
+                        modeId: "",
+                        interviewDate: "",
+                        interviewTime: "",
+                        interviewerId: [],
+                        type: type,
+                        order: 4,
+                        statusId: "forthInterview"
+                    };
+                    this.showDialog = true;
+                    break;
                 case 4:
                     params.stageId = 3;
                     params.statusId = "employ";
@@ -916,11 +942,11 @@ export default {
                     this.showNoticeDialog = true;
                     break;
                 case 12:
-                    console.log(data.isArrivalInterview);
+                    console.log(data.isArrivalInterview,"=======================");
                     params.isArrivalInterview = data.isArrivalInterview;
                     break;
             }
-            const types = [1, 2, 3, 6, 10, 11];
+            const types = [1, 2, 3, 6, 10, 11, 13];
             if (!types.includes(type)) {
                 const {
                     data: { retCode, message }
@@ -1079,6 +1105,8 @@ export default {
                 jobId: row.jobId,
                 typeId: row.typeId,
                 channelId: row.channelId,
+                subChannelId: row.subChannelId,
+                subChannelName: row.subChannelName,
                 name: "",
                 sex: "",
                 phoneNum: "",
@@ -1100,7 +1128,13 @@ export default {
                 noticeDate: "",
                 joinRemark: "",
                 hideTag: "0",
-                isDelete: false
+                isDelete: false,
+                EnglishName: '',
+                experience: '',
+                companyId: '',
+                trialDate: '',
+                leaveDate: '',
+                followUp: ''
             };
             this.tableDatas.unshift(this.newLine);
             this.tableDatas = JSON.parse(JSON.stringify(this.tableDatas));

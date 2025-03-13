@@ -28,6 +28,10 @@ export default [
 			{
 				id: "thirdInterview",
 				name: "三面"
+			},
+			{
+				id: "forthInterview",
+				name: "四面"
 			}
 		]
 	},

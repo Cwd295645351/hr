@@ -116,7 +116,16 @@ export const getList = async (params) => {
 		noticeStr: 1,
 		isArrivalInterview: 1,
 		fileList: 1,
-		remark: 1
+		remark: 1,
+		EnglishName: 1,
+		experience: 1,
+		companyId: 1,
+		companyName: 1,
+		subChannelId: 1,
+		subChannelName: 1,
+		trialDate: 1,
+		leaveDate: 1,
+		followUp: 1
 	};
 
 	const res = await Interview.find(mp, filterData)
@@ -231,9 +240,11 @@ export const addInterviewee = async (data) => {
 		const findUser = await Interview.findOne(params);
 		if (!findUser) {
 			// 获取部门和职位名称
-			const apartment = await getJobName(data.apartmentId, data.jobId);
-			data.apartmentName = apartment.apartmentName;
-			data.jobName = apartment.jobName;
+			if (data.apartmentId !== '') {
+				const apartment = await getJobName(data.apartmentId, data.jobId);
+				data.apartmentName = apartment.apartmentName;
+				data.jobName = apartment.jobName;
+			}
 
 			const config = await getConfig();
 			if (data.schoolPropertyId !== "") {
@@ -253,6 +264,11 @@ export const addInterviewee = async (data) => {
 			}
 			if (data.channelId) {
 				data.channelName = await getChannelNameById(data.channelId);
+			}
+			if (data.companyId !== '') {
+				data.companyName = config.companies.find(
+					(item) => item.id == data.companyId
+				).name;
 			}
 			data.statusName = await getStatusNameById(
 				data.stageId,
@@ -321,6 +337,11 @@ export const editInterviewee = async (data) => {
 		if (originData.typeId !== data.typeId) {
 			data.typeName = config.type.find(
 				(item) => item.id == data.typeId
+			).name;
+		}
+		if (originData.companyId !== data.companyId) {
+			data.companyName = config.companies.find(
+				(item) => item.id == data.companyId
 			).name;
 		}
 		const statusArr = data.statusId.split("-");
@@ -398,7 +419,16 @@ export const editInterviewee = async (data) => {
 				schedules: data.schedules,
 				isArrivalInterview: data.isArrivalInterview,
 				fileList: data.fileList,
-				remark: data.remark
+				remark: data.remark,
+				EnglishName: data.EnglishName,
+				companyId: data.companyId,
+				companyName: data.companyName,
+				subChannelId: data.subChannelId,
+				subChannelName: data.subChannelName,
+				trialDate: data.trialDate,
+				leaveDate: data.leaveDate,
+				followUp: data.followUp,
+				experience: data.experience
 			},
 			{ new: true }
 		);
@@ -432,7 +462,7 @@ export const changeSchedule = async (data) => {
 		};
 		let changeData = {};
 		// type: 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已联系，
-		// 6=发offer，7=通过，8=接受，9=到岗，10=去人才库, 11=设置提醒
+		// 6=发offer，7=通过，8=接受，9=到岗，10=去人才库, 11=设置提醒，12=到面，13=去四面
 		switch (type) {
 			case 0:
 			case 4:
@@ -452,6 +482,7 @@ export const changeSchedule = async (data) => {
 			case 1:
 			case 2:
 			case 3:
+			case 13:
 				const config = await getConfig();
 				const schedules = data.schedulesInfo;
 				schedules.modeName = config.mode.find(

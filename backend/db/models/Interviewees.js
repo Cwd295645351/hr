@@ -13,13 +13,18 @@ const IntervieweesSchema = mongoose.Schema(
 	{
 		// 用户id
 		userId: { type: String, required: true },
-		// 简历推送日期
-		date: {
-			type: Date,
-			get: (v) => {
-				return v ? dayjs(v).format("YYYY-MM-DD") : "";
-			}
-		},
+		// 姓名
+		name: { type: String },
+		// 英文姓名
+		EnglishName: { type: String },
+		// 电话号码
+		phoneNum: { type: String },
+		// 邮箱
+		email: { type: String },
+		// 所在城市
+		city: { type: String },
+		// 主要工作经历（公司&岗位名称）
+		experience: { type: String },
 		// 应聘部门id
 		apartmentId: { type: Number },
 		// 应聘部门名称
@@ -28,24 +33,37 @@ const IntervieweesSchema = mongoose.Schema(
 		jobId: { type: Number },
 		// 应聘职位名称
 		jobName: { type: String },
+		// 劳动合同签署公司id
+		companyId: { type: Number },
+		// 劳动合同签署公司名称
+		companyName: { type: String },
+		// 阶段id：1=初筛简历；2=面试；3=录用；4=待入职；5=到岗；6=人才库
+		stageId: { type: Number },
+		// 状态id
+		statusId: { type: String },
+		// 状态名称
+		statusName: { type: String },
+		// 简历推送日期
+		date: {
+			type: Date,
+			get: (v) => {
+				return v ? dayjs(v).format("YYYY-MM-DD") : "";
+			}
+		},
 		// 类别id
 		typeId: { type: Number },
-		// 类别名称
+		// 类别名称（全职/实习）
 		typeName: { type: String },
-		// 招聘渠道id
+		// 招聘渠道id（1=招聘网站；2=内部推荐；3=社交媒体；4=猎头；5=校园招聘；6=其他）
 		channelId: { type: String },
 		// 招聘渠道名称
 		channelName: { type: String },
-		// 姓名
-		name: { type: String },
+		// 二级招聘渠道id
+		subChannelId: { type: String },
+		// 二级招聘渠道名称
+		subChannelName: { type: String },
 		// 性别(0=男，1=女)
 		sex: { type: Number },
-		// 电话号码
-		phoneNum: { type: String },
-		// 邮箱
-		email: { type: String },
-		// 所在城市
-		city: { type: String },
 		// 毕业学校
 		school: { type: String },
 		// 学校性质id
@@ -67,12 +85,6 @@ const IntervieweesSchema = mongoose.Schema(
 		},
 		// 是否在职（0=否，1=是）
 		isWork: { type: Number },
-		// 阶段id
-		stageId: { type: Number },
-		// 状态id
-		statusId: { type: String },
-		// 状态名称
-		statusName: { type: String },
 		// 入职时间
 		joinDate: {
 			type: Date,
@@ -80,6 +92,22 @@ const IntervieweesSchema = mongoose.Schema(
 				return v ? dayjs(v).format("YYYY-MM-DD") : "";
 			}
 		},
+		// 试用期满时间
+		trialDate: {
+			type: Date,
+			get: (v) => {
+				return v? dayjs(v).format("YYYY-MM-DD") : "";
+			}
+		},
+		// 离职时间
+		leaveDate: {
+			type: Date,
+			get: (v) => {
+				return v? dayjs(v).format("YYYY-MM-DD") : "";
+			}	
+		},
+		// 后续跟进人员
+		followUp: { type: String },
 		// 通知日期
 		remindDate: {
 			type: Date,

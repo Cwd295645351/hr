@@ -22,7 +22,7 @@ import City from "../db/models/Cities";
 
 // 获取所有招聘渠道
 export const getChannelList = async () => {
-	const res = await Channel.find({}, { _id: 0, id: 1, name: 1 }).sort({
+	const res = await Channel.find({}, { _id: 0, id: 1, name: 1, subChannel: 1 }).sort({
 		sort: 1
 	});
 	return res;

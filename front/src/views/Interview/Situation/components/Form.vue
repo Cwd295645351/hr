@@ -9,82 +9,19 @@
 <template>
 	<div class="form-box">
 		<el-form :model="editLine" label-width="130px" label-position="left">
-			<el-form-item label="简历推送日期">
-				<el-date-picker
-					v-model="editLine.date"
-					type="date"
-					size="small"
-					value-format="yyyy-MM-dd"
-					placeholder="选择日期"
-					clearable
-				></el-date-picker>
-			</el-form-item>
-			<el-form-item label="应聘部门">
-				<el-select
-					v-model="editLine.apartmentId"
-					placeholder="请选择部门"
-					size="small"
-					clearable
-					@change="editLine.jobId = ''"
-				>
-					<el-option
-						v-for="(item, index) in jobOptions"
-						:key="item + '_apartment_' + index"
-						:label="item.apartmentName"
-						:value="item.apartmentId"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="应聘职位">
-				<el-select
-					v-model="editLine.jobId"
-					placeholder="请选择职位"
-					size="small"
-					clearable
-				>
-					<el-option
-						v-for="(item, index) in jobs"
-						:key="item + '_jobOptions_' + index"
-						:label="item.name"
-						:value="item.id"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="类别">
-				<el-select
-					v-model="editLine.typeId"
-					placeholder="请选择类别"
-					size="small"
-					clearable
-				>
-					<el-option
-						v-for="(item, index) in types"
-						:key="item + '_typesOptions_' + index"
-						:label="item.name"
-						:value="item.id"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="招聘渠道">
-				<el-select
-					v-model="editLine.channelId"
-					size="small"
-					placeholder="请选择渠道"
-					clearable
-				>
-					<el-option
-						v-for="(item, index) in channelOptions"
-						:key="item + '_channelOptions_' + index"
-						:label="item.name"
-						:value="item.id"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="姓名">
+			<el-form-item label="候选人姓名">
 				<el-input
 					v-model="editLine.name"
 					size="small"
 					placeholder="请输入姓名"
+					clearable
+				></el-input>
+			</el-form-item>
+			<el-form-item label="英文姓名">
+				<el-input
+					v-model="editLine.EnglishName"
+					size="small"
+					placeholder="请输入英文姓名"
 					clearable
 				></el-input>
 			</el-form-item>
@@ -123,7 +60,87 @@
 					clearable
 				></el-input>
 			</el-form-item>
-			<el-form-item label="毕业学校">
+			<el-form-item label="主要工作经历（公司&岗位名称）">
+				<el-input
+					v-model="editLine.experience"
+					size="small"
+					placeholder="请输入经历"
+					clearable
+				></el-input>
+			</el-form-item>
+			<el-form-item label="应聘部门">
+				<el-select
+					v-model="editLine.apartmentId"
+					placeholder="请选择部门"
+					size="small"
+					clearable
+					@change="editLine.jobId = ''"
+				>
+					<el-option
+						v-for="(item, index) in jobOptions"
+						:key="item + '_apartment_' + index"
+						:label="item.apartmentName"
+						:value="item.apartmentId"
+					></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="应聘职位">
+				<el-select
+					v-model="editLine.jobId"
+					placeholder="请选择职位"
+					size="small"
+					clearable
+				>
+					<el-option
+						v-for="(item, index) in jobs"
+						:key="item + '_jobOptions_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="HKGAI/科大">
+				<el-select
+					v-model="editLine.companyId"
+					placeholder="请选择"
+					size="small"
+					clearable
+				>
+					<el-option
+						v-for="(item, index) in companies"
+						:key="item + '_companyOptions_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="简历推送日期">
+				<el-date-picker
+					v-model="editLine.date"
+					type="date"
+					size="small"
+					value-format="yyyy-MM-dd"
+					placeholder="选择日期"
+					clearable
+				></el-date-picker>
+			</el-form-item>
+			<el-form-item label="类别">
+				<el-select
+					v-model="editLine.typeId"
+					placeholder="请选择类别"
+					size="small"
+					clearable
+				>
+					<el-option
+						v-for="(item, index) in types"
+						:key="item + '_typesOptions_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+			</el-form-item>
+
+			<!-- <el-form-item label="毕业学校">
 				<el-input
 					v-model="editLine.school"
 					size="small"
@@ -188,8 +205,7 @@
 					placeholder="选择日期"
 					clearable
 				></el-date-picker>
-			</el-form-item>
-
+			</el-form-item> -->
 			<el-form-item label="当前简历状态">
 				<el-select
 					v-model="editLine.statusId"
@@ -264,12 +280,60 @@
 							></el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="面试评价">
+						<el-input
+							v-model="
+								editLine.schedules[index].interviewerCommitment
+							"
+							size="small"
+							placeholder="请输入面试评价"
+							clearable
+						></el-input>
+					</el-form-item>
 				</div>
 			</template>
+			<el-divider>招聘来源</el-divider>
+			<el-form-item label="一级招聘渠道">
+				<el-select
+					v-model="editLine.channelId"
+					size="small"
+					placeholder="请选择渠道"
+					clearable
+					@change="onChangeChannel"
+				>
+					<el-option
+						v-for="(item, index) in channelOptions"
+						:key="item + '_channelOptions_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="二级招聘渠道">
+				<el-select
+					v-if="subChannel.length > 0"
+					v-model="editLine.subChannelId"
+					size="small"
+					placeholder="请选择二级渠道"
+					@change="onChangeSubChannel"
+				>
+					<el-option
+						v-for="(item, index) in subChannel"
+						:key="item + '_subChannels_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+				<el-input
+					v-else
+					v-model="editLine.subChannelName"
+					size="small"
+					placeholder="请输入"
+				></el-input>
+			</el-form-item>
 			<el-divider></el-divider>
 			<el-form-item label="到面">
 				<el-switch
-					@change="handleData(scope.row, 12)"
 					v-model="editLine.isArrivalInterview"
 					active-color="#13ce66"
 					inactive-color="#ff4949"
@@ -278,12 +342,12 @@
 				>
 				</el-switch>
 			</el-form-item>
-			<el-form-item label="备注">
+			<el-form-item label="后续跟进人员">
 				<el-input
-					type="textarea"
-					autosize
-					placeholder="请输入备注"
-					v-model="editLine.remark"
+					v-model="editLine.followUp"
+					size="small"
+					placeholder="请输入"
+					clearable
 				></el-input>
 			</el-form-item>
 			<el-form-item label="入职时间" v-if="joinDateShow">
@@ -296,7 +360,36 @@
 					clearable
 				></el-date-picker>
 			</el-form-item>
-			<el-form-item label="相关材料">
+			<el-form-item label="试用期满时间" v-if="joinDateShow">
+				<el-date-picker
+					v-model="editLine.trialDate"
+					type="date"
+					size="small"
+					value-format="yyyy-MM-dd"
+					placeholder="请选择试用期满时间"
+					clearable
+				></el-date-picker>
+			</el-form-item>
+			<el-form-item label="离职时间" v-if="joinDateShow">
+				<el-date-picker
+					v-model="editLine.leaveDate"
+					type="date"
+					size="small"
+					value-format="yyyy-MM-dd"
+					placeholder="请选择离职时间"
+					clearable
+				></el-date-picker>
+			</el-form-item>
+
+			<el-form-item label="备注">
+				<el-input
+					type="textarea"
+					autosize
+					placeholder="请输入备注"
+					v-model="editLine.remark"
+				></el-input>
+			</el-form-item>
+			<el-form-item label="简历">
 				<el-upload
 					ref="upload"
 					:action="url"
@@ -342,6 +435,8 @@ export default {
 		degrees: { type: Array, default: () => [] },
 		// 面试形式数组
 		modes: { type: Array, default: () => [] },
+		// 签署公司数组（HKGAI/科大）
+		companies: { type: Array, default: () => [] },
 		// 类别数组
 		types: { type: Array, default: () => [] },
 		// 阶段-简历状态数组
@@ -363,6 +458,15 @@ export default {
 				? this.jobOptions.find(
 						item => item.apartmentId === this.editLine.apartmentId
 				  ).jobs
+				: []
+		},
+		// 二级招聘渠道
+		subChannel() {
+			const channelId = this.editLine.channelId
+			return channelId !== ""
+				? this.channelOptions.find(
+						item => item.id === this.editLine.channelId
+				  ).subChannel
 				: []
 		},
 		// 状态数组
@@ -406,6 +510,7 @@ export default {
 				let labels = []
 				const editLine = this.editLine
 				const schedules = editLine.schedules
+				console.log(statusId,"===");
 				switch (statusId) {
 					case "1-pass":
 					case "2-attendInterview":
@@ -424,6 +529,7 @@ export default {
 									interviewDate: "",
 									interviewTime: "",
 									interviewerId: "",
+									interviewerCommitment: "",
 									order: 1
 								}
 							]
@@ -440,6 +546,7 @@ export default {
 								interviewDate: "",
 								interviewTime: "",
 								interviewerId: "",
+								interviewerCommitment: "",
 								order: 2
 							})
 						} else {
@@ -450,6 +557,7 @@ export default {
 									interviewDate: "",
 									interviewTime: "",
 									interviewerId: "",
+									interviewerCommitment: "",
 									order: 1
 								},
 								{
@@ -458,12 +566,13 @@ export default {
 									interviewDate: "",
 									interviewTime: "",
 									interviewerId: "",
+									interviewerCommitment: "",
 									order: 2
 								}
 							]
 						}
 						break
-					default:
+					case "2-thirdInterview":
 						labels = ["一面信息", "二面信息", "三面信息"]
 						if (schedules.length == 2) {
 							editLine.schedules.push({
@@ -472,6 +581,7 @@ export default {
 								interviewDate: "",
 								interviewTime: "",
 								interviewerId: "",
+								interviewerCommitment: "",
 								order: 3
 							})
 						} else if (schedules.length == 1) {
@@ -482,6 +592,7 @@ export default {
 									interviewDate: "",
 									interviewTime: "",
 									interviewerId: "",
+									interviewerCommitment: "",
 									order: 2
 								},
 								{
@@ -490,6 +601,7 @@ export default {
 									interviewDate: "",
 									interviewTime: "",
 									interviewerId: "",
+									interviewerCommitment: "",
 									order: 3
 								}
 							)
@@ -501,6 +613,7 @@ export default {
 									interviewDate: "",
 									interviewTime: "",
 									interviewerId: "",
+									interviewerCommitment: "",
 									order: 1
 								},
 								{
@@ -509,6 +622,7 @@ export default {
 									interviewDate: "",
 									interviewTime: "",
 									interviewerId: "",
+									interviewerCommitment: "",
 									order: 2
 								},
 								{
@@ -517,7 +631,117 @@ export default {
 									interviewDate: "",
 									interviewTime: "",
 									interviewerId: "",
+									interviewerCommitment: "",
 									order: 3
+								}
+							]
+						}
+						break
+					default:
+						labels = [
+							"一面信息",
+							"二面信息",
+							"三面信息",
+							"四面信息"
+						]
+						if (schedules.length == 3) {
+							editLine.schedules.push({
+								noticeTime: "",
+								modeId: "",
+								interviewDate: "",
+								interviewTime: "",
+								interviewerId: "",
+								interviewerCommitment: "",
+								order: 4
+							})
+						} else if (schedules.length == 2) {
+							editLine.schedules.push(
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 3
+								},
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 4
+								}
+							)
+						} else if (schedules.length == 1) {
+							editLine.schedules.push(
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 2
+								},
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 3
+								},
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 4
+								}
+							)
+						} else if (schedules.length == 0) {
+							editLine.schedules = [
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 1
+								},
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 2
+								},
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 3
+								},
+								{
+									noticeTime: "",
+									modeId: "",
+									interviewDate: "",
+									interviewTime: "",
+									interviewerId: "",
+									interviewerCommitment: "",
+									order: 4
 								}
 							]
 						}
@@ -555,6 +779,17 @@ export default {
 		// 文件更改
 		fileChange(file, fileList) {
 			this.editLine.fileList = fileList
+		},
+		// 一级渠道改变
+		onChangeChannel() {
+			this.editLine.subChannelId = ""
+			this.editLine.subChannelName = ""
+		},
+		// 二级渠道改变
+		onChangeSubChannel(value) {
+			this.editLine.subChannelName = this.subChannel.find(
+				item => item.id === value
+			).name
 		}
 	}
 }

@@ -24,6 +24,8 @@ const ConfigSchema = mongoose.Schema(
 		_985: { type: Array, required: true },
 		// 211学校名单
 		_211: { type: Array, required: true },
+		// 签署合同公司名单
+		companies: { type: Array, required: true },
 		
 	},
 	{ timestamps: true }
