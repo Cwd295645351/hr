@@ -99,6 +99,7 @@ export const getList = async (params) => {
 		email: 1,
 		city: 1,
 		school: 1,
+		major: 1,
 		schoolPropertyId: 1,
 		schoolPropertyName: 1,
 		degreeId: 1,
@@ -125,7 +126,12 @@ export const getList = async (params) => {
 		subChannelName: 1,
 		trialDate: 1,
 		leaveDate: 1,
-		followUp: 1
+		followUp: 1,
+		joinApartmentName: 1,
+		joinJobName: 1,
+		manager: 1,
+		base: 1,
+		todoList: 1
 	};
 
 	const res = await Interview.find(mp, filterData)
@@ -182,40 +188,72 @@ export const exportData = async (params) => {
 		mp.jobId = jobArr[1];
 	}
 
+	const res = await Interview.find(mp).sort({
+		date: -1,
+		jobName: -1,
+		"schedules.0.interviewDate": -1
+	});
+	return {
+		datas: res
+	};
+};
+
+
+// 导出数据
+export const downloadData = async (params) => {
+	let mp = {
+		userId: params.userId,
+		isDelete: false
+	};
+	if (params.beginDate && params.endDate) {
+		mp['$expr'] = {
+			$and: [
+				// 获取数组中的最大 timestamps
+				{ $gte: [{ $max: "$updateTime.timestamps" }, params.beginDate] },
+				{ $lte: [{ $max: "$updateTime.timestamps" }, params.endDate] }
+			]
+		}
+	} else if (params.beginDate && !params.endDate) {
+		mp['$expr'] = {
+			$and: [
+				// 获取数组中的最大 timestamps
+				{ $gte: [{ $max: "$updateTime.timestamps" }, params.beginDate] },
+			]
+		}
+	} else if (!params.beginDate && params.endDate) {
+		mp['$expr'] = {
+			$and: [
+				// 获取数组中的最大 timestamps
+				{ $lte: [{ $max: "$updateTime.timestamps" }, params.endDate] }
+			]
+		}
+	}
+
+
 	const filterData = {
 		date: 1,
-		apartmentId: 1,
 		apartmentName: 1,
-		jobId: 1,
 		jobName: 1,
-		typeId: 1,
-		typeName: 1,
-		channelId: 1,
 		channelName: 1,
 		name: 1,
-		sex: 1,
-		phoneNum: 1,
-		email: 1,
-		city: 1,
-		school: 1,
-		schoolPropertyId: 1,
-		schoolPropertyName: 1,
-		degreeId: 1,
-		degreeName: 1,
-		isFullTime: 1,
-		graduationDate: 1,
-		isWork: 1,
-		remindDate: 1,
 		statusId: 1,
 		statusName: 1,
 		stageId: 1,
 		joinDate: 1,
 		schedules: 1,
-		noticeDate: 1,
-		noticeStr: 1,
-		isArrivalInterview: 1,
 		fileList: 1,
-		remark: 1
+		EnglishName: 1,
+		experience: 1,
+		companyName: 1,
+		subChannelName: 1,
+		trialDate: 1,
+		leaveDate: 1,
+		followUp: 1,
+		joinApartmentName: 1,
+		joinJobName: 1,
+		manager: 1,
+		base: 1,
+		todoList: 1
 	};
 
 	const res = await Interview.find(mp, filterData).sort({
@@ -274,6 +312,9 @@ export const addInterviewee = async (data) => {
 				data.stageId,
 				data.statusId
 			);
+			const INTERVIEW_INFO_CHANGE = 2
+			const nowTimeStamp = Date.now()
+			data.updateTime = [{ updateType: INTERVIEW_INFO_CHANGE, timestamps: nowTimeStamp }]
 			const res = await Interview.create(data);
 			return {
 				retCode: res ? 0 : 1
@@ -386,50 +427,103 @@ export const editInterviewee = async (data) => {
 			}
 		}
 
+		const changeData = {
+			date: data.date,
+			apartmentId: data.apartmentId,
+			apartmentName: data.apartmentName,
+			jobId: data.jobId,
+			jobName: data.jobName,
+			typeId: data.typeId,
+			typeName: data.typeName,
+			channelId: data.channelId,
+			channelName: data.channelName,
+			name: data.name,
+			sex: data.sex,
+			phoneNum: data.phoneNum,
+			email: data.email,
+			city: data.city,
+			school: data.school,
+			major: data.major,
+			schoolPropertyId: data.schoolPropertyId,
+			schoolPropertyName: data.schoolPropertyName,
+			degreeId: data.degreeId,
+			degreeName: data.degreeName,
+			isFullTime: data.isFullTime,
+			graduationDate: data.graduationDate,
+			isWork: data.isWork,
+			remindDate: data.remindDate,
+			stageId: data.stageId,
+			statusId: data.statusId,
+			statusName: data.statusName,
+			joinDate: data.joinDate,
+			schedules: data.schedules,
+			isArrivalInterview: data.isArrivalInterview,
+			fileList: data.fileList,
+			remark: data.remark,
+			EnglishName: data.EnglishName,
+			companyId: data.companyId,
+			companyName: data.companyName,
+			subChannelId: data.subChannelId,
+			subChannelName: data.subChannelName,
+			trialDate: data.trialDate,
+			leaveDate: data.leaveDate,
+			followUp: data.followUp,
+			joinApartmentName: data.joinApartmentName,
+			joinJobName: data.joinJobName,
+			manager: data.manager,
+			base: data.base,
+			todoList: data.todoList,
+			experience: data.experience
+		}
+
+		// 是否进入新的面试阶段
+		const IF_IN_INTERVIEW = data.statusId === 'firstInterview' || data.statusId === 'secondInterview' || data.statusId === 'thirdInterview' || data.statusId === 'forthInterview'
+		if (originData.statusId !== data.statusId && IF_IN_INTERVIEW) {
+			const INTERVIEW_INFO_CHANGE = 2
+			const nowTimeStamp = Date.now()
+			changeData['$push'] =  {
+				updateTime: {
+					updateType: INTERVIEW_INFO_CHANGE,
+					timestamps: nowTimeStamp
+				}
+			}
+		} else {
+			let changeTag = false
+			// 非面试状态变更，遍历相关的 key，若这些字段内容存在不一样，则更新【简历更新时间表】
+			const keys = ['name', 'EnglishName', 'apartmentId', 'jobId', 'companyId', 'stageId', 'date', 'channelId', 'subChannelId', 'joinDate', 'trialDate', 'leaveDate', 'todoList', 'followUp']
+			for (const key of keys) {
+				if (originData[key] !== data[key]) {
+					changeTag = true
+					const INTERVIEW_INFO_CHANGE = 1
+					const nowTimeStamp = Date.now()
+					changeData['$push'] =  {
+						updateTime: {
+							updateType: INTERVIEW_INFO_CHANGE,
+							timestamps: nowTimeStamp
+						}
+					}
+					break
+				}
+			}
+			// 面试日程单独处理
+			if (!changeTag) {
+				if (JSON.stringify(originData.schedules) !== JSON.stringify(data.schedules)) {
+					const INTERVIEW_INFO_CHANGE = 1
+					const nowTimeStamp = Date.now()
+					changeData['$push'] =  {
+						updateTime: {
+							updateType: INTERVIEW_INFO_CHANGE,
+							timestamps: nowTimeStamp
+						}
+					}
+				}
+
+			}
+		}
+
 		const res = await Interview.findOneAndUpdate(
 			params,
-			{
-				date: data.date,
-				apartmentId: data.apartmentId,
-				apartmentName: data.apartmentName,
-				jobId: data.jobId,
-				jobName: data.jobName,
-				typeId: data.typeId,
-				typeName: data.typeName,
-				channelId: data.channelId,
-				channelName: data.channelName,
-				name: data.name,
-				sex: data.sex,
-				phoneNum: data.phoneNum,
-				email: data.email,
-				city: data.city,
-				school: data.school,
-				schoolPropertyId: data.schoolPropertyId,
-				schoolPropertyName: data.schoolPropertyName,
-				degreeId: data.degreeId,
-				degreeName: data.degreeName,
-				isFullTime: data.isFullTime,
-				graduationDate: data.graduationDate,
-				isWork: data.isWork,
-				remindDate: data.remindDate,
-				stageId: data.stageId,
-				statusId: data.statusId,
-				statusName: data.statusName,
-				joinDate: data.joinDate,
-				schedules: data.schedules,
-				isArrivalInterview: data.isArrivalInterview,
-				fileList: data.fileList,
-				remark: data.remark,
-				EnglishName: data.EnglishName,
-				companyId: data.companyId,
-				companyName: data.companyName,
-				subChannelId: data.subChannelId,
-				subChannelName: data.subChannelName,
-				trialDate: data.trialDate,
-				leaveDate: data.leaveDate,
-				followUp: data.followUp,
-				experience: data.experience
-			},
+			changeData,
 			{ new: true }
 		);
 		if (res) {
@@ -461,12 +555,14 @@ export const changeSchedule = async (data) => {
 			isDelete: false
 		};
 		let changeData = {};
-		// type: 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已联系，
-		// 6=发offer，7=通过，8=接受，9=到岗，10=去人才库, 11=设置提醒，12=到面，13=去四面
+		// type: 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已发测算表，
+		// 6=提交，7=通过，8=接受，9=到岗，10=去人才库,
+		//  11=设置提醒，12=到面，13=去四面，14=定薪，15=去审批
 		switch (type) {
 			case 0:
 			case 4:
 			case 5:
+			case 6:
 			case 7:
 			case 8:
 			case 9:
@@ -502,17 +598,36 @@ export const changeSchedule = async (data) => {
 					isArrivalInterview: 0,
 					$addToSet: {
 						schedules: schedules
+					},
+					$push: {
+						updateTime: {
+							updateType: 2,
+							timestamps: Date.now()
+						}
 					}
 				};
 				break;
-			case 6:
+			case 14:
 				changeData = {
 					statusId: data.statusId,
 					statusName: await getStatusNameById(
 						data.stageId,
 						data.statusId
 					),
-					joinDate: data.joinDate
+					joinApartmentName: data.joinApartmentName,
+					joinJobName: data.joinJobName,
+					manager: data.manager,
+					base: data.base,
+				};
+				break;
+			case 15:
+				changeData = {
+					statusId: data.statusId,
+					statusName: await getStatusNameById(
+						data.stageId,
+						data.statusId
+					),
+					joinDate: data.joinDate,
 				};
 				break;
 			case 10:

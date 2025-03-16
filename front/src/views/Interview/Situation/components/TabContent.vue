@@ -107,6 +107,7 @@
                             >保存</el-button
                         >
                         <el-button @click="exportData">导出</el-button>
+                        <el-button @click="downloadWeekData">下载</el-button>
                         <el-upload
                             class="upload-demo"
                             action
@@ -345,9 +346,43 @@
             <el-form
                 :model="operateInfo"
                 label-position="right"
-                label-width="70px"
+                label-width="80px"
             >
-                <el-form-item label="入职时间">
+                <template v-if="statusId === 'submitTable'">
+                    <el-form-item label="入职部门">
+                        <el-input
+                            v-model="joinInfo.joinApartmentName"
+                            size="small"
+                            placeholder="请输入"
+                            clearable
+                        ></el-input>
+                    </el-form-item>
+                    <el-form-item label="Offer 岗位">
+                        <el-input
+                            v-model="joinInfo.joinJobName"
+                            size="small"
+                            placeholder="请输入"
+                            clearable
+                        ></el-input>
+                    </el-form-item>
+                    <el-form-item label="直属上级">
+                        <el-input
+                            v-model="joinInfo.manager"
+                            size="small"
+                            placeholder="请输入"
+                            clearable
+                        ></el-input>
+                    </el-form-item>
+                    <el-form-item label="base">
+                        <el-input
+                            v-model="joinInfo.base"
+                            size="small"
+                            placeholder="请输入"
+                            clearable
+                        ></el-input>
+                    </el-form-item>
+                </template>
+                <el-form-item v-else label="入职时间">
                     <el-date-picker
                         v-model="joinInfo.joinDate"
                         type="date"
@@ -377,11 +412,13 @@ import {
     deleteInterviewee,
     changeSchedule,
     getInterviewList,
-    exportInterviewData
+    exportInterviewData,
+    downloadInterviewData
 } from "../../../../../apis/interview/interview";
 import MyTable from "./Table.vue";
 import MyForm from "./Form.vue";
 import exportMixin from "./importFile";
+import { getDownloadData } from "./downloadFile";
 export default {
     mixins: [exportMixin],
     props: {
@@ -489,8 +526,8 @@ export default {
             showDialog: false, // 弹窗显示
             noticeInfo: {}, // 强提醒内容
             showNoticeDialog: false, // 强提醒弹窗显示
-            joinInfo: "", // 入职时间内容,
-            showJoinDialog: false, // 入职时间弹窗显示
+            joinInfo: {}, // 入职信息,
+            showJoinDialog: false, // 入职信息弹窗显示
             noticeList: [], // 强提醒队列
             fireInfo: {}, // 去人才库内容
             fireOptions: [], // 去人才库下拉选项
@@ -690,6 +727,7 @@ export default {
                 email: "",
                 city: "",
                 school: "",
+                major: "",
                 schoolPropertyId: "",
                 degreeId: "",
                 isFullTime: "",
@@ -713,7 +751,12 @@ export default {
                 subChannelName: '',
                 trialDate: '',
                 leaveDate: '',
-                followUp: ''
+                followUp: '',
+                todoList: '',
+                joinApartmentName: '',
+                joinJobName: '',
+                manager: '',
+                base: ''
             };
             this.tableDatas.unshift(this.newLine);
             this.tableDatas = JSON.parse(JSON.stringify(this.tableDatas));
@@ -815,6 +858,10 @@ export default {
                 statusId: joinInfo.statusId,
                 stageId: 3,
                 type: joinInfo.type,
+                joinApartmentName: joinInfo.joinApartmentName,
+                joinJobName: joinInfo.joinJobName,
+                manager: joinInfo.manager,
+                base: joinInfo.base,
                 joinDate: this.$dayjs(joinInfo.joinDate).format("YYYY-MM-DD")
             };
             try {
@@ -835,9 +882,9 @@ export default {
         },
         /*
          表格操作
-         type: 操作类型： 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已联系，
-                         6=发offer，7=通过，8=接受，9=到岗，10=去人才库,
-                         11=设置提醒, 12=到面，13=去四面
+         type: 操作类型： 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已发测算表，
+                         6=提交，7=通过，8=接受，9=到岗，10=去人才库,
+                         11=设置提醒, 12=到面，13=去四面，14=定薪，15=去审批
          */
         async handleData({ data, type }) {
             let params = {
@@ -911,12 +958,29 @@ export default {
                     params.statusId = "contacted";
                     break;
                 case 6:
+                    params.stageId = 3;
+                    params.statusId = "submitTable";
+                    break;
+                case 14:
                     this.joinInfo = {
-                        joinDate: data.joinDate,
                         id: data.id,
                         type: type,
                         stageId: 3,
-                        statusId: "offerApproval"
+                        statusId: "salaryNnegotiation",
+                        joinApartmentName: '',
+                        joinJobName: '',
+                        manager: '',
+                        base: ''
+                    };
+                    this.showJoinDialog = true;
+                    break;
+                case 15:
+                    this.joinInfo = {
+                        id: data.id,
+                        type: type,
+                        stageId: 3,
+                        statusId: "offerApproval",
+                        joinDate: '',
                     };
                     this.showJoinDialog = true;
                     break;
@@ -946,7 +1010,7 @@ export default {
                     params.isArrivalInterview = data.isArrivalInterview;
                     break;
             }
-            const types = [1, 2, 3, 6, 10, 11, 13];
+            const types = [1, 2, 3, 10, 11, 13, 14, 15];
             if (!types.includes(type)) {
                 const {
                     data: { retCode, message }
@@ -1012,6 +1076,11 @@ export default {
                     break;
                 case "contacted":
                     params.statusId = 11;
+                case "submitTable":
+                    params.statusId = 15;
+                    break;
+                case "salaryNnegotiation":
+                    params.statusId = 16;
                     break;
                 case "offerApproval":
                     params.statusId = 12;
@@ -1113,6 +1182,7 @@ export default {
                 email: "",
                 city: "",
                 school: "",
+                major: "",
                 schoolPropertyId: "",
                 degreeId: "",
                 isFullTime: "",
@@ -1134,7 +1204,12 @@ export default {
                 companyId: '',
                 trialDate: '',
                 leaveDate: '',
-                followUp: ''
+                followUp: '',
+                todoList: '',
+                joinApartmentName: '',
+                joinJobName: '',
+                manager: '',
+                base: ''
             };
             this.tableDatas.unshift(this.newLine);
             this.tableDatas = JSON.parse(JSON.stringify(this.tableDatas));
@@ -1241,6 +1316,46 @@ export default {
                     return item;
                 });
                 this.getExcel_city(changeData);
+            } else {
+                this.$message.error(message);
+            }
+        },
+
+        async downloadWeekData() {
+            let beginDate = "",
+                endDate = "";
+            if (this.searchInfo.beginDate) {
+                beginDate = new Date(this.searchInfo.beginDate).getTime()
+            }
+            if (this.searchInfo.endDate) {
+                const offset = 23 * 3600 * 1000 + 59 * 60 * 1000 + 59 * 1000 + 999;
+                endDate = new Date(this.searchInfo.endDate).getTime() + offset;
+            }
+            const params = {
+                userId: this.userId,
+                beginDate: beginDate,
+                endDate: endDate,
+            };
+            const {
+                data: { data, retCode, message }
+            } = await downloadInterviewData(params);
+            if (retCode === 0) {
+                const setName = (obj, key, trueName, falseName) => {
+                    if (obj[key] != null) {
+                        obj[key] = obj[key] === 1 ? trueName : falseName;
+                    }
+                };
+                const changeData = data.datas.map((item) => {
+                    setName(item, "sex", "男", "女");
+                    setName(item, "isWork", "是", "否");
+                    setName(item, "isFullTime", "是", "否");
+                    setName(item, "isArrivalInterview", "是", "否");
+                    item.fileList = item.fileList.map((file) => {
+                        return window.location.origin + file.url;
+                    });
+                    return item;
+                });
+                getDownloadData(changeData);
             } else {
                 this.$message.error(message);
             }

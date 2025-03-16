@@ -17,6 +17,82 @@
 		>
 			<el-table-column
 				align="center"
+				fixed="left"
+				label="简历推送日期"
+				width="100"
+			>
+				<template slot-scope="scope">
+					<div v-if="scope.$index == 0 && tableStatus == 'add'">
+						<el-date-picker
+							v-model="newLine.date"
+							type="date"
+							size="small"
+							value-format="yyyy-MM-dd"
+							placeholder="选择日期"
+						></el-date-picker>
+					</div>
+					<div v-else>{{ scope.row.date }}</div>
+				</template>
+			</el-table-column>
+			<el-table-column
+				fixed="left"
+				align="center"
+				label="一级招聘渠道"
+				width="85"
+			>
+				<template slot-scope="scope">
+					<div v-if="scope.$index == 0 && tableStatus == 'add'">
+						<el-select
+							v-model="newLine.channelId"
+							size="small"
+							placeholder="请选择渠道"
+							@change="onChangeChannel"
+						>
+							<el-option
+								v-for="(item, index) in channelOptions"
+								:key="item + '_channelOptions_' + index"
+								:label="item.name"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</div>
+					<div v-else>{{ scope.row.channelName }}</div>
+				</template>
+			</el-table-column>
+			<el-table-column
+				fixed="left"
+				align="center"
+				label="二级招聘渠道"
+				width="85"
+			>
+				<template slot-scope="scope">
+					<div v-if="scope.$index == 0 && tableStatus == 'add'">
+						<el-select
+							v-if="subChannel.length > 0"
+							v-model="newLine.subChannelId"
+							size="small"
+							placeholder="请选择二级渠道"
+							@change="onChangeSubChannel"
+						>
+							<el-option
+								v-for="(item, index) in subChannel"
+								:key="item + '_subChannels_' + index"
+								:label="item.name"
+								:value="item.id"
+							></el-option>
+						</el-select>
+						<el-input
+							v-else
+							v-model="newLine.subChannelName"
+							size="small"
+							placeholder="请输入"
+						></el-input>
+					</div>
+					<div v-else>{{ scope.row.subChannelName }}</div>
+				</template>
+			</el-table-column>
+			<el-table-column
+				align="center"
 				label="候选人姓名"
 				fixed="left"
 				width="80"
@@ -103,7 +179,7 @@
 					<div v-else>{{ scope.row.city }}</div>
 				</template>
 			</el-table-column>
-			<!-- <el-table-column align="center" label="毕业学校" width="100">
+			<el-table-column align="center" label="毕业学校" width="100">
 				<template slot-scope="scope">
 					<div v-if="scope.$index == 0 && tableStatus == 'add'">
 						<el-input
@@ -133,6 +209,19 @@
 						</el-select>
 					</div>
 					<div v-else>{{ scope.row.schoolPropertyName }}</div>
+				</template>
+			</el-table-column>
+			<el-table-column align="center" label="专业" width="100">
+				<template slot-scope="scope">
+					<div v-if="scope.$index == 0 && tableStatus == 'add'">
+						<el-input
+							@change="schoolChange"
+							v-model="newLine.major"
+							size="small"
+							placeholder="请输入专业"
+						></el-input>
+					</div>
+					<div v-else>{{ scope.row.major }}</div>
 				</template>
 			</el-table-column>
 			<el-table-column align="center" label="学历" width="60">
@@ -211,7 +300,7 @@
 					</div>
 				</template>
 			</el-table-column>
-			<el-table-column align="center" label="通知日期" width="100">
+			<!-- <el-table-column align="center" label="通知日期" width="100">
 				<template slot-scope="scope">
 					<div v-if="scope.$index == 0 && tableStatus == 'add'">
 						<el-date-picker
@@ -314,20 +403,6 @@
 						</el-select>
 					</div>
 					<div v-else>{{ scope.row.companyName }}</div>
-				</template>
-			</el-table-column>
-			<el-table-column align="center" label="简历推送日期" width="100">
-				<template slot-scope="scope">
-					<div v-if="scope.$index == 0 && tableStatus == 'add'">
-						<el-date-picker
-							v-model="newLine.date"
-							type="date"
-							size="small"
-							value-format="yyyy-MM-dd"
-							placeholder="选择日期"
-						></el-date-picker>
-					</div>
-					<div v-else>{{ scope.row.date }}</div>
 				</template>
 			</el-table-column>
 
@@ -456,6 +531,18 @@
 					</div>
 				</template>
 			</el-table-column>
+			<el-table-column align="center" label="跟进事项" width="85">
+				<template slot-scope="scope">
+					<div v-if="scope.$index == 0 && tableStatus == 'add'">
+						<el-input
+							v-model="newLine.todoList"
+							size="small"
+							placeholder="请输入"
+						></el-input>
+					</div>
+					<div v-else>{{ scope.row.todoList }}</div>
+				</template>
+			</el-table-column>
 			<el-table-column align="center" label="后续跟进人员" width="85">
 				<template slot-scope="scope">
 					<div v-if="scope.$index == 0 && tableStatus == 'add'">
@@ -467,6 +554,38 @@
 					</div>
 					<div v-else>{{ scope.row.followUp }}</div>
 				</template>
+			</el-table-column>
+			<el-table-column
+				v-if="joinInfoShow"
+				align="center"
+				label="入职部门"
+				prop="joinApartmentName"
+				width="95"
+			>
+			</el-table-column>
+			<el-table-column
+				v-if="joinInfoShow"
+				align="center"
+				label="Offer 岗位"
+				prop="joinJobName"
+				width="95"
+			>
+			</el-table-column>
+			<el-table-column
+				v-if="joinInfoShow"
+				align="center"
+				label="直属上级"
+				prop="manager"
+				width="95"
+			>
+			</el-table-column>
+			<el-table-column
+				v-if="joinInfoShow"
+				align="center"
+				label="base"
+				prop="base"
+				width="95"
+			>
 			</el-table-column>
 			<el-table-column
 				v-if="joinDateShow"
@@ -504,55 +623,7 @@
 					</div>
 				</template>
 			</el-table-column>
-			<el-table-column align="center" label="来源">
-				<el-table-column align="center" label="一级招聘渠道" width="85">
-					<template slot-scope="scope">
-						<div v-if="scope.$index == 0 && tableStatus == 'add'">
-							<el-select
-								v-model="newLine.channelId"
-								size="small"
-								placeholder="请选择渠道"
-								@change="onChangeChannel"
-							>
-								<el-option
-									v-for="(item, index) in channelOptions"
-									:key="item + '_channelOptions_' + index"
-									:label="item.name"
-									:value="item.id"
-								></el-option>
-							</el-select>
-						</div>
-						<div v-else>{{ scope.row.channelName }}</div>
-					</template>
-				</el-table-column>
-				<el-table-column align="center" label="二级招聘渠道" width="85">
-					<template slot-scope="scope">
-						<div v-if="scope.$index == 0 && tableStatus == 'add'">
-							<el-select
-								v-if="subChannel.length > 0"
-								v-model="newLine.subChannelId"
-								size="small"
-								placeholder="请选择二级渠道"
-								@change="onChangeSubChannel"
-							>
-								<el-option
-									v-for="(item, index) in subChannel"
-									:key="item + '_subChannels_' + index"
-									:label="item.name"
-									:value="item.id"
-								></el-option>
-							</el-select>
-							<el-input
-								v-else
-								v-model="newLine.subChannelName"
-								size="small"
-								placeholder="请输入"
-							></el-input>
-						</div>
-						<div v-else>{{ scope.row.subChannelName }}</div>
-					</template>
-				</el-table-column>
-			</el-table-column>
+
 			<el-table-column
 				v-if="stageId == 6"
 				align="center"
@@ -642,14 +713,28 @@
 							@click="handleData(scope.row, 5)"
 							type="info"
 							class="modify"
-							>已联系</el-link
+							>已发测算表</el-link
 						>
 						<el-link
 							v-if="statusId == 'contacted'"
 							@click="handleData(scope.row, 6)"
 							type="info"
 							class="modify"
-							>发offer</el-link
+							>提交</el-link
+						>
+						<el-link
+							v-if="statusId == 'submitTable'"
+							@click="handleData(scope.row, 14)"
+							type="info"
+							class="modify"
+							>定薪</el-link
+						>
+						<el-link
+							v-if="statusId == 'salaryNnegotiation'"
+							@click="handleData(scope.row, 15)"
+							type="info"
+							class="modify"
+							>去审批</el-link
 						>
 						<el-link
 							v-if="statusId == 'offerApproval'"
@@ -663,7 +748,7 @@
 							@click="handleData(scope.row, 8)"
 							type="info"
 							class="modify"
-							>接受</el-link
+							>接受 Offer</el-link
 						>
 						<el-link
 							v-if="statusId == 'joining'"
@@ -792,10 +877,34 @@ export default {
 				  ).subChannel
 				: []
 		},
+		// 入职部门、岗位、直属上级、base是否显示
+		joinInfoShow() {
+			// 已提交，待定薪、谈薪、Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
+			const hasJoin = [
+				"salaryNnegotiation",
+				"offerApproval",
+				"offerConfirm",
+				"joining",
+				"join"
+			]
+			if (this.stageId == 6) {
+				return true
+			} else if (hasJoin.includes(this.statusId)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		// 入职时间/试用期满时间/离职时间是否显示
 		joinDateShow() {
-			// offer 审批、offer 确认、 待入职、到岗状态时，入职时间显示
-			const hasJoin = ["offerApproval", "offerConfirm", "joining", "join"]
+			// 已提交，待定薪、谈薪、Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
+			const hasJoin = [
+				"offerApproval",
+				"offerConfirm",
+				"joining",
+				"join"
+			]
+			console.log(this.statusId,"====statusId", hasJoin.includes(this.statusId));
 			if (this.stageId == 6) {
 				return true
 			} else if (hasJoin.includes(this.statusId)) {
@@ -823,7 +932,12 @@ export default {
 						labels = ["一面信息", "二面信息", "三面信息"]
 						break
 					default:
-						labels = ["一面信息", "二面信息", "三面信息", "四面信息"]
+						labels = [
+							"一面信息",
+							"二面信息",
+							"三面信息",
+							"四面信息"
+						]
 				}
 			} else {
 				labels = ["一面信息", "二面信息", "三面信息", "四面信息"]
@@ -841,12 +955,12 @@ export default {
 		},
 		/*
          表格操作
-         type: 操作类型： 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已联系，
-                         6=发offer，7=通过，8=接受，9=到岗，10=去人才库,
-                         11=设置提醒，12=到面，13=去四面
+         type: 操作类型： 0=去约面，1=去一面，2=去二面，3=去三面，4=录用，5=已发测算表，
+                         6=提交，7=通过，8=接受，9=到岗，10=去人才库,
+                         11=设置提醒，12=到面，13=去四面，14=定薪，15=去审批
          */
 		handleData(row, type) {
-			console.log(type, "type====");
+			console.log(type, "type====")
 			const operateInfo = {
 				type: type,
 				data: row

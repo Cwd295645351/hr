@@ -14,7 +14,8 @@ import {
 	importInterviewee,
 	editInterviewee,
 	deleteInterviewee,
-	changeSchedule
+	changeSchedule,
+	downloadData
 } from "../controller/situation";
 import { SuccessModel, ErrorModel } from "../model/resModel";
 
@@ -72,6 +73,20 @@ router.post("/exportData", async (ctx, next) => {
 		}
 	}
 	const res = await exportData(params);
+	if (res) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel(null, "获取失败");
+	}
+});
+
+router.post("/downloadData", async (ctx, next) => {
+	const params = ctx.request.body;
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
+	const res = await downloadData(params);
 	if (res) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {

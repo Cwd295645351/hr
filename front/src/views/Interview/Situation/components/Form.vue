@@ -140,7 +140,7 @@
 				</el-select>
 			</el-form-item>
 
-			<!-- <el-form-item label="毕业学校">
+			<el-form-item label="毕业学校">
 				<el-input
 					v-model="editLine.school"
 					size="small"
@@ -162,6 +162,14 @@
 						:value="item.id"
 					></el-option>
 				</el-select>
+			</el-form-item>
+			<el-form-item label="专业">
+				<el-input
+					v-model="editLine.major"
+					size="small"
+					placeholder="请输入专业"
+					clearable
+				></el-input>
 			</el-form-item>
 			<el-form-item label="学历">
 				<el-select
@@ -196,7 +204,7 @@
 				<el-radio v-model="editLine.isWork" :label="1">是</el-radio>
 				<el-radio v-model="editLine.isWork" :label="0">否</el-radio>
 			</el-form-item>
-			<el-form-item label="通知日期">
+			<!-- <el-form-item label="通知日期">
 				<el-date-picker
 					v-model="editLine.remindDate"
 					type="date"
@@ -342,9 +350,49 @@
 				>
 				</el-switch>
 			</el-form-item>
+			<el-form-item label="跟进事项">
+				<el-input
+					v-model="editLine.todoList"
+					size="small"
+					placeholder="请输入"
+					clearable
+				></el-input>
+			</el-form-item>
 			<el-form-item label="后续跟进人员">
 				<el-input
 					v-model="editLine.followUp"
+					size="small"
+					placeholder="请输入"
+					clearable
+				></el-input>
+			</el-form-item>
+			<el-form-item label="入职部门" v-if="joinDateShow">
+				<el-input
+					v-model="editLine.joinApartmentName"
+					size="small"
+					placeholder="请输入"
+					clearable
+				></el-input>
+			</el-form-item>
+			<el-form-item label="Offer 岗位" v-if="joinDateShow">
+				<el-input
+					v-model="editLine.joinJobName"
+					size="small"
+					placeholder="请输入"
+					clearable
+				></el-input>
+			</el-form-item>
+			<el-form-item label="直属上级" v-if="joinDateShow">
+				<el-input
+					v-model="editLine.manager"
+					size="small"
+					placeholder="请输入"
+					clearable
+				></el-input>
+			</el-form-item>
+			<el-form-item label="base" v-if="joinDateShow">
+				<el-input
+					v-model="editLine.base"
 					size="small"
 					placeholder="请输入"
 					clearable
@@ -485,6 +533,8 @@ export default {
 		},
 		joinDateShow() {
 			const hasJoin = [
+				"3-submitTable",
+				"3-salaryNnegotiation",
 				"3-offerApproval",
 				"3-offerConfirm",
 				"4-joining",

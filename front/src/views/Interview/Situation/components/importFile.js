@@ -23,23 +23,28 @@ var importMixin = {
 				const multiHeader = [
 					"简历推送日期",
 					"状态",
-					"应聘部门",
-					"应聘职位",
-					"类别",
-					"招聘渠道",
-					"姓名",
+					"一级招聘渠道",
+					"二级招聘渠道",
+					"候选人姓名",
+					"英文姓名",
 					"性别",
 					"电话",
 					"邮箱",
 					"所在城市",
 					"毕业学校",
 					"学校性质",
+					"专业",
 					"学历",
 					"全日制",
 					"毕业时间",
 					"在职",
-					"通知日期",
+					"主要工作经历（公司&岗位名称）",
+					"应聘部门",
+					"应聘职位",
+					"HKGAI/科大",
+					"类别",
 					"一面信息",
+					"",
 					"",
 					"",
 					"",
@@ -47,50 +52,85 @@ var importMixin = {
 					"",
 					"",
 					"",
+					"",
 					"三面信息",
 					"",
 					"",
 					"",
+					"",
+					"四面信息",
+					"",
+					"",
+					"",
+					"",
 					"到面",
-					"相关材料",
+					"跟进事项",
+					"后续跟进人员",
+					"入职部门",
+					"Offer 岗位",
+					"直属上级",
+					"base",
 					"入职时间",
-					"备注"
+					"试用期满时间",
+					"离职时间",
+					"简历",
+					"备注",
 				];
 				const multiHeader2 = [
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
 					"面试形式",
 					"面试日期",
 					"面试时间",
 					"面试官",
+					'面试评价',
 					"面试形式",
 					"面试日期",
 					"面试时间",
 					"面试官",
+					'面试评价',
 					"面试形式",
 					"面试日期",
 					"面试时间",
 					"面试官",
-					"",
-					"",
-					"",
-					""
+					'面试评价',
+					"面试形式",
+					"面试日期",
+					"面试时间",
+					"面试官",
+					'面试评价',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
+					'',
 				];
 				const merges = [
 					"A1:A2",
@@ -111,49 +151,82 @@ var importMixin = {
 					"P1:P2",
 					"Q1:Q2",
 					"R1:R2",
-					"S1:V1",
-					"W1:Z1",
-					"AA1:AD1",
-					"AE1:AE2",
-					"AF:AF2",
-					"AG1:AG2",
-					"AH1:AH2"
+					"S1:S2",
+					"T1:T2",
+					"U1:U2",
+					"V1:V2",
+					"W1:AA1",
+					"AB1:AF1",
+					"AG1:AK1",
+					"AL1:AP1",
+					"AQ1:AQ2",
+					"AR1:AR2",
+					"AS1:AS2",
+					"AT1:AT2",
+					"AU1:AU2",
+					"AV1:AV2",
+					"AW1:AW2",
+					"AX1:AX2",
+					"AY1:AY2",
+					"AZ1:AZ2",
+					"BA1:BA2",
+					"BB1:BB2",
 				];
 				const filterVal = [
-					"date",
-					"statusName",
-					"apartmentName",
-					"jobName",
-					"typeName",
-					"channelName",
+					'date',
+					'statusName',
+					'channelName',
+					'subChannelName',
 					"name",
+					"EnglishName",
 					"sex",
 					"phoneNum",
 					"email",
 					"city",
 					"school",
 					"schoolPropertyName",
+					"major",
 					"degreeName",
 					"isFullTime",
 					"graduationDate",
 					"isWork",
-					"remindDate",
+					"experience",
+					"apartmentName",
+					"jobName",
+					"companyName",
+					"statusName", // 状态需要特殊映射
 					"schedules.0.modeName",
 					"schedules.0.interviewDate",
 					"schedules.0.interviewTime",
 					"schedules.0.interviewerName",
+					"schedules.0.interviewerCommitment",
 					"schedules.1.modeName",
 					"schedules.1.interviewDate",
 					"schedules.1.interviewTime",
 					"schedules.1.interviewerName",
+					"schedules.1.interviewerCommitment",
 					"schedules.2.modeName",
 					"schedules.2.interviewDate",
 					"schedules.2.interviewTime",
 					"schedules.2.interviewerName",
+					"schedules.2.interviewerCommitment",
+					"schedules.3.modeName",
+					"schedules.3.interviewDate",
+					"schedules.3.interviewTime",
+					"schedules.3.interviewerName",
+					"schedules.3.interviewerCommitment",
 					"isArrivalInterview",
-					"fileList",
+					"todoList",
+					"followUp",
+					"joinApartmentName",
+					"joinJobName",
+					"manager",
+					"base",
 					"joinDate",
-					"remark"
+					"trialDate",
+					"leaveDate",
+					"fileList",
+					"remark", 
 				];
 				const list = res;
 				const data = this.formatJson(filterVal, list);
@@ -173,13 +246,14 @@ var importMixin = {
 		formatJson(filterVal, jsonData) {
 			// return jsonData.map((v) => filterVal.map((j) => v[j]));
 
-			return jsonData.map((v) =>
-				filterVal.map((j) => {
-					if (j.includes(".")) {
-						const arr = j.split(".");
-						return v[arr[0]]?.[+arr[1]]?.[arr[2]];
+			return jsonData.map((data) =>
+				filterVal.map((property) => {
+					if (property.includes(".")) {
+						// 面试日程才有多级
+						const arr = property.split(".");
+						return data[arr[0]]?.[+arr[1]]?.[arr[2]];
 					} else {
-						return v[j];
+						return data[property];
 					}
 				})
 			);
@@ -216,14 +290,14 @@ var importMixin = {
 
 			var reader = new FileReader();
 			//if (!FileReader.prototype.readAsBinaryString) {
-			FileReader.prototype.readAsBinaryString = function(f) {
+			FileReader.prototype.readAsBinaryString = function (f) {
 				var binary = "";
 				var rABS = false; //是否将文件读取为二进制字符串
 				var pt = this;
 				var wb; //读取完成的数据
 				var outdata;
 				var reader = new FileReader();
-				reader.onload = function(e) {
+				reader.onload = function (e) {
 					var bytes = new Uint8Array(reader.result);
 					var length = bytes.byteLength;
 					for (var i = 0; i < length; i++) {
@@ -272,6 +346,7 @@ var importMixin = {
 							email: item["邮箱"] || "",
 							city: item["所在城市"] || "",
 							school: item["毕业学校"] || "",
+							major: item["专业"] || "",
 							schoolPropertyId: 0,
 							schoolPropertyName: item["学校性质"] || "",
 							degreeId: 0,
@@ -426,7 +501,82 @@ var importMixin = {
 				};
 				item.schedules.push(obj);
 			}
+		},
+		// 处理导出状态映射
+		handleExportStatus(stageId, statusId, schedules) {
+			switch (stageId) {
+				case 1:
+					return '简历筛选'
+				case 2:
+					const currentTime = Date.now()
+					if (schedules.length > 0) {
+						const lastSchedule = schedules[schedules.length - 1]
+						const interviewDateTime = this.combineDateAndTimeWithCST(lastSchedule.interviewDate, lastSchedule.interviewTime)
+						if (interviewDateTime > currentTime) {
+							switch (statusId) {
+								case 'attendInterview':
+								case 'firstInterview':
+									return '待一面'
+								case 'secondInterview':
+									return '待二面'
+								case 'thirdInterview':
+									return '待三面'
+								case 'forthInterview':
+									return '待四面'
+							}
+						} else {
+							return '等待面试评语'
+						}
+					}
+
+				case 3:
+					if (statusId !== 'offerConfirm') return '谈Offer'
+					return '办理签证'
+				case 5:
+					return '已入职'
+				case 6:
+					switch (statusId) {
+						// 面试未通过，视为淘汰
+						case 2:
+						case 5:
+						case 8:
+						case 10:
+						case 12:
+						case 15:
+							return '淘汰'
+						// 面试未应约、爽约、拒Offer、Offer毁约视为候选人放弃
+						case 1:
+						case 3:
+						case 4:
+						case 6:
+						case 7:
+						case 9:
+						case 11:
+						case 13:
+						case 14:
+						case 16:
+							return '候选人放弃'
+						case 0:
+							return '人才库'
+					}
+			}
+		},
+		combineDateAndTimeWithCST(dateStr, timeStr) {
+			// 解析 UTC 日期字符串
+			const date = new Date(dateStr);
+
+			// 将 UTC 时间转换为北京时间
+			date.setUTCHours(date.getUTCHours() + 8);
+
+			// 解析北京时间字符串
+			const [hours, minutes] = timeStr.split(':').map(Number);
+
+			// 设置北京时间
+			date.setHours(hours, minutes, 0, 0);
+
+			return date.getTime(); // 返回时间戳（毫秒）
 		}
+
 	}
 };
 

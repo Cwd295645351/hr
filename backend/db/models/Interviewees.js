@@ -66,6 +66,8 @@ const IntervieweesSchema = mongoose.Schema(
 		sex: { type: Number },
 		// 毕业学校
 		school: { type: String },
+		// 专业
+		major: { type: String },
 		// 学校性质id
 		schoolPropertyId: { type: Number },
 		// 学校性质名称
@@ -106,6 +108,8 @@ const IntervieweesSchema = mongoose.Schema(
 				return v? dayjs(v).format("YYYY-MM-DD") : "";
 			}	
 		},
+		// 跟进事项
+		todoList: { type: String },
 		// 后续跟进人员
 		followUp: { type: String },
 		// 通知日期
@@ -138,8 +142,25 @@ const IntervieweesSchema = mongoose.Schema(
 		joinRemark: { type: String },
 		// 隐藏标志(隐藏入职信息):"1"=隐藏，"0"=显示
 		hideTag: { type: String },
+		// 简历更新时间列表（只有导出内容变化才更新）
+		updateTime: [
+			{
+				// 更新类型：1=非面试状态变更，2=面试状态变更
+				updateType: Number,
+				// 更新时间
+				timestamps: Number
+			}
+		],
 		// 是否删除
-		isDelete: { type: Boolean }
+		isDelete: { type: Boolean },
+		// 入职部门
+		joinApartmentName: { type: String },
+		// Offer 岗位
+		joinJobName: { type: String },
+		// 直属上级
+		manager: { type: String },
+		// base 地点
+		base: { type: String },
 	},
 	{ timestamps: true }
 );

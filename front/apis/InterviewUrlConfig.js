@@ -21,6 +21,7 @@ export const GET_STATUS_LIST = `${HOST}/api/common/getStatusList`; // 获取渠�
 
 export const GET_INTERVIEW_LIST = `${HOST}/api/situation/getList`; // 获取面试情况
 export const EXPORT_INTERVIEW_DATA = `${HOST}/api/situation/exportData`; // 获取面试情况
+export const DOWNLOAD_INTERVIEW_DATA = `${HOST}/api/situation/downloadData`; // 下载面试情况
 export const ADD_INTERVIEWEE = `${HOST}/api/situation/addInterviewee`; // 新增候选人
 export const IMPORT_INTERVIEWEE = `${HOST}/api/situation/importInterviewee`; // 批量导入候选人
 export const EDIT_INTERVIEWEE = `${HOST}/api/situation/editInterviewee`; // 修改候选人

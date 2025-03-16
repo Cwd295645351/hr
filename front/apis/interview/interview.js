@@ -14,7 +14,8 @@ import {
 	IMPORT_INTERVIEWEE,
 	EDIT_INTERVIEWEE,
 	DELETE_INTERVIEWEE,
-	CHANGE_INTERVIEWEE_SCHEDULE
+	CHANGE_INTERVIEWEE_SCHEDULE,
+	DOWNLOAD_INTERVIEW_DATA
 } from "../InterviewUrlConfig";
 import axios from "../AxiosConfig";
 
@@ -26,6 +27,11 @@ export const getInterviewList = (data) => {
 // 导出面试情况
 export const exportInterviewData = (data) => {
 	return axios.post(EXPORT_INTERVIEW_DATA, data);
+};
+
+// 下载本周面试情况
+export const downloadInterviewData = (data) => {
+	return axios.post(DOWNLOAD_INTERVIEW_DATA, data);
 };
 
 // 新增候选人

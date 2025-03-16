@@ -45,15 +45,23 @@ export default [
 			},
 			{
 				id: "contacted",
-				name: "已联系，待回复"
+				name: "待提交测算表"
+			},
+			{
+				id: "submitTable",
+				name: "已提交，待定薪"
+			},
+			{
+				id: "salaryNnegotiation",
+				name: "谈薪"
 			},
 			{
 				id: "offerApproval",
-				name: "offer审批"
+				name: "Offer 审批"
 			},
 			{
 				id: "offerConfirm",
-				name: "offer确认"
+				name: "Offer 发出"
 			}
 		]
 	},
@@ -123,23 +131,31 @@ export default [
 			},
 			{
 				id: 10,
-				name: "拒offer(待联系)"
+				name: "放弃录用"
 			},
 			{
 				id: 11,
-				name: "拒offer(已联系)"
+				name: "候选人放弃（未发回测算表）"
 			},
 			{
 				id: 12,
-				name: "offer审批不通过"
+				name: "Offer 审批不通过"
 			},
 			{
 				id: 13,
-				name: "拒offer(offer确认)"
+				name: "拒 Offer（未签回）"
 			},
 			{
 				id: 14,
 				name: "毁约"
+			},
+			{
+				id: 15,
+				name: "放弃定薪"
+			},
+			{
+				id: 16,
+				name: "拒 Offer（谈薪阶段）"
 			}
 		]
 	}
