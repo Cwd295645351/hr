@@ -81,7 +81,7 @@ function formatJson(filterVal, jsonData) {
 			if (property.includes(".")) {
 				// 面试日程才有多级
 				const arr = property.split(".");
-				return data[arr[0]]?.[+arr[1]]?.[arr[2]];
+				return arr[2] === 'interviewDate' ? dayjs(data[arr[0]]?.[+arr[1]]?.[arr[2]]).format('YYYY-MM-DD') : data[arr[0]]?.[+arr[1]]?.[arr[2]];
 			} else if (property === "statusName") {
 				// 状态需要特殊映射
 				return handleExportStatus(data.stageId, data.statusId, data.schedules);
@@ -105,7 +105,6 @@ function handleExportStatus(stageId, statusId, schedules) {
 			if (schedules.length > 0) {
 				const lastSchedule = schedules[schedules.length - 1]
 				const interviewDateTime = combineDateAndTimeWithCST(lastSchedule.interviewDate, lastSchedule.interviewTime)
-				console.log(interviewDateTime, "==============================");
 				if (interviewDateTime > currentTime) {
 					switch (statusId) {
 						case 'attendInterview':
@@ -121,8 +120,9 @@ function handleExportStatus(stageId, statusId, schedules) {
 				} else {
 					return '等待面试评语'
 				}
+			} else {
+				return '待一面'
 			}
-
 		case 3:
 			if (statusId !== 'offerConfirm') return '谈Offer'
 			return '办理签证'
