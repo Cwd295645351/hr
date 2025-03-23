@@ -147,7 +147,7 @@ const IntervieweesSchema = mongoose.Schema(
 		// 简历更新时间列表（只有导出内容变化才更新）
 		updateTime: [
 			{
-				// 更新类型 0=推荐简历：1=非面试状态变更，2=面试阶段变更，3=谈薪阶段，4=Offer阶段
+				// 更新类型 -1=不计入周报；0=推荐简历：1=非面试状态变更，2=面试阶段变更，3=谈薪阶段，4=Offer阶段
 				updateType: Number,
 				// 更新时间
 				timestamps: Number

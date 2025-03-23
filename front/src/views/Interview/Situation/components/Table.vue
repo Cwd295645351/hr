@@ -520,16 +520,29 @@
 							</div>
 						</template>
 					</el-table-column>
-					<el-table-column width="95" align="center" label="面试评价">
+					<el-table-column
+						width="95"
+						align="center"
+						label="面试评价"
+					>
 						<template slot-scope="scope">
-							<div>
-								{{
+							<el-tooltip
+								:content="
+									scope.row.schedules[index]
+										? scope.row.schedules[index]
+												.interviewerCommitment
+										: ''
+								"
+								popper-class="remark-tooltip"
+								placement="top"
+							>
+								<pre>{{
 									scope.row.schedules[index]
 										? scope.row.schedules[index]
 												.interviewerCommitment
 										: ""
-								}}
-							</div>
+								}}</pre>
+							</el-tooltip>
 						</template>
 					</el-table-column>
 				</el-table-column>

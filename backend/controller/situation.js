@@ -313,13 +313,10 @@ export const addInterviewee = async (data) => {
 				data.stageId,
 				data.statusId
 			);
-			data.updateTime = []
-			if (data.isinitWeek === 1) {
-				// 简历推送计入周报
-				const INTERVIEW_INFO_CHANGE = 0
-				const nowTimeStamp = Date.now()
-				data.updateTime = [{ updateType: INTERVIEW_INFO_CHANGE, timestamps: nowTimeStamp }]
-			}
+			// 简历推送计入周报
+			const INTERVIEW_INFO_CHANGE = data.isinitWeek === 1 ? 0 : -1
+			const nowTimeStamp = Date.now()
+			data.updateTime = [{ updateType: INTERVIEW_INFO_CHANGE, timestamps: nowTimeStamp }]
 			const res = await Interview.create(data);
 			return {
 				retCode: res ? 0 : 1
@@ -480,6 +477,9 @@ export const editInterviewee = async (data) => {
 			todoList: data.todoList,
 			experience: data.experience,
 			isinitWeek: data.isinitWeek
+		}
+		if (data.isinitWeek === 0) {
+			changeData.changeData[0].updateType = -1
 		}
 
 		if (originData.statusId !== data.statusId) {
