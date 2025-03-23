@@ -15,7 +15,8 @@ import {
 	EDIT_INTERVIEWEE,
 	DELETE_INTERVIEWEE,
 	CHANGE_INTERVIEWEE_SCHEDULE,
-	DOWNLOAD_INTERVIEW_DATA
+	DOWNLOAD_INTERVIEW_DATA,
+	GENERATE_WEEK_REPORT
 } from "../InterviewUrlConfig";
 import axios from "../AxiosConfig";
 
@@ -32,6 +33,11 @@ export const exportInterviewData = (data) => {
 // 下载本周面试情况
 export const downloadInterviewData = (data) => {
 	return axios.post(DOWNLOAD_INTERVIEW_DATA, data);
+};
+
+// 生成周报
+export const generateWeekReportApi  = (params) => {
+	return axios.get(GENERATE_WEEK_REPORT, { params: params });
 };
 
 // 新增候选人

@@ -9,6 +9,65 @@
 <template>
 	<div class="form-box">
 		<el-form :model="editLine" label-width="130px" label-position="left">
+			<el-form-item label="简历推送日期">
+				<el-date-picker
+					v-model="editLine.date"
+					type="date"
+					size="small"
+					value-format="yyyy-MM-dd"
+					placeholder="选择日期"
+					clearable
+				></el-date-picker>
+			</el-form-item>
+			<el-form-item label="简历推送是否计入周报">
+				<el-select
+					v-model="editLine.isinitWeek"
+					size="small"
+					placeholder="请选择"
+					clearable
+				>
+					<el-option label="是" :value="1"></el-option>
+					<el-option label="否" :value="0"></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="一级招聘渠道">
+				<el-select
+					v-model="editLine.channelId"
+					size="small"
+					placeholder="请选择渠道"
+					clearable
+					@change="onChangeChannel"
+				>
+					<el-option
+						v-for="(item, index) in channelOptions"
+						:key="item + '_channelOptions_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="二级招聘渠道">
+				<el-select
+					v-if="subChannel.length > 0"
+					v-model="editLine.subChannelId"
+					size="small"
+					placeholder="请选择二级渠道"
+					@change="onChangeSubChannel"
+				>
+					<el-option
+						v-for="(item, index) in subChannel"
+						:key="item + '_subChannels_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+				<el-input
+					v-else
+					v-model="editLine.subChannelName"
+					size="small"
+					placeholder="请输入"
+				></el-input>
+			</el-form-item>
 			<el-form-item label="候选人姓名">
 				<el-input
 					v-model="editLine.name"
@@ -60,86 +119,6 @@
 					clearable
 				></el-input>
 			</el-form-item>
-			<el-form-item label="主要工作经历（公司&岗位名称）">
-				<el-input
-					v-model="editLine.experience"
-					size="small"
-					placeholder="请输入经历"
-					clearable
-				></el-input>
-			</el-form-item>
-			<el-form-item label="应聘部门">
-				<el-select
-					v-model="editLine.apartmentId"
-					placeholder="请选择部门"
-					size="small"
-					clearable
-					@change="editLine.jobId = ''"
-				>
-					<el-option
-						v-for="(item, index) in jobOptions"
-						:key="item + '_apartment_' + index"
-						:label="item.apartmentName"
-						:value="item.apartmentId"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="应聘职位">
-				<el-select
-					v-model="editLine.jobId"
-					placeholder="请选择职位"
-					size="small"
-					clearable
-				>
-					<el-option
-						v-for="(item, index) in jobs"
-						:key="item + '_jobOptions_' + index"
-						:label="item.name"
-						:value="item.id"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="HKGAI/科大">
-				<el-select
-					v-model="editLine.companyId"
-					placeholder="请选择"
-					size="small"
-					clearable
-				>
-					<el-option
-						v-for="(item, index) in companies"
-						:key="item + '_companyOptions_' + index"
-						:label="item.name"
-						:value="item.id"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="简历推送日期">
-				<el-date-picker
-					v-model="editLine.date"
-					type="date"
-					size="small"
-					value-format="yyyy-MM-dd"
-					placeholder="选择日期"
-					clearable
-				></el-date-picker>
-			</el-form-item>
-			<el-form-item label="类别">
-				<el-select
-					v-model="editLine.typeId"
-					placeholder="请选择类别"
-					size="small"
-					clearable
-				>
-					<el-option
-						v-for="(item, index) in types"
-						:key="item + '_typesOptions_' + index"
-						:label="item.name"
-						:value="item.id"
-					></el-option>
-				</el-select>
-			</el-form-item>
-
 			<el-form-item label="毕业学校">
 				<el-input
 					v-model="editLine.school"
@@ -204,6 +183,77 @@
 				<el-radio v-model="editLine.isWork" :label="1">是</el-radio>
 				<el-radio v-model="editLine.isWork" :label="0">否</el-radio>
 			</el-form-item>
+			<el-form-item label="主要工作经历（公司&岗位名称）">
+				<el-input
+					v-model="editLine.experience"
+					size="small"
+					placeholder="请输入经历"
+					clearable
+				></el-input>
+			</el-form-item>
+			<el-form-item label="应聘部门">
+				<el-select
+					v-model="editLine.apartmentId"
+					placeholder="请选择部门"
+					size="small"
+					clearable
+					@change="editLine.jobId = ''"
+				>
+					<el-option
+						v-for="(item, index) in jobOptions"
+						:key="item + '_apartment_' + index"
+						:label="item.apartmentName"
+						:value="item.apartmentId"
+					></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="应聘职位">
+				<el-select
+					v-model="editLine.jobId"
+					placeholder="请选择职位"
+					size="small"
+					clearable
+				>
+					<el-option
+						v-for="(item, index) in jobs"
+						:key="item + '_jobOptions_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="HKGAI/科大">
+				<el-select
+					v-model="editLine.companyId"
+					placeholder="请选择"
+					size="small"
+					clearable
+				>
+					<el-option
+						v-for="(item, index) in companies"
+						:key="item + '_companyOptions_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+			</el-form-item>
+
+			<el-form-item label="类别">
+				<el-select
+					v-model="editLine.typeId"
+					placeholder="请选择类别"
+					size="small"
+					clearable
+				>
+					<el-option
+						v-for="(item, index) in types"
+						:key="item + '_typesOptions_' + index"
+						:label="item.name"
+						:value="item.id"
+					></el-option>
+				</el-select>
+			</el-form-item>
+
 			<!-- <el-form-item label="通知日期">
 				<el-date-picker
 					v-model="editLine.remindDate"
@@ -300,45 +350,7 @@
 					</el-form-item>
 				</div>
 			</template>
-			<el-divider>招聘来源</el-divider>
-			<el-form-item label="一级招聘渠道">
-				<el-select
-					v-model="editLine.channelId"
-					size="small"
-					placeholder="请选择渠道"
-					clearable
-					@change="onChangeChannel"
-				>
-					<el-option
-						v-for="(item, index) in channelOptions"
-						:key="item + '_channelOptions_' + index"
-						:label="item.name"
-						:value="item.id"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="二级招聘渠道">
-				<el-select
-					v-if="subChannel.length > 0"
-					v-model="editLine.subChannelId"
-					size="small"
-					placeholder="请选择二级渠道"
-					@change="onChangeSubChannel"
-				>
-					<el-option
-						v-for="(item, index) in subChannel"
-						:key="item + '_subChannels_' + index"
-						:label="item.name"
-						:value="item.id"
-					></el-option>
-				</el-select>
-				<el-input
-					v-else
-					v-model="editLine.subChannelName"
-					size="small"
-					placeholder="请输入"
-				></el-input>
-			</el-form-item>
+
 			<el-divider></el-divider>
 			<el-form-item label="到面">
 				<el-switch
@@ -505,7 +517,7 @@ export default {
 			return apartmentId !== ""
 				? this.jobOptions.find(
 						item => item.apartmentId === this.editLine.apartmentId
-				  ).jobs
+				  )?.jobs
 				: []
 		},
 		// 二级招聘渠道
@@ -560,7 +572,7 @@ export default {
 				let labels = []
 				const editLine = this.editLine
 				const schedules = editLine.schedules
-				console.log(statusId,"===");
+				console.log(statusId, "===")
 				switch (statusId) {
 					case "1-pass":
 					case "2-attendInterview":

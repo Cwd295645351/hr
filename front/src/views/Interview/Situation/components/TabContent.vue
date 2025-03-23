@@ -7,402 +7,403 @@
  * @LastEditTime: 2022-07-19 22:13:37
 -->
 <template>
-    <div class="tab-content">
-        <el-radio-group
-            class="status-group"
-            v-if="showRadio"
-            :key="stageId"
-            size="small"
-            v-model="statusId"
-        >
-            <el-radio-button
-                v-for="(item, index) in statusArr"
-                :key="item.id + index"
-                :label="item.id"
-                >{{ item.name }}</el-radio-button
-            >
-        </el-radio-group>
-        <div class="table-search-content">
-            <div class="searchBar">
-                <el-form :inline="true" :model="searchInfo">
-                    <el-form-item size="small" label="简历推送日期">
-                        <el-date-picker
-                            v-model="searchInfo.beginDate"
-                            type="date"
-                            placeholder="选择开始日期"
-                            :picker-options="beginDateOptions"
-                            clearable
-                        ></el-date-picker
-                        >~
-                        <el-date-picker
-                            v-model="searchInfo.endDate"
-                            type="date"
-                            placeholder="选择结束日期"
-                            :picker-options="endDateOptions"
-                            clearable
-                        ></el-date-picker>
-                    </el-form-item>
-                    <el-form-item size="small" label="职位">
-                        <el-select
-                            v-model="searchInfo.jobId"
-                            filterable
-                            placeholder="请选择职位"
-                            clearable
-                        >
-                            <el-option
-                                v-for="(item, index) in totalJobs"
-                                :key="item + '_' + index"
-                                :label="item.name"
-                                :value="item.id"
-                            ></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item size="small" label="姓名">
-                        <el-input
-                            v-model="searchInfo.name"
-                            placeholder="请输入姓名"
-                            clearable
-                        ></el-input>
-                    </el-form-item>
-                    <el-form-item
-                        v-if="
-                            statusId !== 'pass' &&
-                            statusId !== 'attendInterview'
-                        "
-                        size="small"
-                        label="面试日期"
-                    >
-                        <el-date-picker
-                            v-model="searchInfo.interviewBeginDate"
-                            type="date"
-                            placeholder="选择开始日期"
-                            :picker-options="interviewBeginDateOptions"
-                            clearable
-                        ></el-date-picker
-                        >~
-                        <el-date-picker
-                            v-model="searchInfo.interviewEndDate"
-                            type="date"
-                            placeholder="选择结束日期"
-                            :picker-options="interviewEndDateOptions"
-                            clearable
-                        ></el-date-picker>
-                    </el-form-item>
-                    <el-form-item size="small">
-                        <el-button type="primary" @click="search(1)"
-                            >查询</el-button
-                        >
-                        <el-button
-                            v-if="
-                                statusId == 'pass' ||
-                                statusId == 'attendInterview'
-                            "
-                            v-show="tableStatus == 'view'"
-                            @click="addData"
-                            >新增</el-button
-                        >
-                        <el-button
-                            v-show="tableStatus == 'add'"
-                            @click="saveData"
-                            >保存</el-button
-                        >
-                        <el-button @click="exportData">导出</el-button>
-                        <el-button @click="downloadWeekData">下载</el-button>
-                        <el-upload
-                            class="upload-demo"
-                            action
-                            :on-change="handleChange"
-                            :on-remove="handleRemove"
-                            :on-exceed="handleExceed"
-                            :show-file-list="false"
-                            :limit="1"
-                            :auto-upload="false"
-                        >
-                            <el-button size="small" type="primary"
-                                >上传</el-button
-                            >
-                        </el-upload>
-                    </el-form-item>
-                </el-form>
-            </div>
-            <my-table
-                class="table-container"
-                v-loading="tableLoading"
-                :key="statusId"
-                :stage-id="stageId"
-                :status-id="statusId"
-                :table-status="tableStatus"
-                :new-line="newLine"
-                :table-datas="tableDatas"
-                :channel-options="channelOptions"
-                :job-options="jobOptions"
-                :interviewer-options="interviewerOptions"
-                :school-property="schoolProperty"
-                :degrees="degrees"
-                :modes="modes"
-                :types="types"
-                :school985="school985"
-                :school211="school211"
-                :companies="companies"
-                @operate="handleData"
-                @editData="editData"
-                @copyData="copyData"
-                @deleteData="deleteData"
-            ></my-table>
-            <div class="page-container">
-                <el-pagination
-                    @size-change="changePageSize"
-                    @current-change="changePageIndex"
-                    :current-page="pageIndex"
-                    background
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size="10"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total"
-                >
-                </el-pagination>
-            </div>
-        </div>
-        <el-drawer
-            title="修改面试情况"
-            :before-close="handleClose"
-            :visible.sync="editInterviewShow"
-            direction="rtl"
-            ref="drawer"
-        >
-            <div>
-                <my-form
-                    v-if="editInterviewShow"
-                    ref="editLine"
-                    :edit-line="editLine"
-                    :channel-options="channelOptions"
-                    :job-options="jobOptions"
-                    :interviewer-options="interviewerOptions"
-                    :school-property="schoolProperty"
-                    :school985="school985"
-                    :school211="school211"
-                    :companies="companies"
-                    :degrees="degrees"
-                    :modes="modes"
-                    :types="types"
-                    :status-options="statusOptions"
-                ></my-form>
-                <div class="demo-drawer__footer">
-                    <el-button @click="cancelForm">取 消</el-button>
-                    <el-button
-                        type="primary"
-                        @click="submitEditInterviewee"
-                        :loading="btnLoading"
-                        >{{ btnLoading ? "提交中 ..." : "确 定" }}</el-button
-                    >
-                </div>
-            </div>
-        </el-drawer>
+	<div class="tab-content">
+		<el-radio-group
+			class="status-group"
+			v-if="showRadio"
+			:key="stageId"
+			size="small"
+			v-model="statusId"
+		>
+			<el-radio-button
+				v-for="(item, index) in statusArr"
+				:key="item.id + index"
+				:label="item.id"
+				>{{ item.name }}</el-radio-button
+			>
+		</el-radio-group>
+		<div class="table-search-content">
+			<div class="searchBar">
+				<el-form :inline="true" :model="searchInfo">
+					<el-form-item size="small" label="简历推送日期">
+						<el-date-picker
+							v-model="searchInfo.beginDate"
+							type="date"
+							placeholder="选择开始日期"
+							:picker-options="beginDateOptions"
+							clearable
+						></el-date-picker
+						>~
+						<el-date-picker
+							v-model="searchInfo.endDate"
+							type="date"
+							placeholder="选择结束日期"
+							:picker-options="endDateOptions"
+							clearable
+						></el-date-picker>
+					</el-form-item>
+					<el-form-item size="small" label="职位">
+						<el-select
+							v-model="searchInfo.jobId"
+							filterable
+							placeholder="请选择职位"
+							clearable
+						>
+							<el-option
+								v-for="(item, index) in totalJobs"
+								:key="item + '_' + index"
+								:label="item.name"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item size="small" label="姓名">
+						<el-input
+							v-model="searchInfo.name"
+							placeholder="请输入姓名"
+							clearable
+						></el-input>
+					</el-form-item>
+					<el-form-item
+						v-if="
+							statusId !== 'pass' &&
+								statusId !== 'attendInterview'
+						"
+						size="small"
+						label="面试日期"
+					>
+						<el-date-picker
+							v-model="searchInfo.interviewBeginDate"
+							type="date"
+							placeholder="选择开始日期"
+							:picker-options="interviewBeginDateOptions"
+							clearable
+						></el-date-picker
+						>~
+						<el-date-picker
+							v-model="searchInfo.interviewEndDate"
+							type="date"
+							placeholder="选择结束日期"
+							:picker-options="interviewEndDateOptions"
+							clearable
+						></el-date-picker>
+					</el-form-item>
+					<el-form-item size="small">
+						<el-button type="primary" @click="search(1)"
+							>查询</el-button
+						>
+						<el-button
+							v-if="
+								statusId == 'pass' ||
+									statusId == 'attendInterview'
+							"
+							v-show="tableStatus == 'view'"
+							@click="addData"
+							>新增</el-button
+						>
+						<el-button
+							v-show="tableStatus == 'add'"
+							@click="saveData"
+							>保存</el-button
+						>
+						<el-button @click="exportData">导出</el-button>
+						<el-button @click="downloadWeekData">下载</el-button>
+						<el-button @click="getWeekData">生成周报</el-button>
+						<el-upload
+							class="upload-demo"
+							action
+							:on-change="handleChange"
+							:on-remove="handleRemove"
+							:on-exceed="handleExceed"
+							:show-file-list="false"
+							:limit="1"
+							:auto-upload="false"
+						>
+							<el-button size="small" type="primary"
+								>上传</el-button
+							>
+						</el-upload>
+					</el-form-item>
+				</el-form>
+			</div>
+			<my-table
+				class="table-container"
+				v-loading="tableLoading"
+				:key="statusId"
+				:stage-id="stageId"
+				:status-id="statusId"
+				:table-status="tableStatus"
+				:new-line="newLine"
+				:table-datas="tableDatas"
+				:channel-options="channelOptions"
+				:job-options="jobOptions"
+				:interviewer-options="interviewerOptions"
+				:school-property="schoolProperty"
+				:degrees="degrees"
+				:modes="modes"
+				:types="types"
+				:school985="school985"
+				:school211="school211"
+				:companies="companies"
+				@operate="handleData"
+				@editData="editData"
+				@copyData="copyData"
+				@deleteData="deleteData"
+			></my-table>
+			<div class="page-container">
+				<el-pagination
+					@size-change="changePageSize"
+					@current-change="changePageIndex"
+					:current-page="pageIndex"
+					background
+					:page-sizes="[10, 20, 30, 40]"
+					:page-size="10"
+					layout="total, sizes, prev, pager, next, jumper"
+					:total="total"
+				>
+				</el-pagination>
+			</div>
+		</div>
+		<el-drawer
+			title="修改面试情况"
+			:before-close="handleClose"
+			:visible.sync="editInterviewShow"
+			direction="rtl"
+			ref="drawer"
+		>
+			<div>
+				<my-form
+					v-if="editInterviewShow"
+					ref="editLine"
+					:edit-line="editLine"
+					:channel-options="channelOptions"
+					:job-options="jobOptions"
+					:interviewer-options="interviewerOptions"
+					:school-property="schoolProperty"
+					:school985="school985"
+					:school211="school211"
+					:companies="companies"
+					:degrees="degrees"
+					:modes="modes"
+					:types="types"
+					:status-options="statusOptions"
+				></my-form>
+				<div class="demo-drawer__footer">
+					<el-button @click="cancelForm">取 消</el-button>
+					<el-button
+						type="primary"
+						@click="submitEditInterviewee"
+						:loading="btnLoading"
+						>{{ btnLoading ? "提交中 ..." : "确 定" }}</el-button
+					>
+				</div>
+			</div>
+		</el-drawer>
 
-        <el-dialog title="面试日程" :visible.sync="showDialog" width="280px">
-            <el-form
-                :model="operateInfo"
-                label-position="right"
-                label-width="70px"
-            >
-                <el-form-item label="面试形式">
-                    <el-select
-                        v-model="operateInfo.modeId"
-                        size="small"
-                        placeholder="请选择面试形式"
-                    >
-                        <el-option
-                            v-for="(item, index) in modes"
-                            :key="item.name + '_' + index"
-                            :label="item.name"
-                            :value="item.id"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="面试日期">
-                    <el-date-picker
-                        v-model="operateInfo.interviewDate"
-                        type="date"
-                        size="small"
-                        placeholder="选择日期"
-                        clearable
-                    ></el-date-picker>
-                </el-form-item>
-                <el-form-item label="面试时间">
-                    <el-time-select
-                        v-model="operateInfo.interviewTime"
-                        size="small"
-                        placeholder="选择时间"
-                        :picker-options="{
-                            start: '09:00',
-                            step: '00:15',
-                            end: '20:00'
-                        }"
-                        clearable
-                    ></el-time-select>
-                </el-form-item>
-                <el-form-item label="面试官">
-                    <el-select
-                        v-model="operateInfo.interviewerId"
-                        placeholder="请选择面试官"
-                        multiple
-                        size="small"
-                    >
-                        <el-option
-                            v-for="(item, index) in interviewerOptions"
-                            :key="item.name + '_' + index"
-                            :label="item.name"
-                            :value="item.id"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button size="small" @click="showDialog = false"
-                    >取消</el-button
-                >
-                <el-button type="primary" size="small" @click="submitInterview"
-                    >确定</el-button
-                >
-            </div>
-        </el-dialog>
-        <el-dialog
-            title="去人才库"
-            :visible.sync="fireDialogShow"
-            width="280px"
-        >
-            <el-form
-                :model="operateInfo"
-                label-position="right"
-                label-width="70px"
-            >
-                <el-form-item label="原因">
-                    <el-select
-                        v-model="fireInfo.statusId"
-                        size="small"
-                        placeholder="请选择原因"
-                    >
-                        <el-option
-                            v-for="(item, index) in fireOptions"
-                            :key="item.name + '_' + index"
-                            :label="item.name"
-                            :value="item.id"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button size="small" @click="fireDialogShow = false"
-                    >取消</el-button
-                >
-                <el-button type="primary" size="small" @click="submitFire"
-                    >确定</el-button
-                >
-            </div>
-        </el-dialog>
-        <el-dialog
-            title="提醒信息"
-            :visible.sync="showNoticeDialog"
-            width="280px"
-        >
-            <el-form
-                :model="operateInfo"
-                label-position="right"
-                label-width="70px"
-            >
-                <el-form-item label="提醒日期">
-                    <el-date-picker
-                        v-model="noticeInfo.noticeDate"
-                        type="date"
-                        size="small"
-                        value-format="yyyy-MM-dd"
-                        placeholder="选择日期"
-                        clearable
-                    ></el-date-picker>
-                </el-form-item>
-                <el-form-item label="提醒内容">
-                    <el-input
-                        type="textarea"
-                        autosize
-                        placeholder="请输入备注"
-                        v-model="noticeInfo.noticeStr"
-                    ></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button size="small" @click="showNoticeDialog = false"
-                    >取消</el-button
-                >
-                <el-button type="primary" size="small" @click="submitNotice"
-                    >确定</el-button
-                >
-            </div>
-        </el-dialog>
-        <el-dialog
-            title="入职信息"
-            :visible.sync="showJoinDialog"
-            width="280px"
-        >
-            <el-form
-                :model="operateInfo"
-                label-position="right"
-                label-width="80px"
-            >
-                <template v-if="statusId === 'submitTable'">
-                    <el-form-item label="入职部门">
-                        <el-input
-                            v-model="joinInfo.joinApartmentName"
-                            size="small"
-                            placeholder="请输入"
-                            clearable
-                        ></el-input>
-                    </el-form-item>
-                    <el-form-item label="Offer 岗位">
-                        <el-input
-                            v-model="joinInfo.joinJobName"
-                            size="small"
-                            placeholder="请输入"
-                            clearable
-                        ></el-input>
-                    </el-form-item>
-                    <el-form-item label="直属上级">
-                        <el-input
-                            v-model="joinInfo.manager"
-                            size="small"
-                            placeholder="请输入"
-                            clearable
-                        ></el-input>
-                    </el-form-item>
-                    <el-form-item label="base">
-                        <el-input
-                            v-model="joinInfo.base"
-                            size="small"
-                            placeholder="请输入"
-                            clearable
-                        ></el-input>
-                    </el-form-item>
-                </template>
-                <el-form-item v-else label="入职时间">
-                    <el-date-picker
-                        v-model="joinInfo.joinDate"
-                        type="date"
-                        size="small"
-                        value-format="yyyy-MM-dd"
-                        placeholder="选择日期"
-                        clearable
-                    ></el-date-picker>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button size="small" @click="showJoinDialog = false"
-                    >取消</el-button
-                >
-                <el-button type="primary" size="small" @click="submitJoin"
-                    >确定</el-button
-                >
-            </div>
-        </el-dialog>
-    </div>
+		<el-dialog title="面试日程" :visible.sync="showDialog" width="280px">
+			<el-form
+				:model="operateInfo"
+				label-position="right"
+				label-width="70px"
+			>
+				<el-form-item label="面试形式">
+					<el-select
+						v-model="operateInfo.modeId"
+						size="small"
+						placeholder="请选择面试形式"
+					>
+						<el-option
+							v-for="(item, index) in modes"
+							:key="item.name + '_' + index"
+							:label="item.name"
+							:value="item.id"
+						></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="面试日期">
+					<el-date-picker
+						v-model="operateInfo.interviewDate"
+						type="date"
+						size="small"
+						placeholder="选择日期"
+						clearable
+					></el-date-picker>
+				</el-form-item>
+				<el-form-item label="面试时间">
+					<el-time-select
+						v-model="operateInfo.interviewTime"
+						size="small"
+						placeholder="选择时间"
+						:picker-options="{
+							start: '09:00',
+							step: '00:15',
+							end: '20:00'
+						}"
+						clearable
+					></el-time-select>
+				</el-form-item>
+				<el-form-item label="面试官">
+					<el-select
+						v-model="operateInfo.interviewerId"
+						placeholder="请选择面试官"
+						multiple
+						size="small"
+					>
+						<el-option
+							v-for="(item, index) in interviewerOptions"
+							:key="item.name + '_' + index"
+							:label="item.name"
+							:value="item.id"
+						></el-option>
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button size="small" @click="showDialog = false"
+					>取消</el-button
+				>
+				<el-button type="primary" size="small" @click="submitInterview"
+					>确定</el-button
+				>
+			</div>
+		</el-dialog>
+		<el-dialog
+			title="去人才库"
+			:visible.sync="fireDialogShow"
+			width="280px"
+		>
+			<el-form
+				:model="operateInfo"
+				label-position="right"
+				label-width="70px"
+			>
+				<el-form-item label="原因">
+					<el-select
+						v-model="fireInfo.statusId"
+						size="small"
+						placeholder="请选择原因"
+					>
+						<el-option
+							v-for="(item, index) in fireOptions"
+							:key="item.name + '_' + index"
+							:label="item.name"
+							:value="item.id"
+						></el-option>
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button size="small" @click="fireDialogShow = false"
+					>取消</el-button
+				>
+				<el-button type="primary" size="small" @click="submitFire"
+					>确定</el-button
+				>
+			</div>
+		</el-dialog>
+		<el-dialog
+			title="提醒信息"
+			:visible.sync="showNoticeDialog"
+			width="280px"
+		>
+			<el-form
+				:model="operateInfo"
+				label-position="right"
+				label-width="70px"
+			>
+				<el-form-item label="提醒日期">
+					<el-date-picker
+						v-model="noticeInfo.noticeDate"
+						type="date"
+						size="small"
+						value-format="yyyy-MM-dd"
+						placeholder="选择日期"
+						clearable
+					></el-date-picker>
+				</el-form-item>
+				<el-form-item label="提醒内容">
+					<el-input
+						type="textarea"
+						autosize
+						placeholder="请输入备注"
+						v-model="noticeInfo.noticeStr"
+					></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button size="small" @click="showNoticeDialog = false"
+					>取消</el-button
+				>
+				<el-button type="primary" size="small" @click="submitNotice"
+					>确定</el-button
+				>
+			</div>
+		</el-dialog>
+		<el-dialog
+			title="入职信息"
+			:visible.sync="showJoinDialog"
+			width="280px"
+		>
+			<el-form
+				:model="operateInfo"
+				label-position="right"
+				label-width="80px"
+			>
+				<template v-if="statusId === 'submitTable'">
+					<el-form-item label="入职部门">
+						<el-input
+							v-model="joinInfo.joinApartmentName"
+							size="small"
+							placeholder="请输入"
+							clearable
+						></el-input>
+					</el-form-item>
+					<el-form-item label="Offer 岗位">
+						<el-input
+							v-model="joinInfo.joinJobName"
+							size="small"
+							placeholder="请输入"
+							clearable
+						></el-input>
+					</el-form-item>
+					<el-form-item label="直属上级">
+						<el-input
+							v-model="joinInfo.manager"
+							size="small"
+							placeholder="请输入"
+							clearable
+						></el-input>
+					</el-form-item>
+					<el-form-item label="base">
+						<el-input
+							v-model="joinInfo.base"
+							size="small"
+							placeholder="请输入"
+							clearable
+						></el-input>
+					</el-form-item>
+				</template>
+				<el-form-item v-else label="入职时间">
+					<el-date-picker
+						v-model="joinInfo.joinDate"
+						type="date"
+						size="small"
+						value-format="yyyy-MM-dd"
+						placeholder="选择日期"
+						clearable
+					></el-date-picker>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button size="small" @click="showJoinDialog = false"
+					>取消</el-button
+				>
+				<el-button type="primary" size="small" @click="submitJoin"
+					>确定</el-button
+				>
+			</div>
+		</el-dialog>
+	</div>
 </template>
 
 <script>
@@ -413,12 +414,13 @@ import {
     changeSchedule,
     getInterviewList,
     exportInterviewData,
-    downloadInterviewData
+    downloadInterviewData,
 } from "../../../../../apis/interview/interview";
 import MyTable from "./Table.vue";
 import MyForm from "./Form.vue";
 import exportMixin from "./importFile";
 import { getDownloadData } from "./downloadFile";
+import { generateWeekReport } from "./generate-week-report";
 export default {
     mixins: [exportMixin],
     props: {
@@ -716,10 +718,11 @@ export default {
             this.newLine = {
                 stageId: this.stageId,
                 statusId: this.statusId,
+                isinitWeek: 1,
                 date: "",
                 apartmentId: "",
                 jobId: "",
-                typeId: "",
+                typeId: 0,
                 channelId: "",
                 name: "",
                 sex: "",
@@ -746,7 +749,7 @@ export default {
                 isDelete: false,
                 EnglishName: '',
                 experience: '',
-                companyId: '',
+                companyId: 0,
                 subChannelId: '',
                 subChannelName: '',
                 trialDate: '',
@@ -1169,6 +1172,7 @@ export default {
             this.newLine = {
                 stageId: this.stageId,
                 statusId: this.statusId,
+                isinitWeek: row.isinitWeek,
                 date: row.date,
                 apartmentId: row.apartmentId,
                 jobId: row.jobId,
@@ -1359,41 +1363,52 @@ export default {
             } else {
                 this.$message.error(message);
             }
+        },
+        async getWeekData() {
+            const monday = this.$dayjs().day() === 0 ? this.$dayjs().day(-6).startOf('date').valueOf() : this.$dayjs().day(1).startOf('date').valueOf();
+            const sunday = this.$dayjs().day() === 0 ? this.$dayjs(new Date()).endOf('date').valueOf() : this.$dayjs().day(7).endOf('date').valueOf();
+            const params = {
+                userId: this.userId,
+                beginDate:  this.searchInfo.beginDate ? this.$dayjs(this.searchInfo.beginDate).startOf('date').valueOf() : monday,
+                endDate:  this.searchInfo.endDate ? this.$dayjs(this.searchInfo.endDate).endOf('date').valueOf() : sunday,
+            };
+
+        	generateWeekReport(params)
         }
     }
 };
 </script>
-<style scoped lang='less'>
+<style scoped lang="less">
 .tab-content {
-    height: 100%;
-    width: 100%;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-width: 0 1px 1px;
-    display: flex;
-    flex-direction: column;
-    .status-group {
-        margin-bottom: 20px;
-        text-align: left;
-    }
-    .table-search-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        .searchBar {
-            text-align: left;
-            .upload-demo {
-                margin-left: 10px;
-                display: inline-block;
-            }
-        }
-        .table-container {
-            flex: 1;
-        }
-        .page-container {
-            margin-top: 10px;
-            text-align: right;
-        }
-    }
+	height: 100%;
+	width: 100%;
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-width: 0 1px 1px;
+	display: flex;
+	flex-direction: column;
+	.status-group {
+		margin-bottom: 20px;
+		text-align: left;
+	}
+	.table-search-content {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		.searchBar {
+			text-align: left;
+			.upload-demo {
+				margin-left: 10px;
+				display: inline-block;
+			}
+		}
+		.table-container {
+			flex: 1;
+		}
+		.page-container {
+			margin-top: 10px;
+			text-align: right;
+		}
+	}
 }
 </style>

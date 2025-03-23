@@ -7,7 +7,7 @@
  * @LastEditTime: 2022-06-08 23:55:28
  */
 export default {
-    // 学校性质
+	// 学校性质
 	schoolProperty: [
 		{
 			id: 0,
@@ -40,25 +40,40 @@ export default {
 			sort: 5
 		}
 	],
-    // 学历
+	// 学历
 	degree: [
 		{
-			id: 0,
-			name: "硕士",
-			sort: 0
+			"id": 0,
+			"name": "硕士",
+			"sort": 0
 		},
 		{
-			id: 1,
-			name: "本科",
-			sort: 1
+			"id": 1,
+			"name": "本科",
+			"sort": 1
 		},
 		{
-			id: 2,
-			name: "大专",
-			sort: 2
+			"id": 2,
+			"name": "大专",
+			"sort": 2
+		},
+		{
+			"id": 3,
+			"name": "高中",
+			"sort": 3
+		},
+		{
+			"id": 4,
+			"name": "中专",
+			"sort": 4
+		},
+		{
+			"id": 5,
+			"name": "博士",
+			"sort": 5
 		}
 	],
-    // 面试形式
+	// 面试形式
 	mode: [
 		{
 			id: 0,
@@ -67,36 +82,21 @@ export default {
 		},
 		{
 			id: 1,
-			name: "电话",
-			sort: 1
-		},
-		{
-			id: 2,
-			name: "微信",
-			sort: 2
-		},
-		{
-			id: 3,
 			name: "视频",
-			sort: 3
+			sort: 1
 		}
 	],
-    // 类别
+	// 类别
 	type: [
 		{
 			id: 0,
-			name: "社招",
+			name: "全职",
 			sort: 0
 		},
 		{
 			id: 1,
-			name: "校招",
-			sort: 1
-		},
-		{
-			id: 2,
 			name: "实习",
-			sort: 2
+			sort: 1
 		}
 	]
 };

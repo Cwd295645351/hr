@@ -226,7 +226,7 @@ var importMixin = {
 					"trialDate",
 					"leaveDate",
 					"fileList",
-					"remark", 
+					"remark",
 				];
 				const list = res;
 				const data = this.formatJson(filterVal, list);
@@ -325,22 +325,20 @@ var importMixin = {
 
 					outdata.forEach((item) => {
 						const obj = {
-							schedules: [],
-							fileList: [],
 							stageId: 0,
 							stageName: "",
-							statusId: "",
-							statusName: item["状态"] || "",
-							date: _this.$dayjs(new Date()).format("YYYY-MM-DD"),
+							statusId: '',
+							statusName: item["招聘进度"] || "",
+							date: _this.$dayjs(new Date(item['简历上载时间'])).format("YYYY-MM-DD"),
 							apartmentId: 0,
-							apartmentName: item["应聘部门"] || "",
+							apartmentName: item["应聘职位"] || "",
 							jobId: 0,
-							jobName: item["应聘职位"] || "",
+							jobName: item["岗位"] || "",
 							typeId: 0,
 							typeName: item["类别"] || "",
 							channelId: "",
-							channelName: item["招聘渠道"] || "",
-							name: item["姓名"],
+							channelName: item["一级招聘渠道"] || "",
+							name: item["候选人姓名"],
 							sex: item["性别"] === "男" ? 1 : 0,
 							phoneNum: item["电话"] || "",
 							email: item["邮箱"] || "",
@@ -354,8 +352,10 @@ var importMixin = {
 							isFullTime: item["全日制"] === "是" ? 1 : 0,
 							graduationDate: item["毕业时间"] || "",
 							isWork: item["在职"] === "是" ? 1 : 0,
-							joinDate: item["入职时间"] || "",
+							joinDate: "",
+							schedules: [],
 							isArrivalInterview: item["到面"] === "是" ? 1 : 0,
+							fileList: [],
 							remindDate: item["通知日期"] || "",
 							remark: item["备注"] || "",
 							noticeStr: "",
@@ -363,6 +363,20 @@ var importMixin = {
 							joinRemark: "",
 							hideTag: "0",
 							isDelete: false,
+							EnglishName: item["英文姓名"] || '',
+							experience: '',
+							companyId: '',
+							companyName: item['HKGAI/科大'] || '',
+							subChannelId: '',
+							subChannelName: item['二级招聘渠道'] || '',
+							trialDate: item['试用期满时间'] || '',
+							leaveDate: item['离职时间'] || '',
+							followUp: item['后续跟进人员'] || '',
+							todoList: item['跟进事项'] || '',
+							joinApartmentName: '',
+							joinJobName: '',
+							manager: '',
+							base: '',
 							userId: _this.userId
 						};
 						_this.handleImportData(obj, item);
@@ -428,76 +442,93 @@ var importMixin = {
 			item.degreeId =
 				configs.degree.find((ite) => ite.name === item.degreeName)
 					?.id || "";
-			item.channelId = channelMap[item.channelName] || "";
-			if (originData["面试官"]) {
+
+			const channelItem = channelMap.find(channel => channel.name === item.channelName)
+			item.channelId = channelItem?.id || "";
+			item.subChannelId = channelItem?.subChannel.find(subChannel => subChannel.name === item.subChannelName)?.id || "";
+			if (originData["一面时间"]) {
 				// 一面信息
 				const obj = {
 					interviewDate: new Date(
-						originData["面试日期"]
+						originData["一面时间"]
 					).toISOString(),
-					interviewTime: originData["面试时间"],
-					interviewerId: originData["面试官"]
+					interviewTime: this.$dayjs(new Date(originData["一面时间"])).format("HH:mm"),
+					interviewerId: originData["一面面试官"]
 						.split(",")
 						.map((ite) => {
 							return interviewers.find(
 								(interviewer) => interviewer.name === ite
 							).id;
 						}),
-					interviewerName: originData["面试官"].split(","),
-					modeId:
-						configs.mode.find(
-							(ite) => ite.name === originData["面试形式"]
-						)?.id || 0,
-					modeName: originData["面试形式"],
+					interviewerName: originData["一面面试官"].split(","),
+					modeId: 1,
+					modeName: '视频',
+					interviewerCommitment: originData["一面意见"],
 					order: 1
 				};
 				item.schedules.push(obj);
 			}
-			if (originData["面试官_1"]) {
-				// 一面信息
+			if (originData["二面时间"]) {
+				// 二面信息
 				const obj = {
 					interviewDate: new Date(
-						originData["面试日期_1"]
+						originData["二面时间"]
 					).toISOString(),
-					interviewTime: originData["面试时间_1"],
-					interviewerId: originData["面试官_1"]
+					interviewTime: this.$dayjs(new Date(originData["二面时间"])).format("HH:mm"),
+					interviewerId: originData["二面面试官"]
 						.split(",")
 						.map((ite) => {
 							return interviewers.find(
 								(interviewer) => interviewer.name === ite
 							).id;
 						}),
-					interviewerName: originData["面试官_1"].split(","),
-					modeId:
-						configs.mode.find(
-							(ite) => ite.name === originData["面试形式_1"]
-						)?.id || 0,
-					modeName: originData["面试形式_1"],
-					order: 1
+					interviewerName: originData["二面面试官"].split(","),
+					modeId: 1,
+					modeName: '视频',
+					order: 2
 				};
 				item.schedules.push(obj);
 			}
-			if (originData["面试官_2"]) {
-				// 一面信息
+			if (originData["三面时间"]) {
+				// 三面信息
 				const obj = {
 					interviewDate: new Date(
-						originData["面试日期_2"]
+						originData["三面时间"]
 					).toISOString(),
-					interviewTime: originData["面试时间_2"],
-					interviewerId: originData["面试官_2"]
+					interviewTime: this.$dayjs(new Date(originData["三面时间"])).format("HH:mm"),
+					interviewerId: originData["三面面试官"]
+						.split(",")
+						.map((ite) => {
+
+							return interviewers.find(
+								(interviewer) => interviewer.name === ite
+							).id;
+						}),
+					interviewerName: originData["三面面试官"].split(","),
+					modeId: 1,
+					modeName: '视频',
+					order: 3
+				};
+				item.schedules.push(obj);
+			}
+			if (originData["四面时间"]) {
+				// 四面信息
+				const obj = {
+					interviewDate: new Date(
+						originData["四面时间"]
+					).toISOString(),
+					interviewTime: this.$dayjs(new Date(originData["四面时间"])).format("HH:mm"),
+					interviewerId: originData["四面面试官"]
 						.split(",")
 						.map((ite) => {
 							return interviewers.find(
 								(interviewer) => interviewer.name === ite
 							).id;
 						}),
-					interviewerName: originData["面试官_2"].split(","),
-					modeId:
-						configs.mode.find(
-							(ite) => ite.name === originData["面试形式_2"]
-						)?.id || 0,
-					modeName: originData["面试形式_2"],
-					order: 1
+					interviewerName: originData["四面面试官"].split(","),
+					modeId: 1,
+					modeName: '视频',
+					order: 4
 				};
 				item.schedules.push(obj);
 			}
@@ -575,6 +606,22 @@ var importMixin = {
 			date.setHours(hours, minutes, 0, 0);
 
 			return date.getTime(); // 返回时间戳（毫秒）
+		},
+
+		/**
+		 * 将 Excel 日期数字转换为 JavaScript 的 Date 对象
+		 * @param {number} excelNumber - Excel 中的日期数字
+		 * @returns {Date} - 转换后的 JavaScript Date 对象
+		 */
+		excelNumberToDate(excelNumber) {
+
+			const excelSerial = 45714.6666666667;
+
+			const unixTimestamp = ((excelSerial - 25571) * 86400 - 8 * 60 * 60) * 1000;
+
+			const date = new Date(unixTimestamp);
+
+			return date;
 		}
 
 	}

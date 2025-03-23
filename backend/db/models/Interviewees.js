@@ -13,6 +13,8 @@ const IntervieweesSchema = mongoose.Schema(
 	{
 		// 用户id
 		userId: { type: String, required: true },
+		// 简历推送是否计入周报（0=否，1=是）
+		isinitWeek: { type: Number },
 		// 姓名
 		name: { type: String },
 		// 英文姓名
@@ -145,7 +147,7 @@ const IntervieweesSchema = mongoose.Schema(
 		// 简历更新时间列表（只有导出内容变化才更新）
 		updateTime: [
 			{
-				// 更新类型：1=非面试状态变更，2=面试状态变更
+				// 更新类型 0=推荐简历：1=非面试状态变更，2=面试阶段变更，3=谈薪阶段，4=Offer阶段
 				updateType: Number,
 				// 更新时间
 				timestamps: Number

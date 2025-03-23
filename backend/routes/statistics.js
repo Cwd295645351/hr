@@ -14,7 +14,8 @@ import {
 	getOriginNums,
 	addOriginNums,
 	editOriginNums,
-	deleteOriginNums
+	deleteOriginNums,
+	generateWeekReport
 } from "../controller/statistics";
 import { getChannelList, getMajorList } from "../controller/common";
 
@@ -380,9 +381,9 @@ router.get("/getEntryRate", async (ctx, next) => {
 		obj.proportion =
 			majorData[major].joinNum != 0
 				? (
-						(majorData[major].joinNum * 100) /
-						majorData[major].total
-				  ).toFixed(2)
+					(majorData[major].joinNum * 100) /
+					majorData[major].total
+				).toFixed(2)
 				: "0.00";
 		returnData.push(obj);
 	}
@@ -396,6 +397,21 @@ router.get("/getEntryRate", async (ctx, next) => {
 	});
 	ctx.body = new SuccessModel(returnData, "获取成功");
 });
+
+// 生成周报
+router.get('/generateWeekReport', async (ctx, next) => {
+	const params = ctx.query;
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
+	const res = await generateWeekReport(params);
+	if (res) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel(null, "获取失败");
+	}
+})
 
 // 不同阶段的简历数增加，index:1-6=通过筛选、已约面、到面、意向录用、待入职、入职
 function addNum(obj, channelName, index) {

@@ -87,6 +87,7 @@ export const getList = async (params) => {
 		date: 1,
 		apartmentId: 1,
 		apartmentName: 1,
+		isinitWeek: 1,
 		jobId: 1,
 		jobName: 1,
 		typeId: 1,
@@ -312,9 +313,13 @@ export const addInterviewee = async (data) => {
 				data.stageId,
 				data.statusId
 			);
-			const INTERVIEW_INFO_CHANGE = 2
-			const nowTimeStamp = Date.now()
-			data.updateTime = [{ updateType: INTERVIEW_INFO_CHANGE, timestamps: nowTimeStamp }]
+			data.updateTime = []
+			if (data.isinitWeek === 1) {
+				// 简历推送计入周报
+				const INTERVIEW_INFO_CHANGE = 0
+				const nowTimeStamp = Date.now()
+				data.updateTime = [{ updateType: INTERVIEW_INFO_CHANGE, timestamps: nowTimeStamp }]
+			}
 			const res = await Interview.create(data);
 			return {
 				retCode: res ? 0 : 1
@@ -473,18 +478,41 @@ export const editInterviewee = async (data) => {
 			manager: data.manager,
 			base: data.base,
 			todoList: data.todoList,
-			experience: data.experience
+			experience: data.experience,
+			isinitWeek: data.isinitWeek
 		}
 
-		// 是否进入新的面试阶段
-		const IF_IN_INTERVIEW = data.statusId === 'firstInterview' || data.statusId === 'secondInterview' || data.statusId === 'thirdInterview' || data.statusId === 'forthInterview'
-		if (originData.statusId !== data.statusId && IF_IN_INTERVIEW) {
-			const INTERVIEW_INFO_CHANGE = 2
-			const nowTimeStamp = Date.now()
-			changeData['$push'] =  {
-				updateTime: {
-					updateType: INTERVIEW_INFO_CHANGE,
-					timestamps: nowTimeStamp
+		if (originData.statusId !== data.statusId) {
+			// 是否进入新的面试阶段
+			const IF_IN_INTERVIEW = data.statusId === 'firstInterview' || data.statusId === 'secondInterview' || data.statusId === 'thirdInterview' || data.statusId === 'forthInterview'
+			if (IF_IN_INTERVIEW) {
+				const INTERVIEW_INFO_CHANGE = 2
+				const nowTimeStamp = Date.now()
+				changeData['$push'] = {
+					updateTime: {
+						updateType: INTERVIEW_INFO_CHANGE,
+						timestamps: nowTimeStamp
+					}
+				}
+			} else if (data.statusId === 'contacted') {
+				// 进入谈薪阶段
+				const INTERVIEW_INFO_CHANGE = 3
+				const nowTimeStamp = Date.now()
+				changeData['$push'] = {
+					updateTime: {
+						updateType: INTERVIEW_INFO_CHANGE,
+						timestamps: nowTimeStamp
+					}
+				}
+			} else if (data.statusId === 'offerConfirm') {
+				// 进入谈薪阶段
+				const INTERVIEW_INFO_CHANGE = 4
+				const nowTimeStamp = Date.now()
+				changeData['$push'] = {
+					updateTime: {
+						updateType: INTERVIEW_INFO_CHANGE,
+						timestamps: nowTimeStamp
+					}
 				}
 			}
 		} else {
@@ -496,7 +524,7 @@ export const editInterviewee = async (data) => {
 					changeTag = true
 					const INTERVIEW_INFO_CHANGE = 1
 					const nowTimeStamp = Date.now()
-					changeData['$push'] =  {
+					changeData['$push'] = {
 						updateTime: {
 							updateType: INTERVIEW_INFO_CHANGE,
 							timestamps: nowTimeStamp
@@ -510,7 +538,7 @@ export const editInterviewee = async (data) => {
 				if (JSON.stringify(originData.schedules) !== JSON.stringify(data.schedules)) {
 					const INTERVIEW_INFO_CHANGE = 1
 					const nowTimeStamp = Date.now()
-					changeData['$push'] =  {
+					changeData['$push'] = {
 						updateTime: {
 							updateType: INTERVIEW_INFO_CHANGE,
 							timestamps: nowTimeStamp
@@ -561,9 +589,7 @@ export const changeSchedule = async (data) => {
 		switch (type) {
 			case 0:
 			case 4:
-			case 5:
 			case 6:
-			case 7:
 			case 8:
 			case 9:
 				changeData = {
@@ -607,6 +633,38 @@ export const changeSchedule = async (data) => {
 					}
 				};
 				break;
+			case 5:
+				changeData = {
+					stageId: data.stageId,
+					statusId: data.statusId,
+					statusName: await getStatusNameById(
+						data.stageId,
+						data.statusId
+					),
+					$push: {
+						updateTime: {
+							updateType: 3,
+							timestamps: Date.now()
+						}
+					}
+				}
+				break;
+			case 7:
+				changeData = {
+					stageId: data.stageId,
+					statusId: data.statusId,
+					statusName: await getStatusNameById(
+						data.stageId,
+						data.statusId
+					),
+					$push: {
+						updateTime: {
+							updateType: 4,
+							timestamps: Date.now()
+						}
+					}
+				}
+				break;
 			case 14:
 				changeData = {
 					statusId: data.statusId,
@@ -618,6 +676,12 @@ export const changeSchedule = async (data) => {
 					joinJobName: data.joinJobName,
 					manager: data.manager,
 					base: data.base,
+					$push: {
+						updateTime: {
+							updateType: 3,
+							timestamps: Date.now()
+						}
+					}
 				};
 				break;
 			case 15:

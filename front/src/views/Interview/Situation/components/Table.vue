@@ -37,6 +37,34 @@
 			<el-table-column
 				fixed="left"
 				align="center"
+				label="简历推送是否计入周报"
+				width="60"
+			>
+				<template slot-scope="scope">
+					<div v-if="scope.$index == 0 && tableStatus == 'add'">
+						<el-select
+							v-model="newLine.isinitWeek"
+							size="small"
+							placeholder="请选择性别"
+						>
+							<el-option label="是" :value="1"></el-option>
+							<el-option label="否" :value="0"></el-option>
+						</el-select>
+					</div>
+					<div v-else>
+						{{
+							scope.row.isinitWeek != null
+								? scope.row.isinitWeek
+									? "是"
+									: "否"
+								: ""
+						}}
+					</div>
+				</template>
+			</el-table-column>
+			<el-table-column
+				fixed="left"
+				align="center"
 				label="一级招聘渠道"
 				width="85"
 			>
@@ -155,7 +183,7 @@
 					<div v-else>{{ scope.row.phoneNum }}</div>
 				</template>
 			</el-table-column>
-			<el-table-column align="center" label="邮箱" width="160">
+			<el-table-column align="center" label="邮箱" width="130">
 				<template slot-scope="scope">
 					<div v-if="scope.$index == 0 && tableStatus == 'add'">
 						<el-input
@@ -317,16 +345,26 @@
 			<el-table-column
 				align="center"
 				label="主要工作经历（公司&岗位名称）"
+				width="160"
 			>
 				<template slot-scope="scope">
 					<div v-if="scope.$index == 0 && tableStatus == 'add'">
 						<el-input
+							type="textarea"
+							autosize
+							placeholder="请输入"
 							v-model="newLine.experience"
-							size="small"
-							placeholder="请输入经历"
 						></el-input>
 					</div>
-					<div v-else>{{ scope.row.experience }}</div>
+					<div class="remark-situation" v-else>
+						<el-tooltip
+							:content="scope.row.experience"
+							popper-class="remark-tooltip"
+							placement="top"
+						>
+							<pre>{{ scope.row.experience }}</pre>
+						</el-tooltip>
+					</div>
 				</template>
 			</el-table-column>
 			<el-table-column align="center" label="应聘部门" width="100">
@@ -898,13 +936,7 @@ export default {
 		// 入职时间/试用期满时间/离职时间是否显示
 		joinDateShow() {
 			// 已提交，待定薪、谈薪、Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
-			const hasJoin = [
-				"offerApproval",
-				"offerConfirm",
-				"joining",
-				"join"
-			]
-			console.log(this.statusId,"====statusId", hasJoin.includes(this.statusId));
+			const hasJoin = ["offerApproval", "offerConfirm", "joining", "join"]
 			if (this.stageId == 6) {
 				return true
 			} else if (hasJoin.includes(this.statusId)) {

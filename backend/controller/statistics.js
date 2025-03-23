@@ -214,3 +214,170 @@ export const deleteOriginNums = async (data) => {
 	if (res) return true;
 	else return false;
 };
+
+
+// 生成周报
+export const generateWeekReport = async (params) => {
+	// 查询当前用户下的所有候选人数据
+	const mp = {
+		userId: params.userId,
+		isDelete: false
+	};
+	const beginDate = params.beginDate;
+	const endDate = params.endDate;
+	const filterData = {
+		jobName: 1,
+		stageId: 1,
+		statusId: 1,
+		schedules: 1,
+		updateTime: 1
+	}
+	const candidateData = await Interview.find(mp, filterData)
+	// 按周划分不同阶段的候选人数据
+	const weekData = {
+		// 推送简历
+		pushResume: 0,
+		// 面试
+		interview: 0,
+		// 谈薪
+		talkSalary: 0,
+		// offer
+		offer: 0,
+	}
+	// 累计数据
+	const totalData = []
+	const jobNameMap = new Map()
+	candidateData.forEach(item => {
+		item.updateTime.forEach(updateItem => {
+			// 只有处于开始结束时间范围内才统计
+			if (updateItem.timestamps >= beginDate && updateItem.timestamps <= endDate) {
+				switch (updateItem.updateType) {
+					case 0:
+						weekData.pushResume++;
+						break;
+					case 2:
+						weekData.interview++;
+						break;
+					case 3:
+						weekData.talkSalary++;
+						break;
+					case 4:
+						weekData.offer++;
+						break;
+
+				}
+			}
+		})
+		let jobData = {};
+
+		if (jobNameMap.has(item.jobName)) {
+			jobData = jobNameMap.get(item.jobName)
+		} else {
+			jobData = {
+				// 职位
+				jobName: item.jobName,
+				// 推送简历
+				pushResume: 0,
+				// 邀约一面
+				inviteOne: 0,
+				// 一面到面
+				attendInterviewOne: 0,
+				// 一面通过
+				onePass: 0,
+				// 邀约二面
+				inviteTwo: 0,
+				// 二面到面
+				attendInterviewTwo: 0,
+				// 二面通过
+				twoPass: 0,
+				// 邀约三面
+				inviteThree: 0,
+				// 三面到面
+				attendInterviewThree: 0,
+				// 三面通过
+				threePass: 0,
+				// 录用谈 Offer
+				offer: 0,
+				// 发电子 Offer
+				electronicOffer: 0,
+				// 待入职
+				waitEntry: 0,
+				// 入职
+				entry: 0,
+			}
+			jobNameMap.set(item.jobName, jobData)
+		}
+
+		const stageId = item.stageId;
+		const statusId = item.statusId;
+		const schedules = item.schedules;
+		const schedulesLength = schedules.length;
+
+		jobData.pushResume++;
+		if (schedulesLength === 1) {
+			jobData.inviteOne++;
+			if (schedules[0].interviewerCommitment) {
+				// 有评价代表到面
+				jobData.attendInterviewOne++;
+			}
+		} else if (schedulesLength === 2) {
+			jobData.inviteOne++;
+			jobData.attendInterviewOne++;
+			jobData.onePass++;
+			jobData.inviteTwo++;
+			if (schedules[1].interviewerCommitment) {
+				// 有评价代表到面
+				jobData.attendInterviewTwo++;
+			}
+		} else if (schedulesLength === 3) {
+			jobData.inviteOne++;
+			jobData.attendInterviewOne++;
+			jobData.onePass++;
+			jobData.inviteTwo++;
+			jobData.attendInterviewTwo++;
+			jobData.twoPass++;
+			jobData.inviteThree++;
+			if (schedules[2].interviewerCommitment) {
+				// 有评价代表到面
+				jobData.attendInterviewThree++;
+			}
+		}
+		if (stageId >= 3 && stageId <= 5) {
+			if (schedulesLength === 1) {
+				jobData.onePass++;
+			} else if (schedulesLength === 2) {
+				jobData.onePass++;
+				jobData.twoPass++;
+			} else if (schedulesLength === 3) {
+				jobData.onePass++;
+				jobData.twoPass++;
+				jobData.threePass++;
+			}
+		}
+		if (stageId === 3) {
+			// 进入录用阶段，表示一面通过
+			if (statusId !== 'employ') {
+				jobData.offer++
+			}
+			if (statusId === 'offerConfirm') {
+				jobData.electronicOffer++
+			}
+		} else if (stageId === 4) {
+			jobData.offer++
+			jobData.electronicOffer++
+			jobData.waitEntry++
+		} else if (stageId === 5) {
+			jobData.offer++
+			jobData.electronicOffer++
+			jobData.waitEntry++
+			jobData.entry++
+		}
+
+	})
+
+	// 将 map 转为数组
+	jobNameMap.forEach(item => {
+		totalData.push(item)
+	})
+	return { weekData, totalData };
+}
