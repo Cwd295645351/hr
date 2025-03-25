@@ -243,7 +243,6 @@
 				<template slot-scope="scope">
 					<div v-if="scope.$index == 0 && tableStatus == 'add'">
 						<el-input
-							@change="schoolChange"
 							v-model="newLine.major"
 							size="small"
 							placeholder="请输入专业"
