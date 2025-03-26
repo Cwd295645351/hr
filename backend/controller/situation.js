@@ -479,7 +479,9 @@ export const editInterviewee = async (data) => {
 			isinitWeek: data.isinitWeek
 		}
 		if (data.isinitWeek === 0) {
-			changeData.changeData[0].updateType = -1
+			changeData['$set'] = {
+				"updateTime.0.updateType": -1
+			}
 		}
 
 		if (originData.statusId !== data.statusId) {
