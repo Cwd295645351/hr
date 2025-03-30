@@ -343,7 +343,8 @@
 							v-model="
 								editLine.schedules[index].interviewerCommitment
 							"
-							size="small"
+							type="textarea"
+							autosize
 							placeholder="请输入面试评价"
 							clearable
 						></el-input>
@@ -441,6 +442,14 @@
 				></el-date-picker>
 			</el-form-item>
 
+			<el-form-item label="谈薪记录">
+				<el-input
+					type="textarea"
+					autosize
+					placeholder="请输入谈薪记录"
+					v-model="editLine.salaryNegotiationRecord"
+				></el-input>
+			</el-form-item>
 			<el-form-item label="备注">
 				<el-input
 					type="textarea"

@@ -759,7 +759,8 @@ export default {
                 joinApartmentName: '',
                 joinJobName: '',
                 manager: '',
-                base: ''
+                base: '',
+                salaryNegotiationRecord: ''
             };
             this.tableDatas.unshift(this.newLine);
             this.tableDatas = JSON.parse(JSON.stringify(this.tableDatas));
@@ -1213,6 +1214,7 @@ export default {
                 joinApartmentName: '',
                 joinJobName: '',
                 manager: '',
+                salaryNegotiationRecord: '',
                 base: ''
             };
             this.tableDatas.unshift(this.newLine);

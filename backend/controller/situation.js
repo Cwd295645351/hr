@@ -132,7 +132,8 @@ export const getList = async (params) => {
 		joinJobName: 1,
 		manager: 1,
 		base: 1,
-		todoList: 1
+		todoList: 1,
+		salaryNegotiationRecord: 1
 	};
 
 	const res = await Interview.find(mp, filterData)
@@ -476,7 +477,8 @@ export const editInterviewee = async (data) => {
 			base: data.base,
 			todoList: data.todoList,
 			experience: data.experience,
-			isinitWeek: data.isinitWeek
+			isinitWeek: data.isinitWeek,
+			salaryNegotiationRecord: data.salaryNegotiationRecord
 		}
 
 

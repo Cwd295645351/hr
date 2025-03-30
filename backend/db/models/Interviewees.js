@@ -163,6 +163,8 @@ const IntervieweesSchema = mongoose.Schema(
 		manager: { type: String },
 		// base 地点
 		base: { type: String },
+		// 谈薪记录
+		salaryNegotiationRecord: { type: String },
 	},
 	{ timestamps: true }
 );

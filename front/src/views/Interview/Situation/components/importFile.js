@@ -74,6 +74,7 @@ var importMixin = {
 					"试用期满时间",
 					"离职时间",
 					"简历",
+					"谈薪记录",
 					"备注",
 				];
 				const multiHeader2 = [
@@ -131,6 +132,7 @@ var importMixin = {
 					'',
 					'',
 					'',
+					'',
 				];
 				const merges = [
 					"A1:A2",
@@ -171,6 +173,7 @@ var importMixin = {
 					"AZ1:AZ2",
 					"BA1:BA2",
 					"BB1:BB2",
+					"BC1:BC2",
 				];
 				const filterVal = [
 					'date',
@@ -226,6 +229,7 @@ var importMixin = {
 					"trialDate",
 					"leaveDate",
 					"fileList",
+					"salaryNegotiationRecord",
 					"remark",
 				];
 				const list = res;
@@ -376,6 +380,7 @@ var importMixin = {
 							joinApartmentName: '',
 							joinJobName: '',
 							manager: '',
+							salaryNegotiationRecord: item['谈薪记录'] || '',
 							base: '',
 							userId: _this.userId
 						};

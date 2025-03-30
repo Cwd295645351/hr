@@ -88,6 +88,9 @@ function formatJson(filterVal, jsonData) {
 			} else if (property === "channelName") {
 				// 来源要结合一级渠道和二级渠道
 				return `${data.channelName}（${data.subChannelName}）`;
+			} else if (property === 'joinDate') {
+				// 入职时间内容不导出
+				return ''
 			} else {
 				return data[property];
 			}

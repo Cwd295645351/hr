@@ -683,6 +683,14 @@
 			>
 			</el-table-column>
 			<el-table-column
+				v-if="salaryNegotiationRecordShow"
+				align="center"
+				label="谈薪记录"
+				prop="salaryNegotiationRecord"
+				width="130"
+			>
+			</el-table-column>
+			<el-table-column
 				align="center"
 				fixed="right"
 				label="备注"
@@ -927,9 +935,27 @@ export default {
 				  ).subChannel
 				: []
 		},
+		salaryNegotiationRecordShow() {
+			//已提交，待定薪、 谈薪、Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
+			const hasJoin = [
+				'submitTable',
+				"salaryNnegotiation",
+				"offerApproval",
+				"offerConfirm",
+				"joining",
+				"join"
+			]
+			if (this.stageId == 6) {
+				return true
+			} else if (hasJoin.includes(this.statusId)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		// 入职部门、岗位、直属上级、base是否显示
 		joinInfoShow() {
-			// 已提交，待定薪、谈薪、Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
+			// 谈薪、Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
 			const hasJoin = [
 				"salaryNnegotiation",
 				"offerApproval",
@@ -947,7 +973,7 @@ export default {
 		},
 		// 入职时间/试用期满时间/离职时间是否显示
 		joinDateShow() {
-			// 已提交，待定薪、谈薪、Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
+			// Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
 			const hasJoin = ["offerApproval", "offerConfirm", "joining", "join"]
 			if (this.stageId == 6) {
 				return true
