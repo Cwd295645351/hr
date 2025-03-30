@@ -478,11 +478,7 @@ export const editInterviewee = async (data) => {
 			experience: data.experience,
 			isinitWeek: data.isinitWeek
 		}
-		if (data.isinitWeek === 0) {
-			changeData['$set'] = {
-				"updateTime.0.updateType": -1
-			}
-		}
+
 
 		if (originData.statusId !== data.statusId) {
 			// 是否进入新的面试阶段
@@ -557,6 +553,19 @@ export const editInterviewee = async (data) => {
 			{ new: true }
 		);
 		if (res) {
+			if (data.isinitWeek === 0) {
+				const changeUpdateTypeResponse = await Interview.findOneAndUpdate(
+					params,
+					{
+						$set: {
+							"updateTime.0.updateType": -1
+						}
+					},
+					{ new: true }
+				);
+				if (changeUpdateTypeResponse) return { retCode: 0 }
+				return { retCode: -1 }
+			}
 			return {
 				retCode: 0
 			};
@@ -565,6 +574,7 @@ export const editInterviewee = async (data) => {
 				retCode: -1
 			};
 		}
+
 	} catch (e) {
 		console.log(e);
 		return {
