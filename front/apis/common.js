@@ -13,7 +13,8 @@ import {
 	GET_JOB_LIST,
 	GET_STATUS_LIST,
 	GET_CHANNEL_LIST,
-	GET_CITY_LIST
+	GET_CITY_LIST,
+	NOT_EVALUATE_LIST
 } from "./InterviewUrlConfig";
 import axios from "./AxiosConfig";
 
@@ -46,3 +47,8 @@ export const getChannelList = () => {
 export const getStatusList = () => {
 	return axios.get(GET_STATUS_LIST);
 };
+
+// 获取未给出评价的面试官信息
+export const getNotEvaluateList = (userId) => {
+	return axios.get(`${NOT_EVALUATE_LIST}?userId=${userId}`);	
+}

@@ -120,6 +120,25 @@
                 ></tab-content>
             </el-tab-pane>
         </el-tabs>
+        <el-dialog
+			title="未提供评价面试官数据"
+			:visible.sync="interviewerDialogShow"
+			width="600px"
+		>
+			<el-table
+				:data="notEvaluateInterviewerList"
+				style="width: 100%"
+				border
+				max-height="300px"
+			>
+				<el-table-column
+					prop="interviewer"
+					label="面试官"
+					width="180"
+				/>
+				<el-table-column prop="interviewee" label="候选人" />
+			</el-table>
+		</el-dialog>
     </div>
 </template>
 
@@ -130,7 +149,8 @@ import {
     getJobList,
     getInterviewerList,
     getChannelList,
-    getStatusList
+    getStatusList,
+    getNotEvaluateList
 } from "../../../../apis/common";
 export default {
     components: { TabContent },
@@ -149,7 +169,9 @@ export default {
             school985: [], // 985学校名单
             school211: [], // 211学校名单
             companies: [], // 劳动合同签署公司
-            statusOptions: [] // 阶段-状态数组
+            statusOptions: [], // 阶段-状态数组
+            interviewerDialogShow: false, // 面试官弹窗显示
+            notEvaluateInterviewerList: []
         };
     },
 
@@ -161,6 +183,7 @@ export default {
         this.getInterviewerList();
         this.getJobList();
         this.getStatusList();
+        this.getNotEvaluateList();
     },
     created() {},
     methods: {
@@ -223,7 +246,22 @@ export default {
             } else {
                 this.$message.error(message);
             }
-        }
+        },
+        // 获取未评价列表
+		async getNotEvaluateList() {
+			const {
+				data: { data, retCode, message }
+			} = await getNotEvaluateList(this.userId)
+			if (retCode === 0) {
+				console.log(data)
+                this.notEvaluateInterviewerList = data
+                if (data.length > 0) {
+                    this.interviewerDialogShow = true
+                }
+			} else {
+				this.$message.error(message)
+			}
+		}
     }
 };
 </script>

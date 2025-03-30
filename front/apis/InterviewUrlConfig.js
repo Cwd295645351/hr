@@ -49,3 +49,5 @@ export const EDIT_JOIN_INFO = `${HOST}/api/joinInfo/editInfo`; // 编辑入职�
 export const HIDE_JOIN_INFO = `${HOST}/api/joinInfo/hideInfo`; // 隐藏入职信息
 
 export const FILE_UPLOAD = `${HOST}/api/common/uploadFile`; // 文件上传
+
+export const NOT_EVALUATE_LIST = `${HOST}/api/statistics/getInterviewerData`; // 获取未给出评价的面试官信息

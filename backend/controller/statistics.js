@@ -381,3 +381,66 @@ export const generateWeekReport = async (params) => {
 	})
 	return { weekData, totalData };
 }
+
+
+// 获取当前未给出面试评价的面试官数据
+export const getInterviewerData_nocommit = async (params) => {
+	const mp = {
+		userId: params.userId,
+		schedules: {
+			$elemMatch: {
+				interviewerCommitment: ""
+			}
+		},
+		isDelete: false
+	};
+	const nowTimeStamp = Date.now()
+	const res = await Interview.find(mp, { name: 1, schedules: 1, stageId: 1 });
+	const interviewerMap = new Map()
+	res.forEach((item) => {
+		console.log(item);
+		if (item.stageId !== 6) {
+			const scheduleData = item.schedules
+			scheduleData.forEach(schedule => {
+				console.log(schedule);
+				if (schedule.interviewerCommitment === '') {
+					const interviewTime = combineDateAndTimeWithCST(schedule.interviewDate, schedule.interviewTime)
+					if (interviewTime < nowTimeStamp) {
+						schedule.interviewerName.forEach(name => {
+							if (interviewerMap.has(name)) {
+								interviewerMap.set(name, interviewerMap.get(name).concat([item.name]))
+							} else {
+								interviewerMap.set(name, [item.name])
+							}
+						})
+					}
+				}
+			})
+		}
+	})
+
+
+
+	const interviewerData = []
+	interviewerMap.forEach((value, key) => {
+		interviewerData.push({ interviewer: key, interviewee: value.join('、') })
+	})
+
+	return interviewerData
+}
+
+const combineDateAndTimeWithCST = (dateStr, timeStr) => {
+	// 解析 UTC 日期字符串
+	const date = new Date(dateStr);
+
+	// 将 UTC 时间转换为北京时间
+	date.setUTCHours(date.getUTCHours() + 8);
+
+	// 解析北京时间字符串
+	const [hours, minutes] = timeStr.split(':').map(Number);
+
+	// 设置北京时间
+	date.setHours(hours, minutes, 0, 0);
+
+	return date.getTime(); // 返回时间戳（毫秒）
+}

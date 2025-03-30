@@ -15,7 +15,8 @@ import {
 	addOriginNums,
 	editOriginNums,
 	deleteOriginNums,
-	generateWeekReport
+	generateWeekReport,
+	getInterviewerData_nocommit
 } from "../controller/statistics";
 import { getChannelList, getMajorList } from "../controller/common";
 
@@ -406,6 +407,21 @@ router.get('/generateWeekReport', async (ctx, next) => {
 		return;
 	}
 	const res = await generateWeekReport(params);
+	if (res) {
+		ctx.body = new SuccessModel(res, "获取成功");
+	} else {
+		ctx.body = new ErrorModel(null, "获取失败");
+	}
+})
+
+// 获取当前未给出面试评价的面试官数据
+router.get('/getInterviewerData', async (ctx, next) => {
+	const params = ctx.query;
+	if (!params.userId || params.userId == "") {
+		ctx.body = new ErrorModel(null, "userId不能为空");
+		return;
+	}
+	const res = await getInterviewerData_nocommit(params);
 	if (res) {
 		ctx.body = new SuccessModel(res, "获取成功");
 	} else {
