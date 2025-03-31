@@ -81,7 +81,17 @@ function formatJson(filterVal, jsonData) {
 			if (property.includes(".")) {
 				// 面试日程才有多级
 				const arr = property.split(".");
-				return arr[2] === 'interviewDate' ? dayjs(data[arr[0]]?.[+arr[1]]?.[arr[2]]).format('YYYY-MM-DD') : data[arr[0]]?.[+arr[1]]?.[arr[2]];
+				if (arr[2] === 'interviewDate') {
+					const date = data[arr[0]]?.[+arr[1]]?.[arr[2]]
+					if (date) {
+						return dayjs(date).format('YYYY-MM-DD')
+					} else {
+						return ''
+					}
+				} else {
+					return data[arr[0]]?.[+arr[1]]?.[arr[2]]
+				}
+
 			} else if (property === "statusName") {
 				// 状态需要特殊映射
 				return handleExportStatus(data.stageId, data.statusId, data.schedules);
@@ -129,31 +139,33 @@ function handleExportStatus(stageId, statusId, schedules) {
 		case 3:
 			if (statusId !== 'offerConfirm') return '谈Offer'
 			return '办理签证'
+		case 4:
+			return '办理签证'
 		case 5:
 			return '已入职'
 		case 6:
 			switch (statusId) {
 				// 面试未通过，视为淘汰
-				case 2:
-				case 5:
-				case 8:
-				case 10:
-				case 12:
-				case 15:
+				case '2':
+				case '5':
+				case '8':
+				case '10':
+				case '12':
+				case '15':
 					return '淘汰'
 				// 面试未应约、爽约、拒Offer、Offer毁约视为候选人放弃
-				case 1:
-				case 3:
-				case 4:
-				case 6:
-				case 7:
-				case 9:
-				case 11:
-				case 13:
-				case 14:
-				case 16:
+				case '1':
+				case '3':
+				case '4':
+				case '6':
+				case '7':
+				case '9':
+				case '11':
+				case '13':
+				case '14':
+				case '16':
 					return '候选人放弃'
-				case 0:
+				case '0':
 					return '人才库'
 			}
 	}
