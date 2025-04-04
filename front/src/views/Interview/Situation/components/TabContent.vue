@@ -349,7 +349,6 @@
 				label-position="right"
 				label-width="80px"
 			>
-				<template v-if="statusId === 'submitTable'">
 					<el-form-item label="入职部门">
 						<el-input
 							v-model="joinInfo.joinApartmentName"
@@ -382,17 +381,16 @@
 							clearable
 						></el-input>
 					</el-form-item>
-				</template>
-				<el-form-item v-else label="入职时间">
-					<el-date-picker
-						v-model="joinInfo.joinDate"
-						type="date"
-						size="small"
-						value-format="yyyy-MM-dd"
-						placeholder="选择日期"
-						clearable
-					></el-date-picker>
-				</el-form-item>
+                    <el-form-item  label="入职时间">
+                        <el-date-picker
+                            v-model="joinInfo.joinDate"
+                            type="date"
+                            size="small"
+                            value-format="yyyy-MM-dd"
+                            placeholder="选择日期"
+                            clearable
+                        ></el-date-picker>
+                    </el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button size="small" @click="showJoinDialog = false"
@@ -966,17 +964,8 @@ export default {
                     params.statusId = "submitTable";
                     break;
                 case 14:
-                    this.joinInfo = {
-                        id: data.id,
-                        type: type,
-                        stageId: 3,
-                        statusId: "salaryNnegotiation",
-                        joinApartmentName: '',
-                        joinJobName: '',
-                        manager: '',
-                        base: ''
-                    };
-                    this.showJoinDialog = true;
+                    params.stageId = 3;
+                    params.statusId = "salaryNnegotiation";
                     break;
                 case 15:
                     this.joinInfo = {
@@ -985,6 +974,10 @@ export default {
                         stageId: 3,
                         statusId: "offerApproval",
                         joinDate: '',
+                        joinApartmentName: '',
+                        joinJobName: '',
+                        manager: '',
+                        base: ''
                     };
                     this.showJoinDialog = true;
                     break;
@@ -1014,7 +1007,7 @@ export default {
                     params.isArrivalInterview = data.isArrivalInterview;
                     break;
             }
-            const types = [1, 2, 3, 10, 11, 13, 14, 15];
+            const types = [1, 2, 3, 10, 11, 13, 15];
             if (!types.includes(type)) {
                 const {
                     data: { retCode, message }

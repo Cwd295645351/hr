@@ -606,7 +606,7 @@
 				</template>
 			</el-table-column>
 			<el-table-column
-				v-if="joinInfoShow"
+				v-if="joinDateShow"
 				align="center"
 				label="入职部门"
 				prop="joinApartmentName"
@@ -614,7 +614,7 @@
 			>
 			</el-table-column>
 			<el-table-column
-				v-if="joinInfoShow"
+				v-if="joinDateShow"
 				align="center"
 				label="Offer 岗位"
 				prop="joinJobName"
@@ -622,7 +622,7 @@
 			>
 			</el-table-column>
 			<el-table-column
-				v-if="joinInfoShow"
+				v-if="joinDateShow"
 				align="center"
 				label="直属上级"
 				prop="manager"
@@ -630,7 +630,7 @@
 			>
 			</el-table-column>
 			<el-table-column
-				v-if="joinInfoShow"
+				v-if="joinDateShow"
 				align="center"
 				label="base"
 				prop="base"
@@ -953,25 +953,7 @@ export default {
 				return false
 			}
 		},
-		// 入职部门、岗位、直属上级、base是否显示
-		joinInfoShow() {
-			// 谈薪、Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
-			const hasJoin = [
-				"salaryNnegotiation",
-				"offerApproval",
-				"offerConfirm",
-				"joining",
-				"join"
-			]
-			if (this.stageId == 6) {
-				return true
-			} else if (hasJoin.includes(this.statusId)) {
-				return true
-			} else {
-				return false
-			}
-		},
-		// 入职时间/试用期满时间/离职时间是否显示
+		// 入职部门、岗位、直属上级、base、入职时间、试用期满时间、离职时间是否显示
 		joinDateShow() {
 			// Offer 审批、Offer 发出、 待入职、到岗状态时，入职时间显示
 			const hasJoin = ["offerApproval", "offerConfirm", "joining", "join"]

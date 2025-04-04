@@ -686,10 +686,6 @@ export const changeSchedule = async (data) => {
 						data.stageId,
 						data.statusId
 					),
-					joinApartmentName: data.joinApartmentName,
-					joinJobName: data.joinJobName,
-					manager: data.manager,
-					base: data.base,
 					$push: {
 						updateTime: {
 							updateType: 3,
@@ -705,6 +701,10 @@ export const changeSchedule = async (data) => {
 						data.stageId,
 						data.statusId
 					),
+					joinApartmentName: data.joinApartmentName,
+					joinJobName: data.joinJobName,
+					manager: data.manager,
+					base: data.base,
 					joinDate: data.joinDate,
 				};
 				break;
