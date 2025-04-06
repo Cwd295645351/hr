@@ -535,12 +535,12 @@
 								popper-class="remark-tooltip"
 								placement="top"
 							>
-								<pre>{{
+								<div style="height: 60px">{{
 									scope.row.schedules[index]
 										? scope.row.schedules[index]
 												.interviewerCommitment
 										: ""
-								}}</pre>
+								}}</div>
 							</el-tooltip>
 						</template>
 					</el-table-column>
@@ -905,7 +905,17 @@ export default {
 				3: "#cc9999",
 				4: "#ffcc33",
 				5: "#009999",
-				6: "#3ab55a"
+				6: "#3ab55a",
+				7: "#ff9933",
+				8: "#0099cc",
+				9: "#99cc00",
+				10: "#cc9999",
+				11: "#ffcc33",
+				12: "#009999",
+				13: "#3ab55a",
+				14: "#ff9933",
+				15: "#0099cc",
+				16: "#99cc00",
 			}
 		}
 	},
